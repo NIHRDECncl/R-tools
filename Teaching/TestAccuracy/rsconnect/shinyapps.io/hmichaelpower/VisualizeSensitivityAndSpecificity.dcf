@@ -1,0 +1,11 @@
+name: VisualizeSensitivityAndSpecificity
+title:
+account: hmichaelpower
+server: shinyapps.io
+appId: 131587
+bundleId: 585766
+url: https://decshinyapps.shinyapps.io/VisualizeSensitivityAndSpecificity/
+when: 1476378450.98592
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: temp.R|VisualizeSensitivityAndSpecificityShinyAppv5.R|VisualizeSensitivityAndSpecificityShinyAppv6-2.R|VisualizeSensitivityAndSpecificityShinyAppv6 - old.R|VisualizeSensitivityAndSpecificityShinyAppv6.R|VisualizeSensitivityAndSpecificityShinyAppv7.1.R|VisualizeSensitivityAndSpecificityShinyAppv7.2.R|VisualizeSensitivityAndSpecificityShinyAppv7.R|Archive/temp.R|Archive/VisualizeSensitivityAndSpecificityShinyApp.R|Archive/VisualizeSensitivityAndSpecificityShinyAppv - bak.R|Archive/VisualizeSensitivityAndSpecificityShinyAppv3.R|Archive/VisualizeSensitivityAndSpecificityShinyAppv4.R|Archive/August 2016/VisualizeSensitivityAndSpecificityShinyAppv5.R
