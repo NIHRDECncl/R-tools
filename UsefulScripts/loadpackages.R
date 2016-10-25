@@ -39,6 +39,17 @@ if (!require("DT")) {
   library("DT")
 }
 
+if (!require("data.table")) {
+  install.packages("data.table", repos="http://cran.rstudio.com/") 
+  library("data.table")
+}
+
+if (!require("PropCIs")) {
+  install.packages("PropCIs", repos="http://cran.rstudio.com/") 
+  library("PropCIs")
+}
+
+
 
 if (!require("ggplot2")) {
   install.packages("ggplot2", repos="http://cran.rstudio.com/") 
@@ -123,4 +134,20 @@ if (!require("Rcpp")){
 if (!require("e1071")){
   install.packages("e1071", repos="http://cran.rstudio.com/")
   library("e1071")
+}
+
+if (!require("readr")){
+  install.packages("readr", repos="http://cran.rstudio.com/")
+  library("readr")
+}
+
+
+if (!require("magrittr")){
+  install.packages("magrittr", repos="http://cran.rstudio.com/")
+  library("magrittr")
+}
+
+if (!require("shinyjs")){
+install.packages("shinyjs", repos="http://cran.rstudio.com/")
+  library("shinyjs")
 }
