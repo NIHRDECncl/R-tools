@@ -8,7 +8,7 @@ library(dplyr)
 ### initialise
 
 NIHRlogoURL <- "https://r1fdow-sn3302.files.1drv.com/y3mOiCUL6aBQw-9zIQ6J5FoBYlD8o91uP9DSLYTd8ac1m1PTxlfzlLOxrXrnyxwbOVgpbrsosKBU-6tgAYp7KH-NsMqLC63jXj8irZyngmJDTHbZUFO1yPmjf1M-Ct3oemEAb6TV-2tWSYCAlqkIEm8lygvuNFjWCYpoSIZM5icHzc?"
-# testing a change for github
+
 
 #######################################################
 # formula to calculate confidence interval for a proportion with 
