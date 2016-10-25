@@ -8,7 +8,7 @@ library(dplyr)
 ### initialise
 
 NIHRlogoURL <- "https://r1fdow-sn3302.files.1drv.com/y3mOiCUL6aBQw-9zIQ6J5FoBYlD8o91uP9DSLYTd8ac1m1PTxlfzlLOxrXrnyxwbOVgpbrsosKBU-6tgAYp7KH-NsMqLC63jXj8irZyngmJDTHbZUFO1yPmjf1M-Ct3oemEAb6TV-2tWSYCAlqkIEm8lygvuNFjWCYpoSIZM5icHzc?"
-# testing a change for github
+
 
 #######################################################
 # formula to calculate confidence interval for a proportion with 
@@ -69,7 +69,7 @@ ui<-fluidPage(
     sidebarPanel(
      
       tags$h3("Input Variables"),
-      numericInput("n", "population", min=1, max=1000, value=54),
+      numericInput("n", "population", min=1, max=1000, value=100),
       numericInput("prevalence", "prevalence of condition", min=0, max=1, value=0.3, step =0.1),
       numericInput("sensitivity", "sensitivity of index test", min=0, max=1, value= 0.90, step =0.1),
       numericInput("specificity", "specificity of index test", min=0, max=1, value= 0.80, step =0.1),
@@ -85,9 +85,9 @@ ui<-fluidPage(
       tags$br(),
       plotOutput("testedPlots")),
       tabPanel("2x2 table",
-      verbatimTextOutput("dx2x2Table"),
+      tableOutput("dx2x2Table"),
       tags$br(),
-      verbatimTextOutput("pv")),
+      tableOutput("pvdf")),
       tabPanel("Distributions",
       plotOutput("distributionplots"))
       ), 
@@ -98,7 +98,7 @@ ui<-fluidPage(
       tags$br(),
       tags$em("A web app to explore prevalence, sensitivity, and specificity on Tp, Fp, Fn, and Tn"),
       tags$br(),
-      "NIHR Diagnostic Evidence Co-operative Newcastle. August 2016",
+      "NIHR Diagnostic Evidence Co-operative Newcastle. October 2016",
       tags$br(),
       tags$br(),
       tags$img(src = NIHRlogoURL, width = "80px", height = "28px")
@@ -171,7 +171,7 @@ server<-function(input, output) {
         )
       )
     })
-
+    
     cmX1 <- reactive({0.5 * Dpos()/input$n})
     cmX2 <- reactive({Dpos()/input$n + 0.5*Dneg()/input$n})# x for Tp
     cmX3 <- reactive({0.5 * Dpos()/input$n})
@@ -219,8 +219,8 @@ server<-function(input, output) {
         paste("Fp = ", Fp),
         paste("Fn = ", Fn),
         paste("Tn = ", Tn),
-        paste("ppv = ", paste(format(100*Tp / (Tp + Fp), digits = 2), "%")),
-        paste("npv = ", paste(format(100*Tp / (Tn + Fn), digits = 2), "%"))
+        paste("ppv = ", paste(format(100*Tp / (Tp + Fp), digits = 2),"%", sep = "")),
+        paste("npv = ", paste(format(100*Tp / (Tn + Fn), digits = 2),"%", sep = ""))
         )
       )
       })
@@ -243,7 +243,7 @@ server<-function(input, output) {
             paste(format(100*Tn / (Tn + Fn), digits = 3), "%", sep = "")
             ),
           AtPrevalence = c(paste(format(100*input$prevalence, digits = 2), "%", sep = "")),
-          . = c("Sensitivity", "Specificity"),
+          Measure = c("Sensitivity", "Specificity"),
           LL95CI = c(
             paste(trimws(format(100*(input$sensitivity - ciproportion(input$sensitivity, input$n)$cill), digits = 2)), "%", sep = ""),
             paste(trimws(format(100*(input$specificity - ciproportion(input$specificity, input$n)$cill), digits = 2)), "%", sep = "")),
@@ -324,34 +324,46 @@ server<-function(input, output) {
     
 
 
-  output$dx2x2Table <- renderPrint(dx2x2Table())
+
   
   marginInsidePlot = 0.01
     
   output$populationPlot<-renderPlot({
 
       p1 <- ggplot(populationdf(), aes(x=x, y=y, color=condition, shape = condition)) + geom_point(size = 4) +
-       scale_color_manual(values=c("#999999", "#E69F00")) 
+       scale_color_manual(values=c("#999999", "#E69F00")) + coord_fixed()
       if (input$sorted) {
        p1 <- ggplot(populationdf(), aes(x=x, y=y, color=condition, shape = condition)) + 
          geom_point(size = 4) + #scale_color_manual(values=c("#999999", "#E69F00"))  +
-### add line segments (with 95% CI)  to separate Condition present from condition absent
+         
+         ### add line segments (with 95% CI)  to separate Condition present from condition absent
          geom_segment(aes(x = vx, y = 0, xend = vx, yend = 1, colour = NULL, shape = NULL), 
-                      data = linesDf())
+                      data = linesDf()) + 
+         
+         
+         ### add in scales for x and y axis 
+        scale_x_continuous(breaks = c(0.00, 0.25, 0.50, 0.75, 1.00),
+                      labels = c("0","25%","50%","75%","100%")) + theme(axis.text.x = element_text(size = 15,colour = "azure4")) + 
+        scale_y_continuous(breaks = c(0.00, 0.25, 0.50, 0.75, 1.00),
+                            labels = c("0","25%","50%","75%","100%")) + theme(axis.text.y = element_text(size = 15,colour = "azure4")) + 
+          coord_fixed()
+                      
        if (input$ciFlag) {
          p1 <- p1 + annotate("rect", xmin = linesDf()$vxlci, xmax = linesDf()$vxuci, ymin = 0, ymax = 1,
-                  colour = "blue", alpha = 0.2)
+                  colour = "deepskyblue", alpha = 0.2)
        }
       }
-      
+      if (!input$sorted) {
       p1 <- p1 +
         theme(
           axis.text.x = element_blank(),
           axis.text.y = element_blank(),
-          axis.ticks = element_blank()
-        ) +
-       labs(x = "", y = "") +
-       ggtitle("Population: people with and without the condition")
+         axis.ticks = element_blank()
+        ) 
+      }
+      p1 <- p1 +
+       labs(x = "", y = "", title="Population: people with and without the condition") + 
+        theme(plot.title = element_text(size = rel(1.5), colour = "dodgerblue3"))
            p1
 
   })
@@ -360,7 +372,7 @@ server<-function(input, output) {
   
   output$testedPlots<-renderPlot( {
 
-    p2 <- ggplot(populationdf(), aes(x=x, y=y, color=condition, shape = result)) + geom_point(size = 4)
+    p2 <- ggplot(populationdf(), aes(x=x, y=y, color=condition, shape = result)) + geom_point(size = 4) + coord_fixed()
    
     if (input$sorted) {
         p2 <- p2 + 
@@ -377,30 +389,46 @@ server<-function(input, output) {
                        data = linesDf()) + 
           
           ### label the cells of the contingency matrix 
-          geom_text(data = contingencyM(), size = 5, aes(x = cmX, y = cmY, label = labs, colour = NULL, shape = NULL))
+          geom_text(data = contingencyM(), size = 6, aes(x = cmX, y = cmY, label = labs, colour = NULL, shape = NULL), 
+                    fontface = 2, colour = "black") + 
+          
+          ### add in scales for x and y axis
+          scale_x_continuous(breaks = c(0.00, 0.25, 0.50, 0.75, 1.00),
+                               labels = c("0","25%","50%","75%","100%")) + theme(axis.text.x = element_text(size = 15,colour = "azure4")) + 
+          scale_y_continuous(breaks = c(0.00, 0.25, 0.50, 0.75, 1.00),
+                             labels = c("0","25%","50%","75%","100%")) + theme(axis.text.y = element_text(size = 15,colour = "azure4")) + 
+          coord_fixed()
+        
 
         if (input$ciFlag) {
           p2 <- p2 +
     ### rectangles to show 95% CIs
             annotate("rect", xmin = linesDf()$vxlci, xmax = linesDf()$vxuci, ymin = 0, ymax = 1,
-                              colour = "blue", alpha = 0.2) +
+                              colour = "deepskyblue", alpha = 0.2) +
             annotate("rect", xmin = linesDf()$vxlci, xmax = linesDf()$vxuci, ymin = 0, ymax = 1,
-                     colour = "blue", alpha = 0.2) +
+                     colour = "deepskyblue", alpha = 0.2) +
             annotate("rect", xmin = 0, xmax = linesDf()$vx, ymin = linesDf()$hy1lci, ymax = linesDf()$hy1uci,
-                     colour = "red", alpha = 0.2) +
+                     colour = "darksalmon", alpha = 0.2) +
             annotate("rect", xmin = linesDf()$vx, xmax = 1, ymin = linesDf()$hy2lci, ymax = linesDf()$hy2uci,
-                     colour = "red", alpha = 0.2)           
+                     colour = "darksalmon", alpha = 0.2)      +
+          geom_text(data = contingencyM(), size = 6, aes(x = cmX, y = cmY, label = labs, colour = NULL, shape = NULL), 
+                    fontface = 2, colour = "black") 
         }
         
         
-            }
+    }
+    if (!input$sorted) {
        p2 <- p2 +  theme(
-        axis.text.x = element_blank(),
+        axis.text.x = element_text(),#element_blank(),
         axis.text.y = element_blank(),
         axis.ticks = element_blank()
-        ) +
-        labs(x = "", y = "") +
-        ggtitle("Test accuracy: true and false positives; false and true negatives, sensitivity, specificity, ...")
+        ) 
+    }
+       p2 <- p2 +
+        labs(x = "", y = "", 
+             title ="Test accuracy: true and false positives; \nfalse and true negatives, sensitivity, specificity, ...") +
+         theme(plot.title = element_text(size = rel(1.5), colour = "dodgerblue3"))
+        #ggtitle("Test accuracy: true and false positives; \n false and true negatives, sensitivity, specificity, ...")
     p2
     
   })
@@ -488,14 +516,10 @@ server<-function(input, output) {
     
   })
   
-   output$lines <- renderPrint((linesDf()))
-   output$stats <- renderPrint((dx2x2df()))
-   output$pv <- renderPrint(pvdf())
-   
-   output$popHead <- renderPrint((head(populationdf())))
-   output$popTail <- renderPrint((tail(populationdf())))
-   output$temp <- renderPrint(contingencyM())
   
+  output$dx2x2Table <- renderTable(dx2x2Table(),digits = 0)
+  output$pvdf <- renderTable(pvdf())
+
 
 }
 
