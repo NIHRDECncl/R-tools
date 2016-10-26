@@ -25,6 +25,8 @@ tab4Html <- content(GET(urlTab4), "text", encoding = "ISO-8859-1")
 
 urlNIHRlogo <- "https://r1fdow-sn3302.files.1drv.com/y3mOiCUL6aBQw-9zIQ6J5FoBYlD8o91uP9DSLYTd8ac1m1PTxlfzlLOxrXrnyxwbOVgpbrsosKBU-6tgAYp7KH-NsMqLC63jXj8irZyngmJDTHbZUFO1yPmjf1M-Ct3oemEAb6TV-2tWSYCAlqkIEm8lygvuNFjWCYpoSIZM5icHzc?"
 
+spinner <- "https://onedrive.live.com/download?cid=B2035DBFA124EFE7&resid=B2035DBFA124EFE7%213097&authkey=AIW3L0FxcS6vk1k"
+
 
 #################### confidence interval on a proportion ###############################
 #
@@ -123,12 +125,27 @@ DxStats <- function(n, prevalence, sensitivity, specificity) {
   )
 }
 
-
-
+################# create spinner
+mycss <- "
+#plot-container {
+position: relative;
+}
+#loading-spinner {
+position: absolute;
+left: 50%;
+top: 50%;
+z-index: -1;
+margin-top: -33px;  /* half of the spinner's height */
+margin-left: -33px; /* half of the spinner's width */
+}
+#plot.recalculating {
+z-index: -2;
+}
+"
 #################### ui ###############################
 
 ui<-fluidPage(
-
+  tags$head(tags$style(HTML(mycss))),
   titlePanel(h4("Evaluating a diagnostic test: clinical accuracy and clinical utility")),
 
   sidebarLayout(
@@ -152,18 +169,22 @@ ui<-fluidPage(
       tabsetPanel(
         tabPanel("About", HTML(tab1Html)), 
         tabPanel("About graph 1", HTML(tab2Html)),
-        tabPanel("Graph 1: clinical accuracy", plotOutput("PrePostProb")),
+        tabPanel("Graph 1: clinical accuracy", #div(id = "plot-container",
+            #tags$img(src = spinner, id = "loading-spinner"),
+            plotOutput("PrePostProb")),
         tabPanel("About graph 2", HTML(tab4Html)),
-        tabPanel("Graph 2: clinical utility", plotOutput("RuleInOutPlot")),
-        tabPanel("Tables", verbatimTextOutput("linesTable"))
+        tabPanel("Graph 2: clinical utility", #div(id = "plot-container",
+           # tags$img(src = spinner, id = "loading-spinner"), 
+            plotOutput("RuleInOutPlot")),
+        tabPanel("Tables", dataTableOutput("linesTable"))
       ), 
       tags$br(),
       tags$b("Cite as:"),
       tags$p("Michael Power, Joy Allen."),
       tags$em("A ShinyApp tool to explore dependence of rule-in and rule-out decisions on prevalence, sensitivity, specificity, and confidence intervals"),
       tags$p("NIHR Diagnostic Evidence Co-operative Newcastle. September 2016"),
-      tags$br(),
-      tags$img(src = urlNIHRlogo, width = "80px", height = "28px") # add the NIHR logo
+      #tgs$br(),
+      tags$img(src = urlNIHRlogo, width = "80px", height = "28px", align = "right") # add the NIHR logo
       
       
     )
@@ -240,34 +261,34 @@ server<-function(input, output) {
       ### save stats so don't have to call many times
       Dx <- DxStats(input$n, input$prevalence, input$sensitivity, input$specificity) 
       
-      data.frame(
-        PriorAxisX <- c(0, 0),
-        PriorAxisY <- c(0, 1),
+      return({data.frame(
+        PriorAxisX = c(0, 0),
+        PriorAxisY = c(0, 1),
         
-        PostAxisX <- c(1, 1),
-        PostAxisY <- c(0, 1),
+        PostAxisX = c(1, 1),
+        PostAxisY = c(0, 1),
         
-        PrevX <- c(0, 1),
-        PrevY <- c(input$prevalence, input$prevalence),
+        PrevX = c(0, 1),
+        PrevY = c(input$prevalence, input$prevalence),
         
-        RuleInDecisionThresholdX <- c(0, 1),
-        RuleInDecisionThresholdY <- c(RuleInDecisionThreshold(), RuleInDecisionThreshold()),
+        RuleInDecisionThresholdX = c(0, 1),
+        RuleInDecisionThresholdY = c(RuleInDecisionThreshold(), RuleInDecisionThreshold()),
         
-        RuleOutDecisionThresholdX <- c(0, 1),
-        RuleOutDecisionThresholdY <- c(RuleOutDecisionThreshold(), RuleOutDecisionThreshold()),
+        RuleOutDecisionThresholdX = c(0, 1),
+        RuleOutDecisionThresholdY = c(RuleOutDecisionThreshold(), RuleOutDecisionThreshold()),
         
-        TestPosX <- c(0, 1),
-        TestPosY <- c(input$prevalence, Dx$PostTestProbP),
+        TestPosX = c(0, 1),
+        TestPosY = c(input$prevalence, Dx$PostTestProbP),
         
-        TestNegX <- c(0, 1),
-        TestNegY <- c(input$prevalence, Dx$PostTestProbN), # post -ve test probability
+        TestNegX = c(0, 1),
+        TestNegY = c(input$prevalence, round(Dx$PostTestProbN,3)), # post -ve test probability
         
-        TPY_ciL <- c(input$prevalence, Dx$TPY_ciL),
-        TPY_ciU <- c(input$prevalence, Dx$TPY_ciU),
+        TPY_ciL = c(input$prevalence, round(Dx$TPY_ciL,3)),
+        TPY_ciU = c(input$prevalence, round(Dx$TPY_ciU,3)),
         
-        TNY_ciL <- c(input$prevalence, Dx$TNY_ciL),
-        TNY_ciU <- c(input$prevalence, Dx$TNY_ciU)
-      )
+        TNY_ciL = c(input$prevalence, round(Dx$TNY_ciL,3)),
+        TNY_ciU = c(input$prevalence, round(Dx$TNY_ciU,3))
+      )})
     })
     
 ### coordinates and labels for plot 1
@@ -321,10 +342,12 @@ server<-function(input, output) {
 #==========================================================
     
     
-    output$linesTable <- renderPrint(linesDf())
+    output$linesTable <- renderDataTable(linesDf(), 
+                                         options = list(scrollX = TRUE, rownames = FALSE,
+                                         dom = 't'))
     
     output$RuleInOutPlot<-renderPlot({
-      
+    #  Sys.sleep(2)
       ggplot(linesDf()) +
         geom_line(aes(x = linesDf()$PriorAxisX, y = linesDf()$PriorAxisY), data = linesDf(), stat = "identity", position = "identity") +
         geom_line(aes(x = linesDf()$PostAxisX, y = linesDf()$PostAxisY), data = linesDf(), stat = "identity", position = "identity") +
