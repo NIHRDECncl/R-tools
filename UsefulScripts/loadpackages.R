@@ -146,7 +146,6 @@ if (!require("epiR")){
   library("epiR")
 }
 
-
 if (!require("magrittr")){
   install.packages("magrittr", repos="http://cran.rstudio.com/")
   library("magrittr")
@@ -155,4 +154,19 @@ if (!require("magrittr")){
 if (!require("shinyjs")){
 install.packages("shinyjs", repos="http://cran.rstudio.com/")
   library("shinyjs")
+}
+
+if (!require("rsconnect")){
+  install.packages("rsconnect", repos="http://cran.rstudio.com/")
+  library("rsconnect")
+}
+
+if (!require("httr")){
+  install.packages("httr", repos="http://cran.rstudio.com/")
+  library("httr")
+}
+
+if (!require("PropCIs")){
+  install.packages("PropCIs", repos="http://cran.rstudio.com/")
+  library("PropCIs")
 }
