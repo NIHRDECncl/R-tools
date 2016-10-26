@@ -43,7 +43,7 @@ ciproportion <- function(y,n) {
   #  Wilson, E. B. "Probable Inference, the Law of Succession, and Statistical Inference," 
   #      Journal of the American Statistical Association, 22, 209-212 (1927).
   
-  
+
   
   #########
   
