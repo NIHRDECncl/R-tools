@@ -141,6 +141,11 @@ if (!require("readr")){
   library("readr")
 }
 
+if (!require("epiR")){
+  install.packages("epiR", repos="http://cran.rstudio.com/")
+  library("epiR")
+}
+
 
 if (!require("magrittr")){
   install.packages("magrittr", repos="http://cran.rstudio.com/")
