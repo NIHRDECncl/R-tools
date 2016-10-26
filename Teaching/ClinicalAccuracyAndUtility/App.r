@@ -12,7 +12,11 @@ library(rsconnect)   # needed to upload to Shinyio
 library(readr)       # needed for GET()
 library("httr")      # needed for HTML() and content()
 
+<<<<<<< HEAD
 
+=======
+#test branch
+>>>>>>> refs/remotes/origin/master
 # initialise text variables for the "about" tabs
 #
 
