@@ -42,9 +42,7 @@ ciproportion <- function(y,n) {
   #
   #  Wilson, E. B. "Probable Inference, the Law of Succession, and Statistical Inference," 
   #      Journal of the American Statistical Association, 22, 209-212 (1927).
-  
 
-  
   #########
   
   z <- qnorm(1-alpha/2)
@@ -389,8 +387,8 @@ server<-function(input, output) {
                        data = linesDf()) + 
           
           ### label the cells of the contingency matrix 
-          geom_text(data = contingencyM(), size = 6, aes(x = cmX, y = cmY, label = labs, colour = NULL, shape = NULL), 
-                    fontface = 2, colour = "black") + 
+          geom_text(data = contingencyM(), size = 7, aes(x = cmX, y = cmY, label = labs, colour = NULL, shape = NULL), 
+                    fontface = 2, colour = "gray41") + 
           
           ### add in scales for x and y axis
           scale_x_continuous(breaks = c(0.00, 0.25, 0.50, 0.75, 1.00),
@@ -411,8 +409,8 @@ server<-function(input, output) {
                      colour = "darksalmon", alpha = 0.2) +
             annotate("rect", xmin = linesDf()$vx, xmax = 1, ymin = linesDf()$hy2lci, ymax = linesDf()$hy2uci,
                      colour = "darksalmon", alpha = 0.2)      +
-          geom_text(data = contingencyM(), size = 6, aes(x = cmX, y = cmY, label = labs, colour = NULL, shape = NULL), 
-                    fontface = 2, colour = "black") 
+          geom_text(data = contingencyM(), size = 7, aes(x = cmX, y = cmY, label = labs, colour = NULL, shape = NULL), 
+                    fontface = 2, colour = "gray41") 
         }
         
         
