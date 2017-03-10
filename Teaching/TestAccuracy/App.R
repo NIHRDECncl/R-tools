@@ -4,10 +4,16 @@
 library(shiny)
 library(ggplot2)
 library(dplyr)
+library(rsconnect)   # needed to upload to Shinyio
+library(readr)       # needed for GET()
+library("httr")      # needed for HTML() and content()
 
 ### initialise
 
-NIHRlogoURL <- "https://r1fdow-sn3302.files.1drv.com/y3mOiCUL6aBQw-9zIQ6J5FoBYlD8o91uP9DSLYTd8ac1m1PTxlfzlLOxrXrnyxwbOVgpbrsosKBU-6tgAYp7KH-NsMqLC63jXj8irZyngmJDTHbZUFO1yPmjf1M-Ct3oemEAb6TV-2tWSYCAlqkIEm8lygvuNFjWCYpoSIZM5icHzc?"
+urlNIHRlogo <- "https://qpk2dq-sn3302.files.1drv.com/y3mcTf14jWUWq2c18ry2kwc1vBkCZb_mj3ZTJ_v-9RU6km49qWK-kRM1c9RfAaCjaSIw5IA16oCqE-zy-d4MYPKQgBtoMX8FsXXk-50ePK1vyKoowy_Cd30vofQvNlzVICCiVTc4LFHRjmfvqlLTq7Gw7Rhqybf3j6pnwrn7W03PeI?"
+
+urlTab1 <- "https://onedrive.live.com/download?cid=B2035DBFA124EFE7&resid=B2035DBFA124EFE7%213341&authkey=ACzy9cfXmzYp3ds"
+tab1Html <- content(GET(urlTab1), "text", encoding = "ISO-8859-1")
 
 
 #######################################################
@@ -77,8 +83,8 @@ ui<-fluidPage(
     ),
     mainPanel(
       tabsetPanel(
-      tabPanel("About"),
-      tabPanel("Test accuracy",
+        tabPanel("About", HTML(tab1Html)), 
+        tabPanel("Test accuracy",
       plotOutput("populationPlot"),
       tags$br(),
       plotOutput("testedPlots")),
@@ -99,7 +105,8 @@ ui<-fluidPage(
       "NIHR Diagnostic Evidence Co-operative Newcastle. October 2016",
       tags$br(),
       tags$br(),
-      tags$img(src = NIHRlogoURL, width = "80px", height = "28px")
+      tags$img(src = urlNIHRlogo, width = "80px", height = "28px", align = "right") # add the NIHR logo
+      
 
       # tags$br(),
       # verbatimTextOutput("lines")
