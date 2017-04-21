@@ -1,7 +1,7 @@
 <<<<<<< HEAD
 ###  a ShinyApp to visually explore the effects of sensitivity, specificity, and prevalence
 ###  on post-test probablities (clinical accuracy), and their relation to thresholds for rule-in and rule-out decision thresholds.
-
+# test
 library(shiny)
 library(ggplot2)
 library(dplyr)
