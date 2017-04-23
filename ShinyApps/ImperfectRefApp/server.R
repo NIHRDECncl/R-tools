@@ -46,20 +46,20 @@ shinyServer(function(input, output) {
     SpecSenChoice = if (input$SenSpecFlag == 1) {"specificity"} else {"sensitivity"}
     
     AssumptionsDF <- data.frame(
-      Name = c("Actual sensitivity of reference test",
-               "Actual specificity of reference test",
+      Name = c("Reference test Actual sensitivity",
+               "Reference test Actual specificity",
                "Actual Prevalence",
                "Graphing choice",
-               paste("Actual ", SpecSenChoice, " of index test"),
+               paste("Index test: Actual ", SpecSenChoice),
                if (input$SpreadFlag == 1) {"Show 15% variation in "} else {paste("show 15% variation in reference test's ") } # 1=sensitivity, 2=specificity
       ),
       Assumptions = as.character(c(input$SnRA,
                              input$SpRA,
                              input$prevA,
                              if (input$SenSpecFlag == 1) {"Sensitivity"} else {"Specificity"}, # 1=sensitivity, 2=specificity
-                             input$SenSpecIRAssumed,
+                             if (input$SenSpecFlag == 1) {"Actual specificity of index test"} else {"Actual sensitivity of index test"},
                              if (input$SpreadFlag == 1) {"Prevalence"} else {
-                               if (input$SenSpecFlag == 1) {"Specificity"} else {"Sensitivity"}
+                             if(input$SenSpecFlag == 1) {"Specificity"} else {"Sensitivity"}
                                } 
                              )),
       stringsAsFactors=FALSE) 
@@ -73,7 +73,8 @@ shinyServer(function(input, output) {
   
   source("calfunction2.R")
   d1 <- reactive({estdxacc2(input$SnRA, input$SpRA, input$prevA, input$SenSpecFlag, 
-                            input$SenSpecIRAssumed, input$VarFlag)})
+                            if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
+                            input$VarFlag)})
   
   rangePlots1 <- reactiveValues(x1 = NULL, y1 = NULL)
   rangePlots2 <- reactiveValues(x2 = NULL, y2 = NULL)
@@ -85,18 +86,22 @@ shinyServer(function(input, output) {
    d2 <- reactive({
    if(SSF() == 1) {
      if(SF() == 1) {estdxacc2(input$SnRA, input$SpRA, input$prevA*0.85, input$SenSpecFlag, 
-                                 input$SenSpecIRAssumed, input$VarFlag)
+                              if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
+                              input$VarFlag)
 
      } else {estdxacc2(input$SnRA, input$SpRA*0.85, input$prevA, input$SenSpecFlag, 
-                                 input$SenSpecIRAssumed, input$VarFlag)
+                       if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
+                       input$VarFlag)
      }
    }
    else {
      if(SF() == 1) {estdxacc2(input$SnRA, input$SpRA, input$prevA*0.85, input$SenSpecFlag, 
-                                 input$SenSpecIRAssumed, input$VarFlag)
+                              if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
+                              input$VarFlag)
      } else {
        estdxacc2(input$SnRA*0.85, input$SpRA, input$prevA, input$SenSpecFlag, 
-                                 input$SenSpecIRAssumed, input$VarFlag)
+                 if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
+                 input$VarFlag)
      }
    }
    })
@@ -104,16 +109,20 @@ shinyServer(function(input, output) {
    d3 <- reactive({
      if(SSF() == 1) {
        if(SF() == 1) {estdxacc2(input$SnRA, input$SpRA, input$prevA*1.15, input$SenSpecFlag, 
-                                      input$SenSpecIRAssumed, input$VarFlag)
+                                if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
+                                input$VarFlag)
        } else {estdxacc2(input$SnRA, input$SpRA*1.15, input$prevA, input$SenSpecFlag, 
-                                    input$SenSpecIRAssumed, input$VarFlag)
+                         if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
+                         input$VarFlag)
        }
      }
      else {
        if(SF() == 1) {estdxacc2(input$SnRA, input$SpRA, input$prevA*1.15, input$SenSpecFlag, 
-                                    input$SenSpecIRAssumed, input$VarFlag)
+                                if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
+                                input$VarFlag)
        } else {estdxacc2(input$SnRA*1.15, input$SpRA, input$prevA, input$SenSpecFlag, 
-                                    input$SenSpecIRAssumed, input$VarFlag)
+                         if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
+                         input$VarFlag)
        }
      }
    })
@@ -128,9 +137,9 @@ shinyServer(function(input, output) {
       ###########          actual sensitivity and specificity of rusty reference test
       ###########          actual prevalence
       x1  = dd$SnIR
-      x1label = "Measured sensitivity of index test"
+      x1label = "Index test: measured sensitivity"
       y1 = dd$SnIA
-      y1label = "Actual sensitivity of index test"
+      y1label = "Index test: actual sensitivity"
       y2 = dd$ErrorSen
       y2label = "Error in sensitivity of index test (% points)"
       plotTitle1 = "Measured sensitivity"
@@ -140,9 +149,9 @@ shinyServer(function(input, output) {
       ###########          actual sensitivity and specificity of rusty reference test
       ###########          actual prevalence
       x1 = dd$SpIR
-      x1label <- "Measured specificity of index test"
+      x1label <- "Index test: Measured specificity"
       y1 = dd$SpIA
-      y1label <- "Actual specificity of index test"
+      y1label <- "Index test: Actual specificity"
       y2 = dd$ErrorSpec
       y2label <- "Error in specificity of index test (% points)"
       plotTitle1 <- "Measured specifcity"
@@ -221,10 +230,10 @@ shinyServer(function(input, output) {
     
     if (SSF() == 1)  {  
       x1  = dd$SnIR 
-      x1label = "Measured sensitivity of index test"
+      x1label = "Index test: Measured sensitivity"
     } else {
       x1 = dd$SpIR
-      x1label <- "Measured specificity of index test"
+      x1label <- "Index test: Measured specificity"
     }
     
     y3 <- dd$NRpos

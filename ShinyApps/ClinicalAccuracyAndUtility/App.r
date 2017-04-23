@@ -315,20 +315,20 @@ server<-function(input, output) {
       data.frame(
         x = c(0.85, 0.85, 1.05, 1.05, 1.05, 1.05),
         y = c(
-          PostTestProbP() + 0.025, # = post +ve test probability 
-          PostTestProbN() - 0.025, # = post -ve test probability
+          Dx$PostTestProbP + 0.025, # = post +ve test probability 
+          Dx$PostTestProbN - 0.025, # = post -ve test probability
           Dx$TPY_ciL - NudgeCIp,
           Dx$TPY_ciU + NudgeCIp,
           Dx$TNY_ciL - NudgeCIn,
           Dx$TNY_ciU + NudgeCIp),
         
         labels = c(
-          strwrap(paste0("Prob post +ve test = ", round(PostTestProbP()*100), "%"), 40),
-          strwrap(paste0("Prob post -ve test = ", round(PostTestProbN()*100), "%"), 40),
-          paste0(round(TPY_ciL() * 100), "%"),
-          paste0(round(TPY_ciU() * 100), "%"),
-          paste0(round(TNY_ciL() * 10000)/100, "%"),
-          paste0(round(TNY_ciU() * 10000)/100, "%")
+          strwrap(paste0("Prob post +ve test = ", round(Dx$PostTestProbP*100), "%"), 40),
+          strwrap(paste0("Prob post -ve test = ", round(Dx$PostTestProbN*100), "%"), 40),
+          paste0(round(Dx$TPY_ciL * 100), "%"),
+          paste0(round(Dx$TPY_ciU * 100), "%"),
+          paste0(round(Dx$TNY_ciL * 10000)/100, "%"),
+          paste0(round(Dx$TNY_ciU * 10000)/100, "%")
           # "1", "2", "3", "4"
         )
       )
@@ -426,13 +426,13 @@ server<-function(input, output) {
     data.frame(
       x = c(0.1, 0.1, input$prevalence),
       y = c(
-        PostTestProbP() + 0.035, 
-        PostTestProbN() - 0.035,
+        Dx$PostTestProbP + 0.035, 
+        Dx$PostTestProbN - 0.035,
         0.10),
       
       labels = c(
-        strwrap(paste0("Prob post +ve test = ", round(PostTestProbP()*100), "%"), 40),
-        strwrap(paste0("Prob post -ve test = ", round(PostTestProbN()*100), "%"), 40),
+        strwrap(paste0("Prob post +ve test = ", round(Dx$PostTestProbP*100), "%"), 40),
+        strwrap(paste0("Prob post -ve test = ", round(Dx$PostTestProbN*100), "%"), 40),
         paste0("Prevalence = ", round(input$prevalence * 100), "%")
       )
     )
