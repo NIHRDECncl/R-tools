@@ -41,21 +41,31 @@ shinyUI(
       
       # assumed actual (true) specificity-sensitivty of index test
       
-      sliderInput(
-        "SenSpecIRAssumed",
-        "Actual Spec/Sens of index test",
+      conditionalPanel(
+        condition = "input.SenSpecFlag == 1",
+        sliderInput(
+        "SpecIRAssumed",
+        "Index test: Actual specificity",
         min = 0,
         max = 1,
         value = 0.8,
         step = 0.01
-      ),
+      )),
       
-      
-      
+      conditionalPanel(
+        condition = "input.SenSpecFlag == 2",
+        sliderInput(
+          "SenIRAssumed",
+          "Index test: Actual sensitivity",
+          min = 0,
+          max = 1,
+          value = 0.8,
+          step = 0.01
+        )),    
       
       sliderInput(
         "SnRA",
-        "Actual sensitivity of reference test",
+        "Reference test: Actual sensitivity",
         min = 0,
         max = 1,
         value = .8,
@@ -65,7 +75,7 @@ shinyUI(
       # Actual specificity of rusty reference test
       sliderInput(
         "SpRA",
-        "Actual specificity of reference test",
+        "Reference test: Actual specificity",
         min = 0,
         max = 1,
         value = .85,
