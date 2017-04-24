@@ -140,7 +140,7 @@ z-index: -2;
 "
 #################### ui ###############################
 
-ui<-fluidPage(
+ui <- function(request) {fluidPage(
   tags$head(tags$style(HTML(mycss))),
   titlePanel(h4("Evaluating a diagnostic test: clinical accuracy and clinical utility")),
 
@@ -159,7 +159,8 @@ ui<-fluidPage(
       numericInput("RuleInDecisionThreshold", "Rule-in PPV threshold", min=0, max=1, value= 0.5, step = 0.01),
       textInput(inputId = "IndeterminateDecision", label = "Indeterminate decision", value = "Example: investigate further"),
       textInput(inputId = "DxRuleOutDecision", label = "Rule-out decision", value = "Example: rule out the condition"),
-      numericInput("RuleOutDecisionThreshold", "Rule-out NPV threshold", min=0, max=1, value= 0.1, step = 0.01)
+      numericInput("RuleOutDecisionThreshold", "Rule-out NPV threshold", min=0, max=1, value= 0.1, step = 0.01),
+      bookmarkButton()
     ),
     mainPanel(
       tabsetPanel(
@@ -186,7 +187,7 @@ ui<-fluidPage(
     )
   )
 )
-
+}
 #######################################################
 
 #################    server     ################
@@ -205,7 +206,7 @@ ui<-fluidPage(
 # DxRuleOutDecision
 # RuleOutDecisionThreshold
 
-server<-function(input, output) {
+server <- function(input, output, session) {
 
     DxCondition <- eventReactive(input$GoButton, {input$DxCondition})
     DxTestName <- eventReactive(input$GoButton, {input$DxTestName})
@@ -487,4 +488,5 @@ server<-function(input, output) {
   })
   }
 
-shinyApp(ui=ui, server=server)
+shinyApp(ui, server, enableBookmarking = "url")
+
