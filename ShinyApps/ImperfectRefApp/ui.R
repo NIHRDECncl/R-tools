@@ -9,7 +9,7 @@
 
 library(shiny)
 # Define UI for slider demo application
-shinyUI(
+ui <- function(request) {
   fluidPage(
   h3("Effect of imperfect reference standard on estimated accuracy of the index test"),
 
@@ -101,7 +101,8 @@ shinyUI(
       choices = list("Actual prevalence" = 1, "Actual spec/sens of index test" = 2),
       selected = 1,
       inline = FALSE
-    )
+    ),
+    bookmarkButton()
   ),
         # end column 4
 
@@ -149,4 +150,4 @@ shinyUI(
   
   ) # end fluidRow
 ) # end fluidPage
-) # end shinyUI
+} # end shinyUI

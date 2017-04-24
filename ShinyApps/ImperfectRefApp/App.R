@@ -4,7 +4,9 @@ library("ggplot2")
 library(tidyverse)
 setwd("/Users/michaelpower/Google Drive/GIT-project/GitHub/R-tools/ShinyApps/ImperfectRefApp")
 
-runApp("ImpRefApp")
+enableBookmarking(store = "url")
+shinyApp(ui, server, enableBookmarking = "url")
+
 
 ######
 ## to publish to shinyApp.io
