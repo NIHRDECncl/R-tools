@@ -17,9 +17,11 @@ library(ggplot2)
 library(dplyr)
 library(gridExtra)
 
+## global.R ##
+
 # Define server logic for slider examples
 
-shinyServer(function(input, output) {
+server <- function(input, output, session) {
   
   # naming conventions for the suffix in 2x2 diagnostic accuracy statistics
   ##   2 => 2x2 table
@@ -308,7 +310,7 @@ shinyServer(function(input, output) {
     # Show the reclassifications using an HTML table
      # output$formula2 <- renderTable(formula2(), include.rownames = FALSE) # close renderTable
       
-}) # end Shiny server function
+} # end Shiny server function
      
      
     
