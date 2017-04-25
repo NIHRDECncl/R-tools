@@ -39,8 +39,7 @@ shinyServer(function(input, output) {
   })
   
   formula <-reactive({
-    source("H:/Jallens_homearea_DEC/Calculators/R/Sample Size shiny app/samplesize_script.R")
-     samplesize(input$prev, input$SnI, input$CI, input$alpha, input$beta)
+    samplesize(input$prev, input$SnI, input$CI, input$alpha, input$beta)
   })
   
   output$view <- renderTable({
