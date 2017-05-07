@@ -1,4 +1,4 @@
-# note shiny does not like read in files with any characters in them
+# note shiny does not like to read in files with any characters in them
 
 library(shiny)
 library(ggplot2)

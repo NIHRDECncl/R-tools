@@ -10,6 +10,15 @@ library(PropCIs)
 library(rsconnect)   # needed to upload to Shinyio
 library("httr")      # needed for HTML() and content()
 
+# tidy formatting with: 
+# library(formatR)
+# tidy_source(source = "/Users/michaelpower/Google Drive/GIT-project/GitHub/R-tools/ShinyApps/ClinicalAccuracyAndUtility",
+# comment = getOption("formatR.comment"),
+#                     indent = getOption("formatR.indent", 2), 
+#                     output = TRUE, 
+#                     text = NULL, 
+#                     width.cutoff = 80)
+                    
 
 # initialise text variables for the "about" tabs
 #
@@ -172,8 +181,8 @@ ui <- function(request) {fluidPage(
         tabPanel("About graph 2", HTML(tab4Html)),
         tabPanel("Graph 2: clinical utility", #div(id = "plot-container",
            # tags$img(src = spinner, id = "loading-spinner"), 
-            plotOutput("RuleInOutPlot")),
-        tabPanel("Tables", dataTableOutput("linesTable"))
+            plotOutput("RuleInOutPlot"))
+        # tabPanel("Tables", dataTableOutput("linesTable"))
       ), 
       tags$br(),
       tags$b("Cite as:"),
