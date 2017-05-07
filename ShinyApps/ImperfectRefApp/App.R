@@ -15,12 +15,12 @@ shinyApp(ui, server, enableBookmarking = "url")
 # library(rsconnect)
 # rsconnect::deployApp("C:/Users/Michael Power/OneDrive/DEC/R tools/Shiny/ImpRefApp")
 
-# tidy formatting with: 
+# tidy formatting with:
 # library(formatR)
 # tidy_dir(source = "/Users/michaelpower/Google Drive/GIT-project/GitHub/R-tools/ShinyApps/ImperfectRefApp",
 #                     comment = getOption("formatR.comment"),
-#                     indent = getOption("formatR.indent", 2), 
-#                     output = TRUE, 
+#                     indent = getOption("formatR.indent", 2),
+#                     output = TRUE,
 #                     text = NULL,
 #                     width.cutoff = 80)
 
