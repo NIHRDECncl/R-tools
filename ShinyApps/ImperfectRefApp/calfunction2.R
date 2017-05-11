@@ -15,8 +15,9 @@
 ##   NRneg => Net reclassification of true negatives: (Actual - Measured) true negatives
 
 
-estdxacc2 <- function(SnRA, SpRA, prevA, SenSpecFlag, SenSpecIRAssumed, VarFlag, NRpos = 0, NRneg = 0){
-  
+estdxacc2 <- function(SnRA, SpRA, prevA, SenSpecFlag, SenSpecIRAssumed, VarFlag, NRpos = 0, NRneg = 0)
+  {
+
   # assume population = 1000
   n = 1000
 
@@ -41,7 +42,8 @@ estdxacc2 <- function(SnRA, SpRA, prevA, SenSpecFlag, SenSpecIRAssumed, VarFlag,
 # 2x2 Dx stats for index test compared with rusty reference standard
 
 # initialize independent (X) variables for graphs
-  SnIRrange = c(seq(0,1,0.01))
+  SnIRrange = c(seq(0, 1, 1)) # only need start and end points for the line; 
+                              # and could use geom_segement() instead of geom_line()
   SnIR = SnIRrange
   SpIR = SnIR
 
@@ -64,22 +66,24 @@ estdxacc2 <- function(SnRA, SpRA, prevA, SenSpecFlag, SenSpecIRAssumed, VarFlag,
   ErrorSen = SnIA - SnIR #initialising these variables
   
   VarGraphChoice = 0.15 # initial 15% variation in graphing choice
+  
 ##################################################################################
   # 2x2 Dx stats for index test compared with rusty reference standard
   ### working with vectors here so we can work out the errors!
 
 
-  if (SenSpecFlag == 1) {
+  if (SenSpecFlag == 1) 
+    {
     ## given Sensitivity of index test compared to actual (true gold) reference
     SpIR = rep(SenSpecIRAssumed,length(SnIRrange))
     
-    TnIR <- DnegR*SpIR
+    TnIR <- DnegR * SpIR
     FpIR <- DnegR - TnIR
   
     TpIR <- SnIR * DposR  # True positives for index test compared with rusty reference standard
 
     SpIA <- SpIR
-    SnIA <- (TpIR - (1-SpIA)*FpRA)/TpRA
+    SnIA <- (TpIR - (1-SpIA) * FpRA) / TpRA
  
 
 ######################################################################################
@@ -92,7 +96,8 @@ estdxacc2 <- function(SnRA, SpRA, prevA, SenSpecFlag, SenSpecIRAssumed, VarFlag,
   NRneg <- TnIA - TnIR
   
   } 
-  else {
+  else 
+    {
     ## given specificity of index test compared to actual (tru gold) reference
     SnIR = rep(SenSpecIRAssumed,length(SnIRrange))
     
