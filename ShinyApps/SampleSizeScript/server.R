@@ -61,8 +61,5 @@ shinyServer(function(input, output) {
   output$view <- renderTable({
     formula()
   })
-  
-  
-  
 })
 

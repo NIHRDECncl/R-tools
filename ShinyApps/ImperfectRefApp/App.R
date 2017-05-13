@@ -14,3 +14,13 @@ shinyApp(ui, server, enableBookmarking = "url")
 ## 2) uncomment the next 2 lines
 # library(rsconnect)
 # rsconnect::deployApp("C:/Users/Michael Power/OneDrive/DEC/R tools/Shiny/ImpRefApp")
+
+# tidy formatting with:
+# library(formatR)
+# tidy_dir(source = "/Users/michaelpower/Google Drive/GIT-project/GitHub/R-tools/ShinyApps/ImperfectRefApp",
+#                     comment = getOption("formatR.comment"),
+#                     indent = getOption("formatR.indent", 2),
+#                     output = TRUE,
+#                     text = NULL,
+#                     width.cutoff = 80)
+
