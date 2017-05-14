@@ -56,7 +56,7 @@ shinyServer(function(input, output) {
       Assumptions = as.character(c(input$SnRA,
                              input$SpRA,
                              input$prevA,
-                             if (input$SenSpecFlag == 1) {"Sensitivity"} else {"Specificity"}, # 1=sensitivity, 2=specificity
+                             if (input$SenSpecFlag == 1) {"Sensitivity"} else {"Specificity"}, 
                              input$SenSpecIRAssumed,
                              if (input$SpreadFlag == 1) {"Prevalence"} else {
                                if (input$SenSpecFlag == 1) {"Specificity"} else {"Sensitivity"}
