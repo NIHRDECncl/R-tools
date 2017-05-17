@@ -44,28 +44,36 @@ server <- function(input, output, session) {
   # Reactive expression to compose a data frame containing all of the assumptions
    formula1 <- reactive({
 
-    # Compose data frame   
-    SpecSenChoice = if (input$SenSpecFlag == 1) {"specificity"} else {"sensitivity"}
+    # Compose data frame 
+
+      # SpecSenChoice: 1=sensitivity, 2=specificity
     
+    SpecSenChoice = if (input$SenSpecFlag == 1) {"specificity"} else {"sensitivity"}
+    SpreadChoice = ifelse(input$SpreadFlag1 == 1 | input$SpreadFlag2 == 1, 1, 2) # 1=spread prevalence; 2= spread sensitivity/specificity
+  
     AssumptionsDF <- data.frame(
       Name = c("Reference test Actual sensitivity",
                "Reference test Actual specificity",
                "Actual Prevalence",
                "Graphing choice",
                paste("Index test: Actual ", SpecSenChoice),
-               if (input$SpreadFlag == 1) {"Show 15% variation in "} else {paste("show 15% variation in reference test's ") } # 1=sensitivity, 2=specificity
+               if (SpreadChoice == 1)  {"Show 15% variation in prevalence"} 
+               else 
+                 {paste0("show 15% variation in reference test's ", SpecSenChoice) 
+                 } # 1=sensitivity, 2=specificity
       ),
       Assumptions = as.character(c(input$SnRA,
                              input$SpRA,
                              input$prevA,
-                             if (input$SenSpecFlag == 1) {"Sensitivity"} else {"Specificity"}, # 1=sensitivity, 2=specificity
+                             if (input$SenSpecFlag == 1) {"Sensitivity"} else {"Specificity"}, 
                              if (input$SenSpecFlag == 1) {"Actual specificity of index test"} else {"Actual sensitivity of index test"},
-                             if (input$SpreadFlag == 1) {"Prevalence"} else {
-                             if(input$SenSpecFlag == 1) {"Specificity"} else {"Sensitivity"}
+                             if (SpreadChoice == 1) {"Prevalence"} 
+                               else {
+                                 if(input$SenSpecFlag == 1) {"Specificity"} 
+                                   else {"Sensitivity"}
                                } 
                              )),
-      stringsAsFactors=FALSE) 
-    
+      stringsAsFactors=FALSE)     
 
    }) # close reactive
   # Show the assumptions using an HTML table
@@ -82,12 +90,13 @@ server <- function(input, output, session) {
   rangePlots2 <- reactiveValues(x2 = NULL, y2 = NULL)
   rangePlots3 <- reactiveValues(x3 = NULL, y3 = NULL)
 
-   SSF <- reactive({input$SenSpecFlag})
-   SF <- reactive({input$SpreadFlag})
+   # SSF <- reactive({input$SenSpecFlag})
+   # SF <- reactive({input$SpreadFlag})
    
    d2 <- reactive({
-   if(SSF() == 1) {
-     if(SF() == 1) {estdxacc2(input$SnRA, input$SpRA, input$prevA*0.85, input$SenSpecFlag, 
+     SpreadChoice = ifelse(input$SpreadFlag1 == 1 | input$SpreadFlag2 == 1, 1, 2) # 1=spread prevalence; 2= spread sensitivity/specificity
+     if(input$SenSpecFlag == 1) {
+       if(SpreadChoice == 1) {estdxacc2(input$SnRA, input$SpRA, input$prevA*0.85, input$SenSpecFlag, 
                               if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
                               input$VarFlag)
 
@@ -97,7 +106,7 @@ server <- function(input, output, session) {
      }
    }
    else {
-     if(SF() == 1) {estdxacc2(input$SnRA, input$SpRA, input$prevA*0.85, input$SenSpecFlag, 
+     if(SpreadChoice == 1) {estdxacc2(input$SnRA, input$SpRA, input$prevA*0.85, input$SenSpecFlag, 
                               if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
                               input$VarFlag)
      } else {
@@ -109,8 +118,9 @@ server <- function(input, output, session) {
    })
    
    d3 <- reactive({
-     if(SSF() == 1) {
-       if(SF() == 1) {estdxacc2(input$SnRA, input$SpRA, input$prevA*1.15, input$SenSpecFlag, 
+     SpreadChoice = ifelse(input$SpreadFlag1 == 1 | input$SpreadFlag2 == 1, 1, 2) # 1=spread prevalence; 2= spread sensitivity/specificity
+     if(input$SenSpecFlag == 1) {
+       if(SpreadChoice == 1) {estdxacc2(input$SnRA, input$SpRA, input$prevA*1.15, input$SenSpecFlag, 
                                 if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
                                 input$VarFlag)
        } else {estdxacc2(input$SnRA, input$SpRA*1.15, input$prevA, input$SenSpecFlag, 
@@ -119,7 +129,7 @@ server <- function(input, output, session) {
        }
      }
      else {
-       if(SF() == 1) {estdxacc2(input$SnRA, input$SpRA, input$prevA*1.15, input$SenSpecFlag, 
+       if(input$SenSpecFlag == 1) {estdxacc2(input$SnRA, input$SpRA, input$prevA*1.15, input$SenSpecFlag, 
                                 if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
                                 input$VarFlag)
        } else {estdxacc2(input$SnRA*1.15, input$SpRA, input$prevA, input$SenSpecFlag, 
@@ -133,7 +143,7 @@ server <- function(input, output, session) {
 
    plotdf <- reactive({
      dd <- d1()
-    if (SSF() == 1)  {
+    if (input$SenSpecFlag == 1)  {
       #### plot actual senstivity of index test against measured sensitivity, given:
       ###########          actual specificity of index test
       ###########          actual sensitivity and specificity of rusty reference test
@@ -167,7 +177,7 @@ server <- function(input, output, session) {
       
   plotdf_limits <- reactive({
     
-       if(SSF() == 1) {
+       if(input$SenSpecFlag == 1) {
          dd2 <- d2()
          dd3 <- d3()
          x1_lower = dd2$SnIR
@@ -230,7 +240,7 @@ server <- function(input, output, session) {
     output$plot3 <-renderPlot({
     dd <- d1()
     
-    if (SSF() == 1)  {  
+    if (input$SenSpecFlag == 1)  {  
       x1  = dd$SnIR 
       x1label = "Index test: Measured sensitivity"
     } else {
