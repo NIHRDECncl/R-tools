@@ -104,25 +104,26 @@ centile_script <- function(age, sex, nonhdl){
 df <- as.data.frame(read.csv("data/mypatientsdatawsnps.csv"))
 df_male <- subset(df, df$Sex == "MALE")
 
-df_male$centile <- "NULL"
+df_male$centile <- 0
 
 centiles <- cm
 
-df_male$centiles2 <- 0
-df_male$centiles2 <- as.numeric(df_male$centiles)
-df_male$centiles[df_male$centile == "<99.5"] <- 100
-
-df_male$centile[df_male$centile == "99-99.5"] <- 99.5
-df_male$centile[df_male$centile == "97.5-99"] <- 99
-df_male$centile[df_male$centile == "95-97.5"] <- 97.5
-df_male$centile[df_male$centile == "90-95"] <- 95
-df_male$centile[df_male$centile == "80-90"] <- 90
-df_male$centile[df_male$centile == "75-80"] <- 80
-df_male$centile[df_male$centile == "<75"] <- 75
 
 
-df_male$centile <- apply(df_male,1, function(x,y,z) centile_script(df_male$age,  "Male", df_male$nonhdl))
-p <- ggplot(data=subset(df_male, !is.na(SNPscore)), aes(x= df_male$SNPscore, y = df_male$centile))
-p <- p + geom_point(data=subset(df_male, !is.na(SNPscore)),aes(x= df_male$SNPscore, y = df_male$centile)) + ylab("nonHDL (mmol/L)") +  
+df_male$centile <- apply(df_male,1, function(x,y,z) centile_script(df_male$age,  "Male", df_male$nonhdl))[,1]
+
+df_male$centile2[df_male$centile == ">99.5"] <- 100
+df_male$centile2[df_male$centile == "99-99.5"] <- 99.5
+df_male$centile2[df_male$centile == "97.5-99"] <- 99
+df_male$centile2[df_male$centile == "95-97.5"] <- 97.5
+df_male$centile2[df_male$centile == "90-95"] <- 95
+df_male$centile2[df_male$centile == "80-90"] <- 90
+df_male$centile2[df_male$centile == "75-80"] <- 80
+df_male$centile2[df_male$centile == "<75"] <- 75
+
+data <- subset(df_male, !is.na(SNPscore))
+
+p <- ggplot(data, aes(x=SNPscore, y=centile))
+p <- p + geom_point() + ylab("nonHDL (mmol/L)") +  
   xlab("SNP score")  +   ggtitle(paste("Male SNP plots"))
 p
