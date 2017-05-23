@@ -17,9 +17,11 @@ library(ggplot2)
 library(dplyr)
 library(gridExtra)
 
+## global.R ##
+
 # Define server logic for slider examples
 
-shinyServer(function(input, output) {
+server <- function(input, output, session) {
   
   # naming conventions for the suffix in 2x2 diagnostic accuracy statistics
   ##   2 => 2x2 table
@@ -42,28 +44,36 @@ shinyServer(function(input, output) {
   # Reactive expression to compose a data frame containing all of the assumptions
    formula1 <- reactive({
 
-    # Compose data frame   
-    SpecSenChoice = if (input$SenSpecFlag == 1) {"specificity"} else {"sensitivity"}
+    # Compose data frame 
+
+      # SpecSenChoice: 1=sensitivity, 2=specificity
     
+    SpecSenChoice = if (input$SenSpecFlag == 1) {"specificity"} else {"sensitivity"}
+    SpreadChoice = ifelse(input$SpreadFlag1 == 1 | input$SpreadFlag2 == 1, 1, 2) # 1=spread prevalence; 2= spread sensitivity/specificity
+  
     AssumptionsDF <- data.frame(
-      Name = c("Actual sensitivity of reference test",
-               "Actual specificity of reference test",
+      Name = c("Reference test Actual sensitivity",
+               "Reference test Actual specificity",
                "Actual Prevalence",
                "Graphing choice",
-               paste("Actual ", SpecSenChoice, " of index test"),
-               if (input$SpreadFlag == 1) {"Show 15% variation in "} else {paste("show 15% variation in reference test's ") } # 1=sensitivity, 2=specificity
+               paste("Index test: Actual ", SpecSenChoice),
+               if (SpreadChoice == 1)  {"Show 15% variation in prevalence"} 
+               else 
+                 {paste0("show 15% variation in reference test's ", SpecSenChoice) 
+                 } # 1=sensitivity, 2=specificity
       ),
       Assumptions = as.character(c(input$SnRA,
                              input$SpRA,
                              input$prevA,
-                             if (input$SenSpecFlag == 1) {"Sensitivity"} else {"Specificity"}, # 1=sensitivity, 2=specificity
-                             input$SenSpecIRAssumed,
-                             if (input$SpreadFlag == 1) {"Prevalence"} else {
-                               if (input$SenSpecFlag == 1) {"Specificity"} else {"Sensitivity"}
+                             if (input$SenSpecFlag == 1) {"Sensitivity"} else {"Specificity"}, 
+                             if (input$SenSpecFlag == 1) {"Actual specificity of index test"} else {"Actual sensitivity of index test"},
+                             if (SpreadChoice == 1) {"Prevalence"} 
+                               else {
+                                 if(input$SenSpecFlag == 1) {"Specificity"} 
+                                   else {"Sensitivity"}
                                } 
                              )),
-      stringsAsFactors=FALSE) 
-    
+      stringsAsFactors=FALSE)     
 
    }) # close reactive
   # Show the assumptions using an HTML table
@@ -73,47 +83,58 @@ shinyServer(function(input, output) {
   
   source("calfunction2.R")
   d1 <- reactive({estdxacc2(input$SnRA, input$SpRA, input$prevA, input$SenSpecFlag, 
-                            input$SenSpecIRAssumed, input$VarFlag)})
+                            if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
+                            input$VarFlag)})
   
   rangePlots1 <- reactiveValues(x1 = NULL, y1 = NULL)
   rangePlots2 <- reactiveValues(x2 = NULL, y2 = NULL)
   rangePlots3 <- reactiveValues(x3 = NULL, y3 = NULL)
 
-   SSF <- reactive({input$SenSpecFlag})
-   SF <- reactive({input$SpreadFlag})
+   # SSF <- reactive({input$SenSpecFlag})
+   # SF <- reactive({input$SpreadFlag})
    
    d2 <- reactive({
-   if(SSF() == 1) {
-     if(SF() == 1) {estdxacc2(input$SnRA, input$SpRA, input$prevA*0.85, input$SenSpecFlag, 
-                                 input$SenSpecIRAssumed, input$VarFlag)
+     SpreadChoice = ifelse(input$SpreadFlag1 == 1 | input$SpreadFlag2 == 1, 1, 2) # 1=spread prevalence; 2= spread sensitivity/specificity
+     if(input$SenSpecFlag == 1) {
+       if(SpreadChoice == 1) {estdxacc2(input$SnRA, input$SpRA, input$prevA*0.85, input$SenSpecFlag, 
+                              if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
+                              input$VarFlag)
 
      } else {estdxacc2(input$SnRA, input$SpRA*0.85, input$prevA, input$SenSpecFlag, 
-                                 input$SenSpecIRAssumed, input$VarFlag)
+                       if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
+                       input$VarFlag)
      }
    }
    else {
-     if(SF() == 1) {estdxacc2(input$SnRA, input$SpRA, input$prevA*0.85, input$SenSpecFlag, 
-                                 input$SenSpecIRAssumed, input$VarFlag)
+     if(SpreadChoice == 1) {estdxacc2(input$SnRA, input$SpRA, input$prevA*0.85, input$SenSpecFlag, 
+                              if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
+                              input$VarFlag)
      } else {
        estdxacc2(input$SnRA*0.85, input$SpRA, input$prevA, input$SenSpecFlag, 
-                                 input$SenSpecIRAssumed, input$VarFlag)
+                 if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
+                 input$VarFlag)
      }
    }
    })
    
    d3 <- reactive({
-     if(SSF() == 1) {
-       if(SF() == 1) {estdxacc2(input$SnRA, input$SpRA, input$prevA*1.15, input$SenSpecFlag, 
-                                      input$SenSpecIRAssumed, input$VarFlag)
+     SpreadChoice = ifelse(input$SpreadFlag1 == 1 | input$SpreadFlag2 == 1, 1, 2) # 1=spread prevalence; 2= spread sensitivity/specificity
+     if(input$SenSpecFlag == 1) {
+       if(SpreadChoice == 1) {estdxacc2(input$SnRA, input$SpRA, input$prevA*1.15, input$SenSpecFlag, 
+                                if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
+                                input$VarFlag)
        } else {estdxacc2(input$SnRA, input$SpRA*1.15, input$prevA, input$SenSpecFlag, 
-                                    input$SenSpecIRAssumed, input$VarFlag)
+                         if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
+                         input$VarFlag)
        }
      }
      else {
-       if(SF() == 1) {estdxacc2(input$SnRA, input$SpRA, input$prevA*1.15, input$SenSpecFlag, 
-                                    input$SenSpecIRAssumed, input$VarFlag)
+       if(input$SenSpecFlag == 1) {estdxacc2(input$SnRA, input$SpRA, input$prevA*1.15, input$SenSpecFlag, 
+                                if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
+                                input$VarFlag)
        } else {estdxacc2(input$SnRA*1.15, input$SpRA, input$prevA, input$SenSpecFlag, 
-                                    input$SenSpecIRAssumed, input$VarFlag)
+                         if (input$SenSpecFlag == 1) {input$SpecIRAssumed} else {input$SenIRAssumed},
+                         input$VarFlag)
        }
      }
    })
@@ -122,15 +143,15 @@ shinyServer(function(input, output) {
 
    plotdf <- reactive({
      dd <- d1()
-    if (SSF() == 1)  {
+    if (input$SenSpecFlag == 1)  {
       #### plot actual senstivity of index test against measured sensitivity, given:
       ###########          actual specificity of index test
       ###########          actual sensitivity and specificity of rusty reference test
       ###########          actual prevalence
       x1  = dd$SnIR
-      x1label = "Measured sensitivity of index test"
+      x1label = "Index test: measured sensitivity"
       y1 = dd$SnIA
-      y1label = "Actual sensitivity of index test"
+      y1label = "Index test: actual sensitivity"
       y2 = dd$ErrorSen
       y2label = "Error in sensitivity of index test (% points)"
       plotTitle1 = "Measured sensitivity"
@@ -140,9 +161,9 @@ shinyServer(function(input, output) {
       ###########          actual sensitivity and specificity of rusty reference test
       ###########          actual prevalence
       x1 = dd$SpIR
-      x1label <- "Measured specificity of index test"
+      x1label <- "Index test: Measured specificity"
       y1 = dd$SpIA
-      y1label <- "Actual specificity of index test"
+      y1label <- "Index test: Actual specificity"
       y2 = dd$ErrorSpec
       y2label <- "Error in specificity of index test (% points)"
       plotTitle1 <- "Measured specifcity"
@@ -156,7 +177,7 @@ shinyServer(function(input, output) {
       
   plotdf_limits <- reactive({
     
-       if(SSF() == 1) {
+       if(input$SenSpecFlag == 1) {
          dd2 <- d2()
          dd3 <- d3()
          x1_lower = dd2$SnIR
@@ -219,12 +240,12 @@ shinyServer(function(input, output) {
     output$plot3 <-renderPlot({
     dd <- d1()
     
-    if (SSF() == 1)  {  
+    if (input$SenSpecFlag == 1)  {  
       x1  = dd$SnIR 
-      x1label = "Measured sensitivity of index test"
+      x1label = "Index test: Measured sensitivity"
     } else {
       x1 = dd$SpIR
-      x1label <- "Measured specificity of index test"
+      x1label <- "Index test: Measured specificity"
     }
     
     y3 <- dd$NRpos
@@ -299,7 +320,7 @@ shinyServer(function(input, output) {
     # Show the reclassifications using an HTML table
      # output$formula2 <- renderTable(formula2(), include.rownames = FALSE) # close renderTable
       
-}) # end Shiny server function
+} # end Shiny server function
      
      
     

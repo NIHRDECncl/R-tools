@@ -28,8 +28,8 @@ library(MESS)
 #######################################################
 
 #################### ui ###############################
+ui <- function(request) {fluidPage(
 
-ui<-fluidPage(
 
   titlePanel(h4("Visually explore the effects of sensitivity, specificity, and prevalence on True positives, False postives, False negatives, True negatives")),
   
@@ -43,10 +43,10 @@ ui<-fluidPage(
       sliderInput("mean2", "Mean of distribution 2", min=-1, max=1, value= 0, step = 0.1),
       sliderInput("sd1", "Standard deviation of distribution 1", min=0.05, max=0.25, value= 0.15),
       sliderInput("sd2", "Standard deviation of distribution 2", min=0.05, max=0.25, value= 0.15),
-      sliderInput("threshold", "Threshold bar", min=-2, max=2, value= 0, step = 0.2)
+      sliderInput("threshold", "Threshold bar", min=-2, max=2, value= 0, step = 0.2),
   #  checkboxInput("sorted", label = "Population sorted by presence of condition and test result", value = FALSE),
   #  checkboxInput("ciFlag", label = "Show 95% confidence intervals (when sorted)", value = FALSE)
-      
+      bookmarkButton()
     ),
     mainPanel(
       plotOutput("distributionplots"),
@@ -64,14 +64,14 @@ ui<-fluidPage(
       verbatimTextOutput("stats2")
     )
   )
-)
+)}
 
 #######################################################
 
 #################    server     ################
 
-server<-function(input, output) {
-    
+  server <- function(input, output, session) {
+
     Dpos <- reactive({round(input$n * input$prevalence)})
     Dneg <- reactive({round(input$n - Dpos())})
     
@@ -134,4 +134,4 @@ server<-function(input, output) {
 
 }
 
-shinyApp(ui=ui, server=server)
+shinyApp(ui, server, enableBookmarking = "url")
