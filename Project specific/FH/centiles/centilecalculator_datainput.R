@@ -141,7 +141,8 @@ ui<-fluidPage(
         # SNP data
         radioButtons('SNP', 'SNP data present?', 
                      c(Yes = 'y', No = 'n' )
-                     )
+                     ), 
+        downloadButton('downloadData', 'Download')
         
     ),
     mainPanel(
@@ -306,32 +307,31 @@ server<-function(input, output) {
           
           if (is.null(df)) return(NULL)
            df <- as.data.frame(df)
+           
            df_male <- subset(df, df$Sex == "MALE")
            
-           df_male$ageindex <- df_male$age - 15
-           df_male$ageindex[df_male$ageindex < 0] <- 0
-           
-           df_male$centile <- "NULL"
+           df_male$centile <- 0
            
            centiles <- cm
-           if(input$SNP == 'y') {  
-           # df_male$centile <- ifelse(df_male$ageindex >0 & df_male$nonhdl >= centiles[df_male$ageindex,8], 100, df_male$centile)
-           # df_male$centile <- ifelse(df_male$ageindex >0 & df_male$nonhdl >= centiles[df_male$ageindex,7]& df_male$nonhdl < centiles[df_male$ageindex,8], 99.5, df_male$centile)
-           # df_male$centile <- ifelse(df_male$ageindex >0 & df_male$nonhdl >= centiles[df_male$ageindex ,6]& df_male$nonhdl < centiles[df_male$ageindex,7], 99, df_male$centile)
-           # df_male$centile <- ifelse(df_male$ageindex >0 & df_male$nonhdl >= centiles[df_male$ageindex,5]& df_male$nonhdl < centiles[df_male$ageindex,6], 97.5, df_male$centile)
-           # df_male$centile <- ifelse(df_male$ageindex >0 & df_male$nonhdl >= centiles[df_male$ageindex,4] & df_male$nonhdl < centiles[df_male$ageindex,5], 95, df_male$centile)
-           # df_male$centile <- ifelse(df_male$ageindex >0 & df_male$nonhdl >= centiles[df_male$ageindex,3]& df_male$nonhdl < centiles[df_male$ageindex,4], 90, df_male$centile)
-           # df_male$centile <- ifelse(df_male$ageindex >0 & df_male$nonhdl >= centiles[df_male$ageindex,2]& df_male$nonhdl < centiles[df_male$ageindex,3], 80, df_male$centile)
-           # df_male$centile <- ifelse(df_male$ageindex >0 & df_male$nonhdl < centiles[df_male$ageindex,2], 75, df_male$centile)
-           # 
-           #df_male$centile <- as.numeric(df_male$centile)
-            #  REACTIVE formula.  
-           df_male$centile <- apply(df_male,1, function(x,y,z) centile_script(df_male$age,  df_male$Sex, df_male$nonhdl))
            
-           p <- ggplot(df_male, aes(x= df_male$SNPscore, y = df_male$nonhdl,colour = factor(centile)))
-           p <- p + geom_point(data = df_male,aes(x= df_male$SNPscore, y = df_male$centile, colour = factor(centile))) + ylab("nonHDL (mmol/L)") +  
-             xlab("SNP score")  + 
-             ggtitle(paste("Male SNP plots"))
+           
+           if(input$SNP == 'y') {
+           df_male$centile <- apply(df_male,1, function(x,y,z) centile_script(df_male$age,  "Male", df_male$nonhdl))[,1]
+           
+#            df_male$centile2[df_male$centile == ">99.5"] <- 100
+#            df_male$centile2[df_male$centile == "99-99.5"] <- 99.5
+#            df_male$centile2[df_male$centile == "97.5-99"] <- 99
+#            df_male$centile2[df_male$centile == "95-97.5"] <- 97.5
+#            df_male$centile2[df_male$centile == "90-95"] <- 95
+#            df_male$centile2[df_male$centile == "80-90"] <- 90
+#            df_male$centile2[df_male$centile == "75-80"] <- 80
+#            df_male$centile2[df_male$centile == "<75"] <- 75
+           
+           data <- subset(df_male, !is.na(SNPscore))
+           
+           p <- ggplot(data, aes(x=SNPscore, y=centile))
+           p <- p + geom_point() + ylab("nonHDL (mmol/L)") +  
+             xlab("SNP score")  +   ggtitle(paste("Male SNP plots"))
            p
            }
          })
@@ -350,23 +350,25 @@ server<-function(input, output) {
            centiles <- cw
            
            if(input$SNP == 'y') {
-           df_female$centile <- ifelse(df_female$ageindex >0 &df_female$nonhdl >= centiles[df_female$ageindex,8], ">99.5", df_female$centile)
-           df_female$centile <- ifelse(df_female$ageindex >0 & df_female$nonhdl >= centiles[df_female$ageindex,7]& df_female$nonhdl < centiles[df_female$ageindex,8], "99-99.5", df_female$centile)
-           df_female$centile <- ifelse(df_female$ageindex >0 & df_female$nonhdl >= centiles[df_female$ageindex ,6]& df_female$nonhdl < centiles[df_female$ageindex,7], "97.5-99", df_female$centile)
-           df_female$centile <- ifelse(df_female$ageindex >0 & df_female$nonhdl >= centiles[df_female$ageindex,5]& df_female$nonhdl < centiles[df_female$ageindex,6], "95-97.5", df_female$centile)
-           df_female$centile <- ifelse(df_female$ageindex >0 & df_female$nonhdl >= centiles[df_female$ageindex,4] & df_female$nonhdl < centiles[df_female$ageindex,5], "90-95", df_female$centile)
-           df_female$centile <- ifelse(df_female$ageindex >0 & df_female$nonhdl >= centiles[df_female$ageindex,3]& df_female$nonhdl < centiles[df_female$ageindex,4], "80-90", df_female$centile)
-           df_female$centile <- ifelse(df_female$ageindex >0 & df_female$nonhdl >= centiles[df_female$ageindex,2]& df_female$nonhdl < centiles[df_female$ageindex,3], "75-80", df_female$centile)
-           df_female$centile <- ifelse(df_female$ageindex >0 & df_female$nonhdl < centiles[df_female$ageindex,2], "<75", df_female$centile)
-           
-           
-           p <- ggplot(df_female, aes(x= df_female$SNPscore, y = df_female$centile, colour = factor(centile)))
-           p <- p + geom_point(data = df_female,aes(x= df_female$SNPscore, y = df_female$centile, colour = factor(centile))) + ylab("nonHDL centile") +  
-             xlab("SNP score")  + 
-             ggtitle(paste("Female SNP plots"))
-           p
+             df_female$centile <- apply(df_female,1, function(x,y,z) centile_script(df_female$age,  "Female", df_female$nonhdl))[,1]
+             
+             #            df_female$centile2[df_female$centile == ">99.5"] <- 100
+             #            df_female$centile2[df_female$centile == "99-99.5"] <- 99.5
+             #            df_female$centile2[df_female$centile == "97.5-99"] <- 99
+             #            df_female$centile2[df_female$centile == "95-97.5"] <- 97.5
+             #            df_female$centile2[df_female$centile == "90-95"] <- 95
+             #            df_female$centile2[df_female$centile == "80-90"] <- 90
+             #            df_female$centile2[df_female$centile == "75-80"] <- 80
+             #            df_female$centile2[df_female$centile == "<75"] <- 75
+             
+             data <- subset(df_female, !is.na(SNPscore))
+             
+             p <- ggplot(data, aes(x=SNPscore, y=centile))
+             p <- p + geom_point() + ylab("nonHDL (mmol/L)") +  
+               xlab("SNP score")  +   ggtitle(paste("Female SNP plots"))
+             p
            }
-         })
+       
         
         # output$text1 <- renderText({ 
         #   if(input$age <16 | input$age > 120) {
@@ -375,7 +377,28 @@ server<-function(input, output) {
         #   
         # })
         
-        
+         output$downloadData <- downloadHandler({
+           
+           df <- myData()
+           
+           if (is.null(df)) return(NULL)
+           df <- as.data.frame(df)
+           
+           df_male <- subset(df, df$Sex == "MALE")
+           df_male$centile <- apply(df_male,1, function(x,y,z) centile_script(df_male$age,  "Male", df_male$nonhdl))[,1]
+           
+           df_female <- subset(df, df$Sex == "FEMALE")
+           df_female$centile <- apply(df_female,1, function(x,y,z) centile_script(df_female$age,  "Female", df_female$nonhdl))[,1]
+           
+           rbind.data.frame(df_male, df_female)
+           
+           filename = paste(patientspecificcentiles, '.csv', sep='')
+           write.csv(df, file)
+          
+         })
+         
+         
+         }) # end of server 
   
 }
 
