@@ -1,0 +1,10 @@
+name: centiles_input
+account: decncltools
+server: shinyapps.io
+appId: 168983
+bundleId: 773957
+url: https://decncltools.shinyapps.io/centiles_input/
+when: 1491153520.63469
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: centilecalculator v0.2.R
