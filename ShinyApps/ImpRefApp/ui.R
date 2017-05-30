@@ -20,8 +20,8 @@ urlNIHRlogo <- "https://qpk2dq-sn3302.files.1drv.com/y3mcTf14jWUWq2c18ry2kwc1vBk
 
 spinner <- "https://onedrive.live.com/download?cid=B2035DBFA124EFE7&resid=B2035DBFA124EFE7%213204&authkey=AClmMWLejVuzT2k"
 
-
-shinyUI(fluidPage(
+ui <- function(request) {
+  fluidPage(
   # tags$head(tags$style(HTML(mycss))),
   # Application title
   titlePanel(h4("App to explore uncertainties due to using an imperfect reference standard")),
@@ -103,5 +103,5 @@ tabPanel("Graphs",
     tags$br(),
     tags$img(src = urlNIHRlogo, width = "80px", height = "28px", align = "right")) # add the NIHR logo
   )
-)
+}
 
