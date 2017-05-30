@@ -21,26 +21,31 @@ urlNIHRlogo <- "https://qpk2dq-sn3302.files.1drv.com/y3mcTf14jWUWq2c18ry2kwc1vBk
 spinner <- "https://onedrive.live.com/download?cid=B2035DBFA124EFE7&resid=B2035DBFA124EFE7%213204&authkey=AClmMWLejVuzT2k"
 
 ui <- function(request) {
+
   fluidPage(
   # tags$head(tags$style(HTML(mycss))),
-  # Application title
-  titlePanel(h4("App to explore uncertainties due to using an imperfect reference standard")),
- 
-  tabsetPanel(
+    # Application title
+    titlePanel( "App to explore uncertainties due to using an imperfect reference standard"),
+    tabsetPanel(
+    # about tab
     tabPanel("About", value = "About"),
-    tabPanel("Index test measurements", 
+
+    # tab for tables for Index test (measured)
+    tabPanel("Index test (measured)",
              #div(id = "plot-container",
              #tags$img(src = spinner, id = "loading-spinner"),
-             tags$h5("contingency matrix for index test"), 
+             tags$h5("contingency matrix for index test"),
              textOutput("ITtitle"),
              tableOutput("ITCMTable"),
              hr(),
-             tags$h5("Diagnostic accuracy stats for index test"), 
+             tags$h5("Diagnostic accuracy stats for index test"),
              hr(),
             tableOutput("ITStatsTable"),
             value = "IT measurements"
            ),
-    tabPanel(" + Reference test estimates",
+
+    # tab for tables for Reference test (estimated)
+    tabPanel(" +  Reference test (estimated)",
          #div(id = "plot-container",
          #tags$img(src = spinner, id = "loading-spinner"),
          tags$h5("contingency matrix for reference test"),
@@ -52,7 +57,9 @@ ui <- function(request) {
          tableOutput("RTStatsTable"),
          value = "Reference test estimates"
         ),
-tabPanel(" -> Index test adjustments",
+
+    # tab for tables for Index test (adjusted)
+    tabPanel(" -> Index test (adjusted)",
          #div(id = "plot-container",
          #tags$img(src = spinner, id = "loading-spinner"),
          tags$h5("contingency matrix for index test adjusted for imperfect reference test"),
@@ -64,17 +71,18 @@ tabPanel(" -> Index test adjustments",
          tableOutput("ITAStatsTable"),
          value = "IT adjustments"
          ),
-tabPanel("Graphs",
+
+    # tab for graphs
+    tabPanel("Graphs",
          #div(id = "plot-container",
          #tags$img(src = spinner, id = "loading-spinner"),
          textOutput("graphs"),
          hr(),
          value = "IT adjustments"
          )
-  ),
-
-  fluidPage(
-    fluidRow(
+    ),
+    
+      fluidRow(
       column(2, wellPanel(tags$b("Overtype with:"),
         textInput("Title", label = NULL, value = "title for outputs", placeholder = "place holder"),
         textInput("IndexTest", label = NULL, value = "name of index test"),
@@ -91,10 +99,12 @@ tabPanel("Graphs",
       column(5, wellPanel(tags$b("Reference test"),
         sliderInput("RTsenEst", label = "\b \b \b \b estimated sensitivity", value = c(0.8, 0.9), min = 0, max = 1, step = 0.01),
         sliderInput("RTspecEst", label = "\b \b \b \b estimated specificity", value = c(0.8, 0.9), min = 0, max = 1, step = 0.01)
-        ))      )),
+        ))      ),
     hr(),
   column(3, actionButton("GoButton", "Recalculate")),
-  column(3, bookmarkButton(title = "Bookmark this application's state and get a URL for saving and sharing.")),
+  column(3, bookmarkButton(
+    title = "Bookmark this application's state and get a URL for saving and sharing."),
+    id = "bookmark"),
   column(12, hr(),
     tags$b("Cite as:"),
     tags$p("Michael Power, Joy Allen."),

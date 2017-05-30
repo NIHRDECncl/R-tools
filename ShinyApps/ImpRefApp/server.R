@@ -7,7 +7,7 @@
 
 
 # setwd("/Users/michaelpower/Google Drive/GIT-project/GitHub/R-tools/ShinyApps/ImpRefV2.0")
-source("FunctionsUsedByImpRefV2.R", local = TRUE)
+isolate({ source("FunctionsUsedByImpRefV2.R", local = TRUE)})
 LoadPackages()
 enableBookmarking("url")
 # options(shiny.error = browser)
@@ -15,8 +15,13 @@ enableBookmarking("url")
 # initialise Dx accuracy list for index test (measured), reference test, index test (true)
 #
 
-server <- function(input, output, session)  {
+shinyServer <- function(input, output, session) {
   
+  # Trigger bookmarking with either button
+  observeEvent(input$bookmark, {
+    session$doBookmark()
+  })
+
 # inputs from ui:   
 #   input$Title = "title for tables and graphs"
 #   input$IndexTest = "name of index test"
@@ -59,6 +64,9 @@ server <- function(input, output, session)  {
   # Tabulate (for the index test)
   # true accuracy measures, absolute errors, percentage errors (for mid-ranges of given parameters). And lower and upper uncertainty intervals with 95% limits derived from a probability sensitivity analysis which varies measured and assumed parameters across their limits with PDFs able to be selected by the user from on option list.
   # 
+  
+  # set titles and labels for index and reference tests
+  
   ITtitle <- eventReactive(input$GoButton, 
                {
                  paste0("Contingency matrix and diagnostic accuracy stats for ", input$IndexTest, " compared to ", input$ReferenceTest)
@@ -78,11 +86,18 @@ server <- function(input, output, session)  {
     ITDxAccMeas$Subtitle <- input$Subtitle
     ITDxAccMeas$IndexTest <- input$IndexTest
     ITDxAccMeas$ReferenceTest <- input$ReferenceTest
-    ITDxAccMeas$DxStats["Estimate","Sensitivity"] <- input$ITsenMeas
-    ITDxAccMeas$DxStats["Estimate","Specificity"] <- input$ITspecMeas
+    
+   
+    #  set population and prevalence
     ITDxAccMeas$DxStats["Estimate","Prevalence"] <- input$Prevalence
     ITDxAccMeas$DxStats["Estimate","Population"] <- input$Population
+    
+    # set sensitivity and specificity
+    ITDxAccMeas$DxStats["Estimate","Sensitivity"] <- input$ITsenMeas
+    ITDxAccMeas$DxStats["Estimate","Specificity"] <- input$ITspecMeas
    
+    # calculate contingency matrix and diagnostic accuracy stats 
+    ##### to do: update function to calculate confidence limits 
     ITDxAccMeas <- DxAcc(ITDxAccMeas, direction = "From stats", CImethod = "proportion")
     
    return(ITDxAccMeas)
@@ -95,6 +110,12 @@ server <- function(input, output, session)  {
       RTDxAccEst$IndexTest <- input$IndexTest
       RTDxAccEst$ReferenceTest <- input$ReferenceTest
       
+ #  assume same population and prevalence for reference test as for index test
+      RTDxAccEst$DxStats["Estimate","Prevalence"] <- input$Prevalence
+      RTDxAccEst$DxStats["Estimate","Population"] <- input$Population
+      
+      # set sensitivity and specificity
+      # use the given range for low and high limits, and their mean for the estimate
       RTDxAccEst$DxStats["Conf_Low","Sensitivity"] <- input$RTsenEst[1]
       RTDxAccEst$DxStats["Estimate","Sensitivity"] <- mean(input$RTsenEst) 
       RTDxAccEst$DxStats["Conf_high","Sensitivity"] <- input$RTsenEst[2]
@@ -102,25 +123,24 @@ server <- function(input, output, session)  {
       RTDxAccEst$DxStats["Conf_Low","Specificity"] <- input$RTspecEst[1]
       RTDxAccEst$DxStats["Estimate","Specificity"] <- mean(input$RTspecEst) 
       RTDxAccEst$DxStats["Conf_high","Specificity"] <- input$RTspecEst[2]
-      
+
+      # calculate contingency matrix and diagnostic accuracy stats 
       RTDxAccEst <- DxAcc(RTDxAccEst, direction = "From stats", CImethod = "estimated range")
 
       return(RTDxAccEst)
     })
     
-    
-    
-    
-    
-        
+  # print tables for index test (measured)
   output$ITtitle <- renderText(ITtitle())
   output$ITStatsTable <- renderTable(IT()$DxStats)
   output$ITCMTable <- renderTable(IT()$DxCM)
-  
+
+  # print tables for reference test (estimated)
   output$RTtitle <- renderText(RTtitle())
   output$RTStatsTable <- renderTable(RT()$DxStats)
   output$RTCMTable <- renderTable(RT()$DxCM)
 
+  # print tables for index test (adjusted for imperfect reference test)
   output$ITAtitle <- renderText(ITAtitle())
   output$ITAStatsTable <- renderTable(ITA()$DxStats)
   output$ITACMTable <- renderTable(ITA()$DxCM)
