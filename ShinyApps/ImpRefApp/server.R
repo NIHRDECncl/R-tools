@@ -27,19 +27,22 @@ shinyServer <- function(input, output, session) {
 #   input$IndexTest = "name of index test"
 #   input$ReferenceTest = "name of reference test"
 # 
-#   input$Prevalence
-#   input$Population
+#   input$gPrevalence --- true prevalence
+#   input$iPopulation --- population in the ir (Index cf Reference test) contingency matrix
 #  
-#   input$ITsenMeas
-#   input$ITpecMeas
+#   input$irSen
+#   input$irSpec
 #  
-#   input$RTsenEst
-#   input$RTspecEst
+#   input$rgSen
+#   input$rgSpec
 # 
+#   input$igSen
+#   input$igSpec
+#
   
-  ITDxAccMeas <- initDxAccList() 
-  RTDxAccEst <- ITDxAccMeas
-  ITDxAccTrue <- ITDxAccMeas
+  irDxAcc <- initDxAccList() 
+  rgDxAcc <- irDxAcc
+  igDxAcc <- irDxAcc
   
   # Tabulate (for the index test)
   # true accuracy measures, absolute errors, percentage errors (for mid-ranges of given parameters). And lower and upper uncertainty intervals with 95% limits derived from a probability sensitivity analysis which varies measured and assumed parameters across their limits with PDFs able to be selected by the user from on option list.
@@ -67,67 +70,67 @@ shinyServer <- function(input, output, session) {
   
   # set titles and labels for index and reference tests
   
-  ITtitle <- eventReactive(input$GoButton, 
+  irTitle <- eventReactive(input$GoButton, 
                {
                  paste0("Contingency matrix and diagnostic accuracy stats for ", input$IndexTest, " compared to ", input$ReferenceTest)
                 })
-  RTtitle <- eventReactive(input$GoButton, 
+  rgTitle <- eventReactive(input$GoButton, 
                            {
                              paste0("Contingency matrix and diagnostic accuracy stats for ", input$ReferenceTest, " compared to ", input$ReferenceTest)
                            })
-  ITAtitle <- eventReactive(input$GoButton, 
+  igTitle <- eventReactive(input$GoButton, 
                            {
                              paste0("Contingency matrix and diagnostic accuracy stats for ", input$IndexTest, " adjusted for inaccuracies in ", input$ReferenceTest)
                            })
   
 
     IT <- eventReactive(input$GoButton, {
-    ITDxAccMeas$Title <- input$Title
-    ITDxAccMeas$Subtitle <- input$Subtitle
-    ITDxAccMeas$IndexTest <- input$IndexTest
-    ITDxAccMeas$ReferenceTest <- input$ReferenceTest
+    irDxAcc$Title <- input$Title
+    irDxAcc$Subtitle <- input$Subtitle
+    irDxAcc$IndexTest <- input$IndexTest
+    irDxAcc$ReferenceTest <- input$ReferenceTest
     
    
     #  set population and prevalence
-    ITDxAccMeas$DxStats["Estimate","Prevalence"] <- input$Prevalence
-    ITDxAccMeas$DxStats["Estimate","Population"] <- input$Population
+    irDxAcc$DxStats["Estimate","Prevalence"] <- input$Prevalence
+    irDxAcc$DxStats["Estimate","Population"] <- input$Population
     
     # set sensitivity and specificity
-    ITDxAccMeas$DxStats["Estimate","Sensitivity"] <- input$ITsenMeas
-    ITDxAccMeas$DxStats["Estimate","Specificity"] <- input$ITspecMeas
+    irDxAcc$DxStats["Estimate","Sensitivity"] <- input$ITsenMeas
+    irDxAcc$DxStats["Estimate","Specificity"] <- input$ITspecMeas
    
     # calculate contingency matrix and diagnostic accuracy stats 
     ##### to do: update function to calculate confidence limits 
-    ITDxAccMeas <- DxAcc(ITDxAccMeas, direction = "From stats", CImethod = "proportion")
+    irDxAcc <- DxAcc(irDxAcc, direction = "From stats", CImethod = "proportion")
     
-   return(ITDxAccMeas)
+   return(irDxAcc)
   })
 
     
     RT <- eventReactive(input$GoButton, {
-      RTDxAccEst$Title <- input$Title
-      RTDxAccEst$Subtitle <- input$Subtitle
-      RTDxAccEst$IndexTest <- input$IndexTest
-      RTDxAccEst$ReferenceTest <- input$ReferenceTest
+      rgDxAcc$Title <- input$Title
+      rgDxAcc$Subtitle <- input$Subtitle
+      rgDxAcc$IndexTest <- input$IndexTest
+      rgDxAcc$ReferenceTest <- input$ReferenceTest
       
  #  assume same population and prevalence for reference test as for index test
-      RTDxAccEst$DxStats["Estimate","Prevalence"] <- input$Prevalence
-      RTDxAccEst$DxStats["Estimate","Population"] <- input$Population
+      rgDxAcc$DxStats["Estimate","Prevalence"] <- input$Prevalence
+      rgDxAcc$DxStats["Estimate","Population"] <- input$Population
       
       # set sensitivity and specificity
       # use the given range for low and high limits, and their mean for the estimate
-      RTDxAccEst$DxStats["Conf_Low","Sensitivity"] <- input$RTsenEst[1]
-      RTDxAccEst$DxStats["Estimate","Sensitivity"] <- mean(input$RTsenEst) 
-      RTDxAccEst$DxStats["Conf_high","Sensitivity"] <- input$RTsenEst[2]
+      rgDxAcc$DxStats["Conf_Low","Sensitivity"] <- input$RTsenEst[1]
+      rgDxAcc$DxStats["Estimate","Sensitivity"] <- mean(input$RTsenEst) 
+      rgDxAcc$DxStats["Conf_high","Sensitivity"] <- input$RTsenEst[2]
       
-      RTDxAccEst$DxStats["Conf_Low","Specificity"] <- input$RTspecEst[1]
-      RTDxAccEst$DxStats["Estimate","Specificity"] <- mean(input$RTspecEst) 
-      RTDxAccEst$DxStats["Conf_high","Specificity"] <- input$RTspecEst[2]
+      rgDxAcc$DxStats["Conf_Low","Specificity"] <- input$RTspecEst[1]
+      rgDxAcc$DxStats["Estimate","Specificity"] <- mean(input$RTspecEst) 
+      rgDxAcc$DxStats["Conf_high","Specificity"] <- input$RTspecEst[2]
 
       # calculate contingency matrix and diagnostic accuracy stats 
-      RTDxAccEst <- DxAcc(RTDxAccEst, direction = "From stats", CImethod = "estimated range")
+      rgDxAcc <- DxAcc(rgDxAcc, direction = "From stats", CImethod = "estimated range")
 
-      return(RTDxAccEst)
+      return(rgDxAcc)
     })
     
   # print tables for index test (measured)
@@ -152,14 +155,18 @@ shinyServer <- function(input, output, session) {
   #   input$IndexTest = "name of index test"
   #   input$ReferenceTest = "name of reference test"
   # 
-  #   input$Prevalence
-  #   input$Population
+  #   input$gPrevalence
+  #   input$iPopulation
   #  
-  #   input$ITsenMeas
-  #   input$ITpecMeas
+  #   input$irSen
+  #   input$irSpec
   #  
-  #   input$RTsenEst
-  #   input$RTspecEst
+  #   input$rgSen
+  #   input$rgSpec
+  # 
+  #   input$igSen
+  #   input$igSpec
+  
  
 }
 
