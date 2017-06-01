@@ -6,16 +6,32 @@
 #
 
 
+<<<<<<< HEAD
+=======
 # setwd("/Users/michaelpower/Google Drive/GIT-project/GitHub/R-tools/ShinyApps/ImpRefV2.0")
 isolate({ source("FunctionsUsedByImpRefV2.R", local = TRUE)})
 LoadPackages()
 enableBookmarking("url")
+>>>>>>> master
 # options(shiny.error = browser)
 
 # initialise Dx accuracy list for index test (measured), reference test, index test (true)
 #
 
+<<<<<<< HEAD
+source("FunctionsUsedByImpRefV2.R", local = TRUE)
+LoadPackages()
+enableBookmarking("url")
+
+server <- function(input, output, session) {
+  
+  # Trigger bookmarking with either button
+  observeEvent(input$bookmark, {
+    session$doBookmark()
+  })
+=======
 shinyServer <- function(input, output, session) {
+>>>>>>> master
   
   # Trigger bookmarking with either button
   observeEvent(input$bookmark, {
@@ -70,7 +86,11 @@ shinyServer <- function(input, output, session) {
   
   # set titles and labels for index and reference tests
   
+<<<<<<< HEAD
+  ITtitle <- eventReactive(input$GoButton, 
+=======
   irTitle <- eventReactive(input$GoButton, 
+>>>>>>> master
                {
                  paste0("Contingency matrix and diagnostic accuracy stats for ", input$IndexTest, " compared to ", input$ReferenceTest)
                 })
@@ -85,6 +105,25 @@ shinyServer <- function(input, output, session) {
   
 
     IT <- eventReactive(input$GoButton, {
+<<<<<<< HEAD
+    ITDxAccMeas$Title <- input$Title
+    ITDxAccMeas$Subtitle <- input$Subtitle
+    ITDxAccMeas$IndexTest <- input$IndexTest
+    ITDxAccMeas$ReferenceTest <- input$ReferenceTest
+    
+   
+    #  set population and prevalence
+    ITDxAccMeas$DxStats["Estimate","Prevalence"] <- input$Prevalence
+    ITDxAccMeas$DxStats["Estimate","Population"] <- input$Population
+    
+    # set sensitivity and specificity
+    ITDxAccMeas$DxStats["Estimate","Sensitivity"] <- input$ITsenMeas
+    ITDxAccMeas$DxStats["Estimate","Specificity"] <- input$ITspecMeas
+   
+    # calculate contingency matrix and diagnostic accuracy stats 
+    ##### to do: update function to calculate confidence limits 
+    ITDxAccMeas <- DxAcc(ITDxAccMeas, direction = "From stats", CImethod = "proportion")
+=======
     irDxAcc$Title <- input$Title
     irDxAcc$Subtitle <- input$Subtitle
     irDxAcc$IndexTest <- input$IndexTest
@@ -102,6 +141,7 @@ shinyServer <- function(input, output, session) {
     # calculate contingency matrix and diagnostic accuracy stats 
     ##### to do: update function to calculate confidence limits 
     irDxAcc <- DxAcc(irDxAcc, direction = "From stats", CImethod = "proportion")
+>>>>>>> master
     
    return(irDxAcc)
   })
@@ -114,6 +154,23 @@ shinyServer <- function(input, output, session) {
       rgDxAcc$ReferenceTest <- input$ReferenceTest
       
  #  assume same population and prevalence for reference test as for index test
+<<<<<<< HEAD
+      RTDxAccEst$DxStats["Estimate","Prevalence"] <- input$Prevalence
+      RTDxAccEst$DxStats["Estimate","Population"] <- input$Population
+      
+      # set sensitivity and specificity
+      # use the given range for low and high limits, and their mean for the estimate
+      RTDxAccEst$DxStats["Conf_Low","Sensitivity"] <- input$RTsenEst[1]
+      RTDxAccEst$DxStats["Estimate","Sensitivity"] <- mean(input$RTsenEst) 
+      RTDxAccEst$DxStats["Conf_high","Sensitivity"] <- input$RTsenEst[2]
+      
+      RTDxAccEst$DxStats["Conf_Low","Specificity"] <- input$RTspecEst[1]
+      RTDxAccEst$DxStats["Estimate","Specificity"] <- mean(input$RTspecEst) 
+      RTDxAccEst$DxStats["Conf_high","Specificity"] <- input$RTspecEst[2]
+
+      # calculate contingency matrix and diagnostic accuracy stats 
+      RTDxAccEst <- DxAcc(RTDxAccEst, direction = "From stats", CImethod = "estimated range")
+=======
       rgDxAcc$DxStats["Estimate","Prevalence"] <- input$Prevalence
       rgDxAcc$DxStats["Estimate","Population"] <- input$Population
       
@@ -129,6 +186,7 @@ shinyServer <- function(input, output, session) {
 
       # calculate contingency matrix and diagnostic accuracy stats 
       rgDxAcc <- DxAcc(rgDxAcc, direction = "From stats", CImethod = "estimated range")
+>>>>>>> master
 
       return(rgDxAcc)
     })

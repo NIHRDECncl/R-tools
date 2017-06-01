@@ -20,6 +20,20 @@ urlNIHRlogo <- "https://qpk2dq-sn3302.files.1drv.com/y3mcTf14jWUWq2c18ry2kwc1vBk
 
 spinner <- "https://onedrive.live.com/download?cid=B2035DBFA124EFE7&resid=B2035DBFA124EFE7%213204&authkey=AClmMWLejVuzT2k"
 
+<<<<<<< HEAD
+ui <- function(request) {fluidPage(
+  # tags$head(tags$style(HTML(mycss))),
+  # Application title
+  titlePanel(h4("App to explore uncertainties due to using an imperfect reference standard")),
+ 
+  tabsetPanel(
+    
+    # about tab
+    tabPanel("About", value = "About"),
+    
+    # tab for tables for Index test (measured)
+    tabPanel("Index test (measured)", 
+=======
 
 # conventions for naming variables
 # Prefixes indicate the group the varible belongs to:
@@ -91,6 +105,7 @@ ui <- function(request) {
 
     # tab for tables for Index test (measured)
     tabPanel("Index test (measured)",
+>>>>>>> master
              #div(id = "plot-container",
              #tags$img(src = spinner, id = "loading-spinner"),
              tags$h5("contingency matrix for index test"),
@@ -102,8 +117,13 @@ ui <- function(request) {
             tableOutput("ITStatsTable"),
             value = "IT measurements"
            ),
+<<<<<<< HEAD
+    
+    # tab for tables for Reference test (estimated) 
+=======
 
     # tab for tables for Reference test (estimated)
+>>>>>>> master
     tabPanel(" +  Reference test (estimated)",
          #div(id = "plot-container",
          #tags$img(src = spinner, id = "loading-spinner"),
@@ -116,8 +136,13 @@ ui <- function(request) {
          tableOutput("RTStatsTable"),
          value = "Reference test estimates"
         ),
+<<<<<<< HEAD
+    
+    # tab for tables for Index test (adjusted) 
+=======
 
     # tab for tables for Index test (adjusted)
+>>>>>>> master
     tabPanel(" -> Index test (adjusted)",
          #div(id = "plot-container",
          #tags$img(src = spinner, id = "loading-spinner"),
@@ -130,9 +155,15 @@ ui <- function(request) {
          tableOutput("ITAStatsTable"),
          value = "IT adjustments"
          ),
+<<<<<<< HEAD
+    
+    # tab for graphs 
+    tabPanel("Graphs",
+=======
 
     # tab for graphs
     tabPanel("Graphs: individual vars",
+>>>>>>> master
          #div(id = "plot-container",
          #tags$img(src = spinner, id = "loading-spinner"),
          textOutput("graphs"),
