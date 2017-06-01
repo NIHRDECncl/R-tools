@@ -149,7 +149,8 @@ z-index: -2;
 "
 #################### ui ###############################
 
-ui <- function(request) {fluidPage(
+ui <- function(request) {
+  fluidPage(
   tags$head(tags$style(HTML(mycss))),
   titlePanel(h4("Evaluating a diagnostic test: clinical accuracy and clinical utility")),
 

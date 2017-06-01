@@ -6,11 +6,19 @@
 #
 
 
+<<<<<<< HEAD
+=======
+# setwd("/Users/michaelpower/Google Drive/GIT-project/GitHub/R-tools/ShinyApps/ImpRefV2.0")
+isolate({ source("FunctionsUsedByImpRefV2.R", local = TRUE)})
+LoadPackages()
+enableBookmarking("url")
+>>>>>>> master
 # options(shiny.error = browser)
 
 # initialise Dx accuracy list for index test (measured), reference test, index test (true)
 #
 
+<<<<<<< HEAD
 source("FunctionsUsedByImpRefV2.R", local = TRUE)
 LoadPackages()
 enableBookmarking("url")
@@ -21,25 +29,36 @@ server <- function(input, output, session) {
   observeEvent(input$bookmark, {
     session$doBookmark()
   })
+=======
+shinyServer <- function(input, output, session) {
+>>>>>>> master
   
+  # Trigger bookmarking with either button
+  observeEvent(input$bookmark, {
+    session$doBookmark()
+  })
+
 # inputs from ui:   
 #   input$Title = "title for tables and graphs"
 #   input$IndexTest = "name of index test"
 #   input$ReferenceTest = "name of reference test"
 # 
-#   input$Prevalence
-#   input$Population
+#   input$gPrevalence --- true prevalence
+#   input$iPopulation --- population in the ir (Index cf Reference test) contingency matrix
 #  
-#   input$ITsenMeas
-#   input$ITpecMeas
+#   input$irSen
+#   input$irSpec
 #  
-#   input$RTsenEst
-#   input$RTspecEst
+#   input$rgSen
+#   input$rgSpec
 # 
+#   input$igSen
+#   input$igSpec
+#
   
-  ITDxAccMeas <- initDxAccList() 
-  RTDxAccEst <- ITDxAccMeas
-  ITDxAccTrue <- ITDxAccMeas
+  irDxAcc <- initDxAccList() 
+  rgDxAcc <- irDxAcc
+  igDxAcc <- irDxAcc
   
   # Tabulate (for the index test)
   # true accuracy measures, absolute errors, percentage errors (for mid-ranges of given parameters). And lower and upper uncertainty intervals with 95% limits derived from a probability sensitivity analysis which varies measured and assumed parameters across their limits with PDFs able to be selected by the user from on option list.
@@ -67,21 +86,26 @@ server <- function(input, output, session) {
   
   # set titles and labels for index and reference tests
   
+<<<<<<< HEAD
   ITtitle <- eventReactive(input$GoButton, 
+=======
+  irTitle <- eventReactive(input$GoButton, 
+>>>>>>> master
                {
                  paste0("Contingency matrix and diagnostic accuracy stats for ", input$IndexTest, " compared to ", input$ReferenceTest)
                 })
-  RTtitle <- eventReactive(input$GoButton, 
+  rgTitle <- eventReactive(input$GoButton, 
                            {
                              paste0("Contingency matrix and diagnostic accuracy stats for ", input$ReferenceTest, " compared to ", input$ReferenceTest)
                            })
-  ITAtitle <- eventReactive(input$GoButton, 
+  igTitle <- eventReactive(input$GoButton, 
                            {
                              paste0("Contingency matrix and diagnostic accuracy stats for ", input$IndexTest, " adjusted for inaccuracies in ", input$ReferenceTest)
                            })
   
 
     IT <- eventReactive(input$GoButton, {
+<<<<<<< HEAD
     ITDxAccMeas$Title <- input$Title
     ITDxAccMeas$Subtitle <- input$Subtitle
     ITDxAccMeas$IndexTest <- input$IndexTest
@@ -99,18 +123,38 @@ server <- function(input, output, session) {
     # calculate contingency matrix and diagnostic accuracy stats 
     ##### to do: update function to calculate confidence limits 
     ITDxAccMeas <- DxAcc(ITDxAccMeas, direction = "From stats", CImethod = "proportion")
+=======
+    irDxAcc$Title <- input$Title
+    irDxAcc$Subtitle <- input$Subtitle
+    irDxAcc$IndexTest <- input$IndexTest
+    irDxAcc$ReferenceTest <- input$ReferenceTest
     
-   return(ITDxAccMeas)
+   
+    #  set population and prevalence
+    irDxAcc$DxStats["Estimate","Prevalence"] <- input$Prevalence
+    irDxAcc$DxStats["Estimate","Population"] <- input$Population
+    
+    # set sensitivity and specificity
+    irDxAcc$DxStats["Estimate","Sensitivity"] <- input$ITsenMeas
+    irDxAcc$DxStats["Estimate","Specificity"] <- input$ITspecMeas
+   
+    # calculate contingency matrix and diagnostic accuracy stats 
+    ##### to do: update function to calculate confidence limits 
+    irDxAcc <- DxAcc(irDxAcc, direction = "From stats", CImethod = "proportion")
+>>>>>>> master
+    
+   return(irDxAcc)
   })
 
     
     RT <- eventReactive(input$GoButton, {
-      RTDxAccEst$Title <- input$Title
-      RTDxAccEst$Subtitle <- input$Subtitle
-      RTDxAccEst$IndexTest <- input$IndexTest
-      RTDxAccEst$ReferenceTest <- input$ReferenceTest
+      rgDxAcc$Title <- input$Title
+      rgDxAcc$Subtitle <- input$Subtitle
+      rgDxAcc$IndexTest <- input$IndexTest
+      rgDxAcc$ReferenceTest <- input$ReferenceTest
       
  #  assume same population and prevalence for reference test as for index test
+<<<<<<< HEAD
       RTDxAccEst$DxStats["Estimate","Prevalence"] <- input$Prevalence
       RTDxAccEst$DxStats["Estimate","Population"] <- input$Population
       
@@ -126,8 +170,25 @@ server <- function(input, output, session) {
 
       # calculate contingency matrix and diagnostic accuracy stats 
       RTDxAccEst <- DxAcc(RTDxAccEst, direction = "From stats", CImethod = "estimated range")
+=======
+      rgDxAcc$DxStats["Estimate","Prevalence"] <- input$Prevalence
+      rgDxAcc$DxStats["Estimate","Population"] <- input$Population
+      
+      # set sensitivity and specificity
+      # use the given range for low and high limits, and their mean for the estimate
+      rgDxAcc$DxStats["Conf_Low","Sensitivity"] <- input$RTsenEst[1]
+      rgDxAcc$DxStats["Estimate","Sensitivity"] <- mean(input$RTsenEst) 
+      rgDxAcc$DxStats["Conf_high","Sensitivity"] <- input$RTsenEst[2]
+      
+      rgDxAcc$DxStats["Conf_Low","Specificity"] <- input$RTspecEst[1]
+      rgDxAcc$DxStats["Estimate","Specificity"] <- mean(input$RTspecEst) 
+      rgDxAcc$DxStats["Conf_high","Specificity"] <- input$RTspecEst[2]
 
-      return(RTDxAccEst)
+      # calculate contingency matrix and diagnostic accuracy stats 
+      rgDxAcc <- DxAcc(rgDxAcc, direction = "From stats", CImethod = "estimated range")
+>>>>>>> master
+
+      return(rgDxAcc)
     })
     
   # print tables for index test (measured)
@@ -152,14 +213,18 @@ server <- function(input, output, session) {
   #   input$IndexTest = "name of index test"
   #   input$ReferenceTest = "name of reference test"
   # 
-  #   input$Prevalence
-  #   input$Population
+  #   input$gPrevalence
+  #   input$iPopulation
   #  
-  #   input$ITsenMeas
-  #   input$ITpecMeas
+  #   input$irSen
+  #   input$irSpec
   #  
-  #   input$RTsenEst
-  #   input$RTspecEst
+  #   input$rgSen
+  #   input$rgSpec
+  # 
+  #   input$igSen
+  #   input$igSpec
+  
  
 }
 
