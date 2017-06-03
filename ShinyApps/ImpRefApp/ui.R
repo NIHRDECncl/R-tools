@@ -36,19 +36,7 @@ spinner <- "https://onedrive.live.com/download?cid=B2035DBFA124EFE7&resid=B2035D
 
 
 ui <- function(request) {
-  
   navbarPage(
-    # tags$head(tags$style(HTML(mycss))),
-    
-    # tags$style(HTML(".irs-bar {width: 5%; height: 5px; background: black; border-top: 1px solid black; border-bottom: 1px solid black;}")),
-    # tags$style(HTML(".irs-bar-edge {background: black; border: 1px solid black; height: 5px; border-radius: 5px 5px 5px 5px;}")),
-    # tags$style(HTML(".irs-line {border: 1px solid black; height: 10px;}")),
-    # tags$style(HTML(".irs-grid-text {font-family: 'arial'; color: black}")),
-    # tags$style(HTML(".irs-max {font-family: 'arial'; color: red;}")),
-    # tags$style(HTML(".irs-min {font-family: 'arial'; color: black;}")),
-    # tags$style(HTML(".irs-single {color:black; background:#6666ff;}")), 
-    tags$style(HTML(".irs-slider {width: 1px; height: 15px; top: 15px;}")),
-    
     # about tab
       tabPanel("About", 
                hr(),
@@ -58,6 +46,7 @@ ui <- function(request) {
                value = "About"),
       
       tabPanel("Inputs", 
+               tags$style(HTML(".irs-slider {width: 1px; height: 15px; top: 15px;}")),
                
                fluidRow(
                  column(4, wellPanel(tags$b("Overtype with:"),
