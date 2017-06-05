@@ -49,33 +49,37 @@ ui <- function(request) {
                tags$style(HTML(".irs-slider {width: 1px; height: 15px; top: 15px;}")),
                
                fluidRow(
-                 column(4, wellPanel(tags$b("Overtype with:"),
-                                     textInput("Title", label = NULL, value = "title for outputs", placeholder = "place holder"),
-                                     textInput("IndexTest", label = NULL, value = "name of index test"),
-                                     textInput("ReferenceTest", label = NULL, value = "name of reference test")
-                 )),
-                 column(4, wellPanel(tags$b(""),
-                                     sliderInput("gPrevalence", label = "prevalence", value = c(0.1, 0.25), min = 0, max = 1, step = 0.01),
-                                     numericInput("iPopulation", label = "study size", value = 100, min = 10, max = 1000, step = 5)
-                 ))),
-               
-               fluidRow(
-                 column(4, wellPanel(tags$b("Index test --- measured values"),
+                 column(4, wellPanel(tags$b("Index test"),
                                      sliderInput("irSen", label = "\b \b measured sensitivity", value =c (0.7, 0.9), min = 0, max = 1, step = 0.01, width = "125%"),
                                      sliderInput("irSpec", label = "\b \b measured specificity", value = c(0.8, 0.95), min = 0, max = 1, step = 0.01)
                  )),
                  column(4, wellPanel(tags$b("Reference test"),
-                                     sliderInput("rgSen", label = "\b \b \b \b estimated sensitivity", value = c(0.60, 0.75), min = 0, max = 1, step = 0.01, width='100%'),
-                                     sliderInput("rgSpec", label = "\b \b \b \b estimated specificity", value = c(0.85, 0.99), min = 0, max = 1, step = 0.01, width='100%')
+                                     sliderInput("rgSen", label = "\b \b \b \b guestimated sensitivity", value = c(0.60, 0.75), min = 0, max = 1, step = 0.01, width='100%'),
+                                     sliderInput("rgSpec", label = "\b \b \b \b guestimated specificity", value = c(0.85, 0.99), min = 0, max = 1, step = 0.01, width='100%')
                  )),
                  
-                 column(4, wellPanel(tags$b("Index test --- estimates of true values"),
-                                     sliderInput("igSen", label = "\b \b \b \b estimated sensitivity", value = c(0.6, 0.8), min = 0, max = 1, step = 0.01, width='100%'),
-                                     sliderInput("igSpec", label = "\b \b \b \b estimated specificity", value = c(0.6, 0.75), min = 0, max = 1, step = 0.01, width='100%')
+                 column(4, wellPanel(tags$b("Index test guestimates of sensitivity/specificity for calculating specificity/sensitivity "),
+                                     sliderInput("igSen", label = "\b \b \b \b guestimated sensitivity", value = c(0.6, 0.8), min = 0, max = 1, step = 0.01, width='100%'),
+                                     sliderInput("igSpec", label = "\b \b \b \b guestimated specificity", value = c(0.6, 0.75), min = 0, max = 1, step = 0.01, width='100%')
                  ))      ),
-               
-               value = "Inputs"),
-      
+
+      fluidRow(
+        column(4, wellPanel(tags$b("Overtype with:"),
+                            textInput("Title", label = NULL, value = "title for outputs", placeholder = "place holder"),
+                            textInput("IndexTest", label = NULL, value = "name of index test"),
+                            textInput("ReferenceTest", label = NULL, value = "name of reference test")
+        )),
+        
+        column(4, wellPanel(tags$b(""),
+                            sliderInput("gPrevalence", label = "True prevalence (estimated range)", value = c(0.1, 0.25), min = 0, max = 1, step = 0.01),
+                            numericInput("iPopulation", label = "study size", value = 100, min = 10, max = 1000, step = 5)
+        )),
+        
+        column(4, wellPanel(tags$b(""),
+                            numericInput("nSamples", label = "Number of samples for probablistic assessment of uncertainties", value = 100, min = 2, max = 100, step = 1)
+        ))
+        ),
+      value = "Inputs"),
       
       # tab for tables for Index test (measured)
       navbarMenu("Tables",
