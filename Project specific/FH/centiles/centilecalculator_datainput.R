@@ -5,21 +5,21 @@ library(ggplot2)
 library(dplyr)
 
 
-#wd <- "H:/Jallens_homearea_DEC/Calculators/R/R-tools/Project specific/FH/centiles"
-wd <- "~/Documents/DEC WORK/Shiny/R tools/R-tools/Project specific/FH/centiles"
-
-setwd(wd)
-
-cm <- read.csv("malecentiles.csv")
-cw <- read.csv("femalecentiles.csv")
-
-gcm <- read.csv("gamlassmalecentiles.csv")
-gcw <-read.csv("gamlassfemalecentiles.csv")
-
-gamlass_centiles <- TRUE
 
 centile_script <- function(age, sex, nonhdl){ 
  
+  #wd <- "H:/Jallens_homearea_DEC/Calculators/R/R-tools/Project specific/FH/centiles"
+  wd <- "~/Documents/DEC WORK/Shiny/R tools/R-tools/Project specific/FH/centiles"
+  
+  setwd(wd)
+  
+  cm <- read.csv("malecentiles.csv")
+  cw <- read.csv("femalecentiles.csv")
+  
+  gcm <- read.csv("gamlassmalecentiles.csv")
+  gcw <-read.csv("gamlassfemalecentiles.csv")
+  
+  gamlass_centiles <- TRUE
   
   if(!gamlass_centiles){
     
