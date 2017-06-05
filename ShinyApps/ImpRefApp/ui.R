@@ -36,29 +36,17 @@ spinner <- "https://onedrive.live.com/download?cid=B2035DBFA124EFE7&resid=B2035D
 
 
 ui <- function(request) {
-  
-  fluidPage(
-    # tags$head(tags$style(HTML(mycss))),
-    
-    # tags$style(HTML(".irs-bar {width: 5%; height: 5px; background: black; border-top: 1px solid black; border-bottom: 1px solid black;}")),
-    # tags$style(HTML(".irs-bar-edge {background: black; border: 1px solid black; height: 5px; border-radius: 5px 5px 5px 5px;}")),
-    # tags$style(HTML(".irs-line {border: 1px solid black; height: 10px;}")),
-    # tags$style(HTML(".irs-grid-text {font-family: 'arial'; color: black}")),
-    # tags$style(HTML(".irs-max {font-family: 'arial'; color: red;}")),
-    # tags$style(HTML(".irs-min {font-family: 'arial'; color: black;}")),
-    # tags$style(HTML(".irs-single {color:black; background:#6666ff;}")), 
-    tags$style(HTML(".irs-slider {width: 1px; height: 15px; top: 15px;}")),
-    
-    
-    
-    
-    # Application title
-    titlePanel( "App to explore uncertainties due to using an imperfect reference standard"),
-    tabsetPanel(
-      # about tab
-      tabPanel("About", value = "About"),
+  navbarPage(
+    # about tab
+      tabPanel("About", 
+               hr(),
+               tags$h3("under construction", style="color:red"),
+               hr(),
+               tags$blockquote("this page will explain how to use the app to explore the various sources of uncertainty and their effects"),
+               value = "About"),
       
       tabPanel("Inputs", 
+               tags$style(HTML(".irs-slider {width: 1px; height: 15px; top: 15px;}")),
                
                fluidRow(
                  column(4, wellPanel(tags$b("Overtype with:"),
@@ -90,10 +78,16 @@ ui <- function(request) {
       
       
       # tab for tables for Index test (measured)
-      tabPanel("Index test (measured)",
+      navbarMenu("Tables",
+      tabPanel("Index test measurments of diagnostic accuracy",
                #div(id = "plot-container",
                #tags$img(src = spinner, id = "loading-spinner"),
                tags$h5("contingency matrix for index test"),
+               hr(),
+               tags$h3("under construction", style="color:red"),
+               hr(),
+               tags$blockquote("this page will have table of diagostic accuracy statistics"),
+               
                textOutput("ITtitle"),
                tableOutput("ITCMTable"),
                hr(),
@@ -104,10 +98,15 @@ ui <- function(request) {
       ),
       
       # tab for tables for Reference test (estimated)
-      tabPanel(" +  Reference test (estimated)",
+      tabPanel(" +  Reference test guestimates of diagnostic accuracy",
                #div(id = "plot-container",
                #tags$img(src = spinner, id = "loading-spinner"),
                tags$h5("contingency matrix for reference test"),
+               hr(),
+               tags$h3("under construction", style="color:red"),
+               hr(),
+               tags$blockquote("this page will have table of diagostic accuracy statistics"),
+               
                textOutput("RTtitle"),
                tableOutput("RTCMTable"),
                hr(),
@@ -118,10 +117,15 @@ ui <- function(request) {
       ),
       
       # tab for tables for Index test (adjusted)
-      tabPanel(" -> Index test (adjusted)",
+      tabPanel(" -> Index test guestimates and estimates of true diagnostic accuracy",
                #div(id = "plot-container",
                #tags$img(src = spinner, id = "loading-spinner"),
                tags$h5("contingency matrix for index test adjusted for imperfect reference test"),
+               hr(),
+               tags$h3("under construction", style="color:red"),
+               hr(),
+               tags$blockquote("this page will have table of diagostic accuracy statistics"),
+               
                textOutput("ITAtitle"),
                tableOutput("ITACMTable"),
                hr(),
@@ -129,33 +133,48 @@ ui <- function(request) {
                hr(),
                tableOutput("ITAStatsTable"),
                value = "IT adjustments"
+      )
       ),
       
       # tab for graphs
-      tabPanel("Graphs: individual vars",
+      navbarMenu("Graphs",
+      tabPanel("Effects of individual variables assuming statistical independence",
                #div(id = "plot-container",
                #tags$img(src = spinner, id = "loading-spinner"),
                textOutput("graphs"),
+               hr(),
+               tags$h3("under construction", style="color:red"),
+               hr(),
+               tags$blockquote("this page will have graphs of diagostic accuracy statistics"),
+               
                hr(),
                value = "IT adjustments"
       ),
       # tab for graphs
-      tabPanel("Graphs: stat dependence",
+      tabPanel("Effects of individual variables assuming statistical dependence",
                #div(id = "plot-container",
                #tags$img(src = spinner, id = "loading-spinner"),
                textOutput("graphs"),
+               tags$h3("under construction", style="color:red"),
+               hr(),
+               tags$blockquote("this page will have graphs of diagostic accuracy statistics"),
+               
                hr(),
                value = "IT adjustments"
       ),
       # tab for graphs
-      tabPanel("Graphs: overall",
+      tabPanel("Overall uncertainties assuming statistical dependence",
                #div(id = "plot-container",
                #tags$img(src = spinner, id = "loading-spinner"),
                textOutput("graphs"),
                hr(),
+               tags$h3("under construction", style="color:red"),
+               hr(),
+               tags$blockquote("this page will have graphs of diagostic accuracy statistics"),
+               
                value = "IT adjustments"
       )
-    ),
+      ),
     
     hr(),
     column(3, actionButton("GoButton", "Recalculate")),
@@ -169,5 +188,5 @@ ui <- function(request) {
            tags$p("NIHR Diagnostic Evidence Co-operative Newcastle. September 2016"),
            tags$br(),
            tags$img(src = urlNIHRlogo, width = "80px", height = "28px", align = "right")) # add the NIHR logo
-  )
+    , title = "Explore uncertainties in diagnostic accuracy when evaluating with an imperfect reference")
 }
