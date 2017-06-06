@@ -200,7 +200,23 @@ server<-function(input, output) {
         
           
         })
+      
+      outputdata <- reactive({
         
+      df <- myData()
+      
+      if (is.null(df)) return(NULL)
+      df <- as.data.frame(df)
+      
+      df_male <- subset(df, df$Sex == "MALE")
+      df_male$centile <- apply(df_male,1, function(x,y,z) centile_script(df_male$age,  "Male", df_male$nonhdl))[,1]
+      
+      df_female <- subset(df, df$Sex == "FEMALE")
+      df_female$centile <- apply(df_female,1, function(x,y,z) centile_script(df_female$age,  "Female", df_female$nonhdl))[,1]
+      
+      df2 <- rbind.data.frame(df_male, df_female)
+      
+      })
      
         output$centilePlotm<-renderPlot({
            df <- myData()
@@ -368,6 +384,8 @@ server<-function(input, output) {
                xlab("SNP score")  +   ggtitle(paste("Female SNP plots"))
              p
            }
+           
+         })
        
         
         # output$text1 <- renderText({ 
@@ -377,28 +395,19 @@ server<-function(input, output) {
         #   
         # })
         
-         output$downloadData <- downloadHandler({
+         output$downloadData <- downloadHandler(
            
-           df <- myData()
-           
-           if (is.null(df)) return(NULL)
-           df <- as.data.frame(df)
-           
-           df_male <- subset(df, df$Sex == "MALE")
-           df_male$centile <- apply(df_male,1, function(x,y,z) centile_script(df_male$age,  "Male", df_male$nonhdl))[,1]
-           
-           df_female <- subset(df, df$Sex == "FEMALE")
-           df_female$centile <- apply(df_female,1, function(x,y,z) centile_script(df_female$age,  "Female", df_female$nonhdl))[,1]
-           
-           rbind.data.frame(df_male, df_female)
-           
-           filename = paste(patientspecificcentiles, '.csv', sep='')
-           write.csv(df, file)
-          
-         })
+           filename = function() {
+             paste('patientspecificcentiles-', Sys.Date(), "csv", sep = "")
+           },
+           content = function(file) {
+             write.csv(outputdata(), file)
+           }
+             
+         )
          
          
-         }) # end of server 
+          # end of server 
   
 }
 
