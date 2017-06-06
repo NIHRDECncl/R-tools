@@ -5,8 +5,8 @@ library(ggplot2)
 library(dplyr)
 
 
-wd <- "H:/Jallens_homearea_DEC/Calculators/R/R-tools/Project specific/FH/centiles"
-#wd <- "~/Documents/DEC WORK/Shiny/R tools/R-tools/Project specific/FH/centiles"
+#wd <- "H:/Jallens_homearea_DEC/Calculators/R/R-tools/Project specific/FH/centiles"
+wd <- "~/Documents/DEC WORK/Shiny/R tools/R-tools/Project specific/FH/centiles"
 
 setwd(wd)
 
@@ -302,7 +302,8 @@ server<-function(input, output) {
             geom_line(aes(x = age, y = X99.), colour = "cyan", size = 1.25) + 
             geom_line(aes(x = age, y = X99.5.), colour = "brown", size = 1.25) + 
             xlim(0,120)+ ylim(2.5,12) + ylab("nonHDL (mmol/L)") +     xlab("Age")  + 
-            ggtitle(paste("Female centile plots")) + geom_point(data = df_female, mapping = aes(x = df_female$age, y = df_female$nonhdl), size = 2) + 
+            ggtitle(paste("Female centile plots")) + 
+            geom_point(data = df_female, mapping = aes(x = df_female$age, y = df_female$nonhdl), size = 2) + 
             annotate("text", label = "75%",colour = "red", size = 6, x = 115, y = 3.75) +
             annotate("text", label = "80%",colour = "blue", size = 6,  x = 115, y = 4) +
             annotate("text", label = "90%",colour = "green", size = 6,  x = 115, y = 4.5) +
@@ -407,7 +408,8 @@ server<-function(input, output) {
          )
          
          
-          # end of server 
+
+
   
 }
 
