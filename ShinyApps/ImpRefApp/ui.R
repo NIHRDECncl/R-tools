@@ -59,9 +59,10 @@ ui <- function(request) {
                                    sliderInput("rgSpec", label = "\b \b \b \b guestimated specificity for PUA", value = c(0.85, 0.99), min = 0, max = 1, step = 0.01, width='100%')
                )),
                
-               column(4, wellPanel(tags$b("Index test - true accuracy"),
-                                   sliderInput("igSen", label = "\b \b \b \b guestimated sensitivity for PUA of specificity", value = c(0.6, 0.8), min = 0, max = 1, step = 0.01, width='100%'),
-                                   sliderInput("igSpec", label = "\b \b \b \b guestimated specificity for PUA of sensitivity", value = c(0.6, 0.75), min = 0, max = 1, step = 0.01, width='100%')
+
+               column(4, wellPanel(tags$b("Index test "),
+                                   sliderInput("igSen", label = "\b \b \b \b guestimated true sensitivity", value = c(0.6, 0.8), min = 0, max = 1, step = 0.01, width='100%'),
+                                   sliderInput("igSpec", label = "\b \b \b \b guestimated true specificity", value = c(0.6, 0.75), min = 0, max = 1, step = 0.01, width='100%')
                ))      ),
              
              fluidRow(
@@ -73,12 +74,13 @@ ui <- function(request) {
                
                column(4, wellPanel(tags$b(""),
                                    sliderInput("gPrevalence", label = "True prevalence (estimated range)", value = c(0.1, 0.25), min = 0, max = 1, step = 0.01),
-                                   numericInput("nPrev", label = "Number of prevalences for PUA", value = 3, min = 1, max = 10, step = 1)
+                                   numericInput("nPrevs", label = "Number of prevalences for PAU", value = 3, min = 1, max = 10, step = 1)
                )),
                
                column(4, wellPanel(tags$b(""),
-                                   numericInput("nSamples", label = "Number of samples for probabilistic analysis of uncertainties", value = 10, min = 2, max = 1000, step = 1),
-                                   numericInput("iPopulation", label = "study size (to calculate confidence intervals)", value = 100, min = 10, max = 1000, step = 1)
+                                   numericInput("nSamples", label = "Number of samples for PAU", value = 10, min = 2, max = 1000, step = 1),
+                                   numericInput("nStudy", label = "Study size (for estimating confidence intervals", value = 100, min = 10, max = 1000, step = 1)
+                                   
                ))
              ),
              value = "Inputs"),
@@ -146,38 +148,75 @@ ui <- function(request) {
     navbarMenu("Graphs",
                tabPanel("Effects of individual variables assuming statistical independence",
                         #div(id = "plot-container",
-                        #tags$img(src = , id = "loading-spinner"),
-                        textOutput("graphs"),
-                        hr(),
                         tags$h3("under construction", style="color:red"),
                         hr(),
-                        tags$blockquote("this page will have graphs of diagostic accuracy statistics"),
-                        
+                        tags$h4("Effects of individual variables assuming statistical independence", style="color:blue"),
+                        tags$p(""),
+                        tags$h5("Given:"),
+                        tags$li("Range of prevalences: gPrevLow – gPrev – gPrevHigh"),
+                        tags$li("Index test’s measured sensitivity and specificity (with 95% CIs): irSen, irSpec"),
+                        tags$li("Reference test’s guestimated sensitivity and specificity (with ranges): rgSen, rgSpec"),
+                        tags$li("Index test’s guestimated true sensitivity and specificity (with ranges): igSen, igSpec"),
+                        tags$li("Conditional independence of the results of the index and reference tests"),
+                        tags$h5("Facet-plot line and ribbon graphs for the index test with the set of prevalences, (i) for true sensitivity given specificity, and (ii) for true specificity given sensitivity"),
+                        tags$li("Y1-s = igSen and igPPV; or igSpec and igNPV:"),
+                        tags$li("Y2-s = differentials:  (irSen – igSen) and (irPPV – igPPV); or (irSpec – igSpec) and (irNPV – igNPV)"),
+                        tags$li("X1-s = reference test’s sensitivity, with ranges rgSenLow – rgSenHigh"),
+                        tags$li("X2-s = reference test’s specificity, with ranges rgSpecLow – rgSpecHigh"),
                         hr(),
+                        tags$img(src = urlSpinner, id = "loading-spinner"),
+                        textOutput("graphs"),
                         value = "IT adjustments"
                ),
                # tab for graphs
-               tabPanel("Effects of individual variables assuming statistical dependence",
+               tabPanel("Effects of all variables assuming statistical independence",
                         #div(id = "plot-container",
-                        #tags$img(src = , id = "loading-spinner"),
-                        textOutput("graphs"),
                         tags$h3("under construction", style="color:red"),
                         hr(),
-                        tags$blockquote("this page will have graphs of diagostic accuracy statistics"),
+                        tags$h4("Effects of all variables assuming statistical independence", style="color:blue"),
+                        tags$p(""),
+                        tags$h5("Given:"),
+                        tags$li("Range of prevalences: gPrevLow – gPrev – gPrevHigh"),
+                        tags$li("Index test’s measured sensitivity and specificity (with 95% CIs): irSen, irSpec"),
+                        tags$li("Reference test’s guestimated sensitivity and specificity (with ranges): rgSen, rgSpec"),
+                        tags$li("Index test’s guestimated true sensitivity and specificity (with ranges): igSen, igSpec"),
+                        tags$li("Conditional independence of the results of the index and reference tests"),
+                        tags$li("Number of random samples to perform from each input variable’s PDF: nSamp"),
+                        tags$p(""),
+                        tags$p(" For each prevalence (gPrevLow – gPrev – gPrevHigh), and separately for the given example values of igSen and igSpec"),
+                        tags$p("Facet-plot box and whisker plots for data from nSamp:"),
+                        tags$li("Estimates: igSen, igSpec, igPPV, and igNPV"),
+                        tags$li("Differentials:  (irSen – igSen) and (irPPV – igPPV); or (irSpec – igSpec) and (irNPV – igNPV)"),
                         
                         hr(),
+                        tags$img(src = urlSpinner, id = "loading-spinner"),
+                        textOutput("graphs"),
                         value = "IT adjustments"
                ),
                # tab for graphs
                tabPanel("Overall uncertainties assuming statistical dependence",
                         #div(id = "plot-container",
-                        #tags$img(src = , id = "loading-spinner"),
-                        textOutput("graphs"),
-                        hr(),
                         tags$h3("under construction", style="color:red"),
                         hr(),
-                        tags$blockquote("this page will have graphs of diagostic accuracy statistics"),
+                        tags$h4("Overall uncertainties assuming statistical dependence", style="color:blue"),
+                        tags$p(""),
+                        tags$h5("Given:"),
+                        tags$li("Range of prevalences: gPrevLow – gPrev – gPrevHigh"),
+                        tags$li("Index test’s measured sensitivity and specificity (with 95% CIs): irSen, irSpec"),
+                        tags$li("Reference test’s guestimated sensitivity and specificity (with ranges): rgSen, rgSpec"),
+                        tags$li("Index test’s guestimated true sensitivity and specificity (with ranges): igSen, igSpec"),
+                        tags$li("Conditional dependence of the results of the index and reference tests"),
+                        tags$li("Probability distribution functions (PDFs) for each of the input variables, and assuming correlations = 0"),
+                        tags$li("Number of random samples to perform from each input variable’s PDF: nSamp"),
+                        tags$p(""),
+                        tags$p(" For each prevalence (gPrevLow – gPrev – gPrevHigh), and separately for the given example values of igSen and igSpec"),
+                        tags$p("Facet-plot box and whisker plots for data from Nsamp:"),
+                        tags$li("Estimates: igSen, igSpec, igPPV, and igNPV"),
+                        tags$li("Differentials:  (irSen – igSen) and (irPPV – igPPV); or (irSpec – igSpec) and (irNPV – igNPV)"),
                         
+                        hr(),
+                        tags$img(src = urlSpinner, id = "loading-spinner"),
+                        textOutput("graphs"),
                         value = "IT adjustments"
                )
     ),
