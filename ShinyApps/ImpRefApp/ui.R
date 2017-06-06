@@ -6,7 +6,7 @@
 
 # initialise text variables for the "about" tabs
 #
-
+# browser()
 urlAbout <- "ImpRefTabAbout1.html"
 AboutHtml <- "html place holder until content(GET(urlAbout)... works"
 # AboutHtml <- content(GET(urlAbout), "text", encoding = "ISO-8859-1") # ERROR: Couldn't resolve host name
@@ -59,10 +59,16 @@ ui <- function(request) {
                                    sliderInput("rgSpec", label = "\b \b \b \b guestimated specificity for PUA", value = c(0.85, 0.99), min = 0, max = 1, step = 0.01, width='100%')
                )),
                
+<<<<<<< HEAD
 
                column(4, wellPanel(tags$b("Index test "),
                                    sliderInput("igSen", label = "\b \b \b \b guestimated true sensitivity", value = c(0.6, 0.8), min = 0, max = 1, step = 0.01, width='100%'),
                                    sliderInput("igSpec", label = "\b \b \b \b guestimated true specificity", value = c(0.6, 0.75), min = 0, max = 1, step = 0.01, width='100%')
+=======
+               column(4, wellPanel(tags$b("Index test - true accuracy"),
+                                   sliderInput("igSen", label = "\b \b \b \b guestimated sensitivity for PUA of specificity", value = c(0.6, 0.8), min = 0, max = 1, step = 0.01, width='100%'),
+                                   sliderInput("igSpec", label = "\b \b \b \b guestimated specificity for PUA of sensitivity", value = c(0.6, 0.75), min = 0, max = 1, step = 0.01, width='100%')
+>>>>>>> HMPbranch
                ))      ),
              
              fluidRow(
@@ -74,6 +80,7 @@ ui <- function(request) {
                
                column(4, wellPanel(tags$b(""),
                                    sliderInput("gPrevalence", label = "True prevalence (estimated range)", value = c(0.1, 0.25), min = 0, max = 1, step = 0.01),
+<<<<<<< HEAD
                                    numericInput("nPrevs", label = "Number of prevalences for PAU", value = 3, min = 1, max = 10, step = 1)
                )),
                
@@ -81,6 +88,14 @@ ui <- function(request) {
                                    numericInput("nSamples", label = "Number of samples for PAU", value = 10, min = 2, max = 1000, step = 1),
                                    numericInput("nStudy", label = "Study size (for estimating confidence intervals", value = 100, min = 10, max = 1000, step = 1)
                                    
+=======
+                                   numericInput("nPrev", label = "Number of prevalences for PUA", value = 3, min = 1, max = 10, step = 1)
+               )),
+               
+               column(4, wellPanel(tags$b(""),
+                                   numericInput("nSamples", label = "Number of samples for probabilistic analysis of uncertainties", value = 10, min = 2, max = 1000, step = 1),
+                                   numericInput("iPopulation", label = "study size (to calculate confidence intervals)", value = 100, min = 10, max = 1000, step = 1)
+>>>>>>> HMPbranch
                ))
              ),
              value = "Inputs"),
@@ -89,7 +104,7 @@ ui <- function(request) {
     navbarMenu("Tables",
                tabPanel("Index test measurments of diagnostic accuracy",
                         #div(id = "plot-container",
-                        #tags$img(src = urlSpinner, id = "loading-spinner"),
+                        tags$img(src = urlSpinner, id = "loading-spinner"),
                         tags$h5("contingency matrix for index test"),
                         hr(),
                         tags$h3("under construction", style="color:red"),
@@ -108,13 +123,12 @@ ui <- function(request) {
                # tab for tables for Reference test (estimated)
                tabPanel(" +  Reference test guestimates of diagnostic accuracy",
                         #div(id = "plot-container",
-                        #tags$img(src = , id = "loading-spinner"),
+                        tags$img(src = urlSpinner, id = "loading-spinner"),
                         tags$h5("contingency matrix for reference test"),
                         hr(),
                         tags$h3("under construction", style="color:red"),
                         hr(),
-                        tags$blockquote("this page will have table of diagostic accuracy statistics"),
-                        
+
                         textOutput("RTtitle"),
                         tableOutput("RTCMTable"),
                         hr(),
@@ -127,7 +141,7 @@ ui <- function(request) {
                # tab for tables for Index test (adjusted)
                tabPanel(" -> Index test guestimates and estimates of true diagnostic accuracy",
                         #div(id = "plot-container",
-                        #tags$img(src = , id = "loading-spinner"),
+                        tags$img(src = urlSpinner, id = "loading-spinner"),
                         tags$h5("contingency matrix for index test adjusted for imperfect reference test"),
                         hr(),
                         tags$h3("under construction", style="color:red"),
@@ -151,6 +165,10 @@ ui <- function(request) {
                         tags$h3("under construction", style="color:red"),
                         hr(),
                         tags$h4("Effects of individual variables assuming statistical independence", style="color:blue"),
+<<<<<<< HEAD
+=======
+                        
+>>>>>>> HMPbranch
                         tags$p(""),
                         tags$h5("Given:"),
                         tags$li("Range of prevalences: gPrevLow – gPrev – gPrevHigh"),
@@ -169,6 +187,10 @@ ui <- function(request) {
                         value = "IT adjustments"
                ),
                # tab for graphs
+<<<<<<< HEAD
+=======
+               
+>>>>>>> HMPbranch
                tabPanel("Effects of all variables assuming statistical independence",
                         #div(id = "plot-container",
                         tags$h3("under construction", style="color:red"),
