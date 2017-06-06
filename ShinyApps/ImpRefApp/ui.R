@@ -7,10 +7,14 @@
 # initialise text variables for the "about" tabs
 #
 
-# urlTab1 <- "https://onedrive.live.com/download?cid=B2035DBFA124EFE7&resid=B2035DBFA124EFE7%213330&authkey=AAyGG8EPuGbDSdc"
+urlTab1 <- "test.html"
+#tab1Html <- content(GET(urlTab1), "text", encoding = "ISO-8859-1")
+# urlTest <- "test.png"
+  
+
 # tab1Html <- content(GET(urlTab1), "text", encoding = "ISO-8859-1")
 # 
-# urlTab2 <- "https://onedrive.live.com/download?cid=B2035DBFA124EFE7&resid=B2035DBFA124EFE7%213332&authkey=AEung92_Q6bRkaY"
+ # urlTab1 <- "https://onedrive.live.com/download?cid=B2035DBFA124EFE7&resid=B2035DBFA124EFE7%213332&authkey=AEung92_Q6bRkaY"
 # tab2Html <- content(GET(urlTab2), "text", encoding = "ISO-8859-1")
 # 
 # urlTab4 <- "https://onedrive.live.com/download?cid=B2035DBFA124EFE7&resid=B2035DBFA124EFE7%213333&authkey=AJcIpWL8ThA4eIg"
@@ -39,6 +43,8 @@ ui <- function(request) {
   navbarPage(
     # about tab
       tabPanel("About", 
+               # tags$img(src = urlTest),
+                HTML(tab1Html),
                hr(),
                tags$h3("under construction", style="color:red"),
                hr(),
