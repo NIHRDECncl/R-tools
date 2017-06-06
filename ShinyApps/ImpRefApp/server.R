@@ -13,13 +13,12 @@ enableBookmarking("url")
 
 # initialise Dx accuracy list for index test (measured), reference test, index test (true)
 #
-
 shinyServer <- function(input, output, session) {
   
   # Trigger bookmarking with either button
-  observeEvent(input$bookmark, {
-    session$doBookmark()
-  })
+  # observeEvent(input$bookmark, {
+  #   session$doBookmark()
+  # })
   
   # inputs from ui:   
   #   input$Title = "title for tables and graphs"
