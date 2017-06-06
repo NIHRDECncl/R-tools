@@ -58,9 +58,11 @@ ui <- function(request) {
                                    sliderInput("rgSpec", label = "\b \b \b \b guestimated specificity", value = c(0.85, 0.99), min = 0, max = 1, step = 0.01, width='100%')
                )),
                
-               column(4, wellPanel(tags$b("Index test guestimates of sensitivity/specificity for calculating specificity/sensitivity "),
-                                   sliderInput("igSen", label = "\b \b \b \b guestimated sensitivity", value = c(0.6, 0.8), min = 0, max = 1, step = 0.01, width='100%'),
-                                   sliderInput("igSpec", label = "\b \b \b \b guestimated specificity", value = c(0.6, 0.75), min = 0, max = 1, step = 0.01, width='100%')
+
+               column(4, wellPanel(tags$b("Index test "),
+                                   sliderInput("igSen", label = "\b \b \b \b guestimated true sensitivity", value = c(0.6, 0.8), min = 0, max = 1, step = 0.01, width='100%'),
+                                   sliderInput("igSpec", label = "\b \b \b \b guestimated true specificity", value = c(0.6, 0.75), min = 0, max = 1, step = 0.01, width='100%')
+
                ))      ),
              
              fluidRow(
@@ -72,11 +74,16 @@ ui <- function(request) {
                
                column(4, wellPanel(tags$b(""),
                                    sliderInput("gPrevalence", label = "True prevalence (estimated range)", value = c(0.1, 0.25), min = 0, max = 1, step = 0.01),
-                                   numericInput("iPopulation", label = "study size", value = 100, min = 10, max = 1000, step = 5)
+
+
+                                   numericInput("nPrevs", label = "Number of prevalences for PAU", value = 3, min = 1, max = 10, step = 1)
                )),
                
                column(4, wellPanel(tags$b(""),
-                                   numericInput("nSamples", label = "Number of samples for probablistic assessment of uncertainties", value = 100, min = 2, max = 100, step = 1)
+                                   numericInput("nSamples", label = "Number of samples for PAU", value = 10, min = 2, max = 1000, step = 1),
+                                   numericInput("nStudy", label = "Study size (for estimating confidence intervals", value = 100, min = 10, max = 1000, step = 1)
+                                   
+
                ))
              ),
              value = "Inputs"),
