@@ -87,7 +87,7 @@ ui <- function(request) {
     navbarMenu("Tables",
                tabPanel("Index test measurments of diagnostic accuracy",
                         #div(id = "plot-container",
-                        #tags$img(src = urlSpinner, id = "loading-spinner"),
+                        tags$img(src = urlSpinner, id = "loading-spinner"),
                         tags$h5("contingency matrix for index test"),
                         hr(),
                         tags$h3("under construction", style="color:red"),
@@ -106,7 +106,7 @@ ui <- function(request) {
                # tab for tables for Reference test (estimated)
                tabPanel(" +  Reference test guestimates of diagnostic accuracy",
                         #div(id = "plot-container",
-                        #tags$img(src = , id = "loading-spinner"),
+                        tags$img(src = urlSpinner, id = "loading-spinner"),
                         tags$h5("contingency matrix for reference test"),
                         hr(),
                         tags$h3("under construction", style="color:red"),
@@ -125,7 +125,7 @@ ui <- function(request) {
                # tab for tables for Index test (adjusted)
                tabPanel(" -> Index test guestimates and estimates of true diagnostic accuracy",
                         #div(id = "plot-container",
-                        #tags$img(src = , id = "loading-spinner"),
+                        tags$img(src = urlSpinner, id = "loading-spinner"),
                         tags$h5("contingency matrix for index test adjusted for imperfect reference test"),
                         hr(),
                         tags$h3("under construction", style="color:red"),
@@ -146,7 +146,7 @@ ui <- function(request) {
     navbarMenu("Graphs",
                tabPanel("Effects of individual variables assuming statistical independence",
                         #div(id = "plot-container",
-                        #tags$img(src = , id = "loading-spinner"),
+                        tags$img(src = urlSpinner, id = "loading-spinner"),
                         textOutput("graphs"),
                         hr(),
                         tags$h3("under construction", style="color:red"),
@@ -159,7 +159,7 @@ ui <- function(request) {
                # tab for graphs
                tabPanel("Effects of individual variables assuming statistical dependence",
                         #div(id = "plot-container",
-                        #tags$img(src = , id = "loading-spinner"),
+                        tags$img(src = urlSpinner, id = "loading-spinner"),
                         textOutput("graphs"),
                         tags$h3("under construction", style="color:red"),
                         hr(),
@@ -171,7 +171,7 @@ ui <- function(request) {
                # tab for graphs
                tabPanel("Overall uncertainties assuming statistical dependence",
                         #div(id = "plot-container",
-                        #tags$img(src = , id = "loading-spinner"),
+                        tags$img(src = urlSpinner, id = "loading-spinner"),
                         textOutput("graphs"),
                         hr(),
                         tags$h3("under construction", style="color:red"),
