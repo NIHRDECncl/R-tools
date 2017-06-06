@@ -111,11 +111,6 @@ ui <- function(request) {
                         hr(),
                         tags$h3("under construction", style="color:red"),
                         hr(),
-<<<<<<< HEAD
-
-=======
-                        
->>>>>>> master
                         textOutput("RTtitle"),
                         tableOutput("RTCMTable"),
                         hr(),
