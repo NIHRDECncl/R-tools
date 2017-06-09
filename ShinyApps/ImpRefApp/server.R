@@ -4,22 +4,21 @@
 # http://shiny.rstudio.com
 #
 
-
+# browser()
 # setwd("/Users/michaelpower/Google Drive/GIT-project/GitHub/R-tools/ShinyApps/ImpRefV2.0")
 isolate({ source("FunctionsUsedByImpRefV2.R", local = TRUE)})
 LoadPackages()
 enableBookmarking("url")
-# options(shiny.error = browser)
+ options(shiny.error = browser)
 
 # initialise Dx accuracy list for index test (measured), reference test, index test (true)
 #
-
 shinyServer <- function(input, output, session) {
   
   # Trigger bookmarking with either button
-  observeEvent(input$bookmark, {
-    session$doBookmark()
-  })
+  # observeEvent(input$bookmark, {
+  #   session$doBookmark()
+  # })
   
   # inputs from ui:   
   #   input$Title = "title for tables and graphs"
