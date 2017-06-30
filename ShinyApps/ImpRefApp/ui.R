@@ -44,7 +44,7 @@ ui <- function(request) {
                ))      ),
              
              fluidRow(
-               column(4, wellPanel(tags$b("Overtype with:"),
+               column(4, wellPanel(tags$b("Lables and titles for graphs and tables: Overtype with:"),
                                    textInput("Title", label = NULL, value = "title for outputs", placeholder = "place holder"),
                                    textInput("IndexTest", label = NULL, value = "name of index test"),
                                    textInput("ReferenceTest", label = NULL, value = "name of reference test")
