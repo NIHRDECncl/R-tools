@@ -2,26 +2,6 @@
 # This is the user-interface definition of a Shiny web application.
 # 
 #
-
-
-# initialise text variables for the "about" tabs
-#
-# browser()
-urlAbout <- "ImpRefTabAbout1.html"
-AboutHtml <- "html place holder until content(GET(urlAbout)... works"
-# AboutHtml <- content(GET(urlAbout), "text", encoding = "ISO-8859-1") # ERROR: Couldn't resolve host name
-# 
-# urlTab2 <- "https://onedrive.live.com/download?cid=B2035DBFA124EFE7&resid=B2035DBFA124EFE7%213332&authkey=AEung92_Q6bRkaY"
-# tab2Html <- content(GET(urlTab2), "text", encoding = "ISO-8859-1")
-# 
-# urlTab4 <- "https://onedrive.live.com/download?cid=B2035DBFA124EFE7&resid=B2035DBFA124EFE7%213333&authkey=AJcIpWL8ThA4eIg"
-# tab4Html <- content(GET(urlTab4), "text", encoding = "ISO-8859-1")
-
-urlNIHRlogo <- "nihr_colour.jpg" # in ~/www/
-
-urlSpinner <- "spinner.gif" # in ~/www/
-
-
 # conventions for naming variables
 # Prefixes indicate the group the varible belongs to:
 #    i - for variables related to the Index test
@@ -32,7 +12,6 @@ urlSpinner <- "spinner.gif" # in ~/www/
 #    irSens = the sensitivity of the Index test with the Reference test as the standard
 #    rgSpec = the specificity of the Reference test, with the Gold standard as the standard
 #    igNNT = the true NNT of Index test as it is compared to the Gold standard
-
 
 
 ui <- function(request) {
@@ -83,6 +62,16 @@ ui <- function(request) {
              ),
              value = "Inputs"),
     
+    # tab for debugging outputs
+    
+    tabPanel("Debugging", 
+             hr(),
+             verbatimTextOutput("debug1"),
+             hr(),
+             verbatimTextOutput("debug2"),
+             value = "Debugging"),
+    
+    
     # tab for tables for Index test (measured)
     navbarMenu("Tables",
                tabPanel("Index test measurments of diagnostic accuracy",
@@ -93,8 +82,9 @@ ui <- function(request) {
                         tags$h3("under construction", style="color:red"),
                         hr(),
                         tags$blockquote("this page will have table of diagostic accuracy statistics"),
-                        
+            
                         textOutput("ITtitle"),
+                       
                         tableOutput("ITCMTable"),
                         hr(),
                         tags$h5("Diagnostic accuracy stats for index test"),
@@ -106,13 +96,12 @@ ui <- function(request) {
                # tab for tables for Reference test (estimated)
                tabPanel(" +  Reference test guestimates of diagnostic accuracy",
                         #div(id = "plot-container",
-                        tags$img(src = urlSpinner, id = "loading-spinner"),
                         tags$h5("contingency matrix for reference test"),
                         hr(),
                         tags$h3("under construction", style="color:red"),
                         hr(),
                         textOutput("RTtitle"),
-                        tableOutput("RTCMTable"),
+                        withSpinner(tableOutput("RTCMTable")),
                         hr(),
                         tags$h5("Diagnostic accuracy stats for reference test"),
                         hr(),
@@ -131,7 +120,7 @@ ui <- function(request) {
                         tags$blockquote("this page will have table of diagostic accuracy statistics"),
                         
                         textOutput("ITAtitle"),
-                        tableOutput("ITACMTable"),
+                        withSpinner(tableOutput("ITACMTable")),
                         hr(),
                         tags$h5("Diagnostic accuracy stats for adjusted index test"),
                         hr(),
@@ -161,8 +150,7 @@ ui <- function(request) {
                         tags$li("X1-s = reference test’s sensitivity, with ranges rgSenLow – rgSenHigh"),
                         tags$li("X2-s = reference test’s specificity, with ranges rgSpecLow – rgSpecHigh"),
                         hr(),
-                        tags$img(src = urlSpinner, id = "loading-spinner"),
-                        textOutput("graphs"),
+                        withSpinner(textOutput("graphs"), type = 6, size = 0.5),
                         value = "IT adjustments"
                ),
                # tab for graphs
@@ -185,10 +173,8 @@ ui <- function(request) {
                         tags$p("Facet-plot box and whisker plots for data from nSamp:"),
                         tags$li("Estimates: igSen, igSpec, igPPV, and igNPV"),
                         tags$li("Differentials:  (irSen – igSen) and (irPPV – igPPV); or (irSpec – igSpec) and (irNPV – igNPV)"),
-                        
                         hr(),
-                        tags$img(src = urlSpinner, id = "loading-spinner"),
-                        textOutput("graphs"),
+                        withSpinner(textOutput("graphs"), type = 5, size = 1),
                         value = "IT adjustments"
                ),
                # tab for graphs
@@ -213,8 +199,7 @@ ui <- function(request) {
                         tags$li("Differentials:  (irSen – igSen) and (irPPV – igPPV); or (irSpec – igSpec) and (irNPV – igNPV)"),
                         
                         hr(),
-                        tags$img(src = urlSpinner, id = "loading-spinner"),
-                        textOutput("graphs"),
+                        withSpinner(textOutput("graphs"), type = 8, size = 2),
                         value = "IT adjustments"
                )
     ),
