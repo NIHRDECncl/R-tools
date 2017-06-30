@@ -15,6 +15,11 @@ LoadPackages <- function() {
   library("httr")      # needed for HTML() and content()
   library(purrr)       # map() and friends
   library(vcd)         # mosaic() plot http://www.statmethods.net/advgraphs/mosaic.html
+  library(colourpicker) # http://deanattali.com/blog/plot-colour-helper/ 
+  library(shinythemes)
+  library(DT)
+  library(shinycssloaders)
+  
   # ...
   
 }
@@ -76,7 +81,6 @@ ciproportion <- function(y,n) {
 
 initDxAccList <- function() {
   Title <- "overtype with title for tables and plots"
-  Subtitle <- "overtype with subtitle"
   StudyType <- "cohort" # alternative is "case-control"
   IndexTest <- "overtype with name of index test" # use as label for tables and graphs
   ReferenceTest <- "overtype with name of reference test" # use as label for tables and graphs
@@ -100,8 +104,7 @@ initDxAccList <- function() {
     NPV = c(NA, NA, NA, NA),
     PPV = c(NA, NA, NA, NA),
     LRpos = c(NA, NA, NA, NA),
-    LRneg = c(NA, NA, NA, NA),
-    DOR = c(NA, NA, NA, NA)
+    LRneg = c(NA, NA, NA, NA)
   )
   row.names(DxStats) <-  c("Conf_Low", "Estimate", "Conf_High", "CIMethod") # etc rows named for indexing
             
