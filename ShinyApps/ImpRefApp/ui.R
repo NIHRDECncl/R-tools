@@ -76,7 +76,6 @@ ui <- function(request) {
     navbarMenu("Tables",
                tabPanel("Index test measurments of diagnostic accuracy",
                         #div(id = "plot-container",
-                        tags$img(src = urlSpinner, id = "loading-spinner"),
                         tags$h5("contingency matrix for index test"),
                         hr(),
                         tags$h3("under construction", style="color:red"),
@@ -112,7 +111,6 @@ ui <- function(request) {
                # tab for tables for Index test (adjusted)
                tabPanel(" -> Index test guestimates and estimates of true diagnostic accuracy",
                         #div(id = "plot-container",
-                        tags$img(src = urlSpinner, id = "loading-spinner"),
                         tags$h5("contingency matrix for index test adjusted for imperfect reference test"),
                         hr(),
                         tags$h3("under construction", style="color:red"),
@@ -213,7 +211,7 @@ ui <- function(request) {
            tags$b("Cite as:"),
            tags$p("Michael Power, Joy Allen."),
            tags$em("A ShinyApp tool to explore dependence of rule-in and rule-out decisions on prevalence, sensitivity, specificity, and confidence intervals"),
-           tags$p("NIHR Diagnostic Evidence Co-operative Newcastle. September 2016"),
+           tags$p("NIHR Diagnostic Evidence Co-operative Newcastle. July 2017"),
            tags$br(),
            tags$img(src = urlNIHRlogo, width = "80px", height = "28px", align = "right")) # add the NIHR logo
     , title = "Explore uncertainties in diagnostic accuracy when evaluating with an imperfect reference")

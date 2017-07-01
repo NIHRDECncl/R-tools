@@ -1,4 +1,5 @@
 ## global.R ##
+enableBookmarking(store = "url")
 
 # initialise text variables for the "about" tabs
 #
