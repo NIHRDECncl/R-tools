@@ -29,6 +29,16 @@ ui <- function(request) {
              tags$style(HTML(".irs-slider {width: 1px; height: 15px; top: 15px;}")),
              
              fluidRow(
+               column(8, actionButton("GoButton", "Click to recalculate the graphs after changing input data")),
+              
+               ######### bookmark button does not work ????????????????????
+                column(4, bookmarkButton(
+                 title = "Bookmark this application's state and get a URL for saving and sharing.",
+                 id = "bookmark"))
+             ),
+             
+             fluidRow(
+               hr(),
                column(4, wellPanel(tags$b("Index test"),
                                    sliderInput("irSen", label = "\b \b measured sensitivity", value =c (0.7, 0.9), min = 0, max = 1, step = 0.01, width = "125%"),
                                    sliderInput("irSpec", label = "\b \b measured specificity", value = c(0.8, 0.95), min = 0, max = 1, step = 0.01)
@@ -41,7 +51,9 @@ ui <- function(request) {
                column(4, wellPanel(tags$b("Index test - true accuracy"),
                                    sliderInput("igSen", label = "\b \b \b \b guestimated sensitivity for PUA of specificity", value = c(0.6, 0.8), min = 0, max = 1, step = 0.01, width='100%'),
                                    sliderInput("igSpec", label = "\b \b \b \b guestimated specificity for PUA of sensitivity", value = c(0.6, 0.75), min = 0, max = 1, step = 0.01, width='100%')
-               ))      ),
+               ))
+               
+               ),
              
              fluidRow(
                column(4, wellPanel(tags$b("Lables and titles for graphs and tables: Overtype with:"),
@@ -202,11 +214,6 @@ ui <- function(request) {
                )
     ),
     
-    hr(),
-    column(3, actionButton("GoButton", "Recalculate")),
-    column(3, bookmarkButton(
-      title = "Bookmark this application's state and get a URL for saving and sharing."),
-      id = "bookmark"),
     column(12, hr(),
            tags$b("Cite as:"),
            tags$p("Michael Power, Joy Allen."),
