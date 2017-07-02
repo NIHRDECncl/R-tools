@@ -44,7 +44,7 @@ shinyServer <- function(input, output, session) {
 
     LRp <- eventReactive(input$GoButton, {(input$sensitivity/(1 - input$specificity))})
     LRn <- eventReactive(input$GoButton, {(1 - input$sensitivity)/(input$specificity)})
-
+    
     PreTestOddsP <- eventReactive(input$GoButton, {(input$prevalence)/(1 - input$prevalence)})
     PreTestOddsN <- eventReactive(input$GoButton, {(1 - input$prevalence)/(input$prevalence)})
 
@@ -252,8 +252,7 @@ shinyServer <- function(input, output, session) {
   
   
   
-  
-  output$PrePostProb<-renderPlot({
+  output$PrePostProb <- renderPlot({
     ggplot(graphPre2PostProb()) +
       geom_line(aes(x = graphPre2PostProb()$x, y = graphPre2PostProb()$yP), stat = "identity", position = "identity") +
       geom_ribbon(data = graphPre2PostProb(),

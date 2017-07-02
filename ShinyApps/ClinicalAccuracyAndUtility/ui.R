@@ -49,15 +49,28 @@ ui <- function(request) {
     navbarMenu("Clinical accuracy: predictive values",
         tabPanel("About graph 1", includeHTML("www/tab2.html")),
         tabPanel("Graph 1: clinical accuracy: pre- and post-test probabilities; predictive values",
-                 withSpinner(plotOutput("PrePostProb"))
-                 # bookmarkButton()    # does not work here
+                  conditionalPanel(
+                     condition = "input.GoButton == 0",
+                     h5("To see the graphs, go to the Inputs tab and click on the Update graphs button", style="color:red")
+                    ),
+                 conditionalPanel(
+                     condition = "input.GoButton !== 0",
+                     withSpinner(plotOutput("PrePostProb"))
+                   )
         )),
     
     navbarMenu("Clinical utility: thresholds to cross for clinical decisons",
         tabPanel("About graph 2", includeHTML("www/tab3.html")),
         tabPanel("Graph 2: clinical utility: post-test probabilities and decision thresholds", 
-                 withSpinner(plotOutput("RuleInOutPlot"))
-    )),
+                conditionalPanel(
+                   condition = "input.GoButton == 0",
+                   h5("To see the graphs, go to the Inputs tab and click on the Update graphs button", style="color:red")
+                 ),
+               conditionalPanel(
+                   condition = "input.GoButton !== 0",
+                   withSpinner(plotOutput("RuleInOutPlot"))
+               )
+             )),
     
 
 ###################################
