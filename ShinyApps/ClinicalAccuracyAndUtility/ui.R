@@ -1,10 +1,10 @@
 #################### ui ###############################
 
 ui <- function(request) {
-  navbarPage(h4("Evaluating a diagnostic test"),
+  navbarPage(h4("Explore the clinically useful measures of test accuracy"),
     tabPanel("About", includeHTML("www/tab1.html")), 
     
-    tabPanel("Input data",
+    tabPanel("Input data: set sensitivity, specificity, etc",
       tags$br(),
       tags$h3("Input Variables"),
       textInput(inputId = "DxCondition", label = "Condition", value = "Example disease"),
@@ -21,17 +21,17 @@ ui <- function(request) {
       bookmarkButton()
     ),
     
-    navbarMenu("Clinical accuracy",
+    navbarMenu("Clinical accuracy: predictive values",
         tabPanel("About graph 1", includeHTML("www/tab2.html")),
-        tabPanel("Graph 1: clinical accuracy",
+        tabPanel("Graph 1: clinical accuracy: pre- and post-test probabilities; predictive values",
                  actionButton("GoButton", "Update the graph"),
                  withSpinner(plotOutput("PrePostProb"))
                  # bookmarkButton()    # does not work here
         )),
     
-    navbarMenu("Clinical utility",
+    navbarMenu("Clinical utility: thresholds for clinical decisons",
         tabPanel("About graph 2", includeHTML("www/tab3.html")),
-        tabPanel("Graph 2: clinical utility", #div(id = "plot-container",
+        tabPanel("Graph 2: clinical utility: post-test probabilities and decision thresholds", 
                  actionButton("GoButton", "Update the graph"),
                  withSpinner(plotOutput("RuleInOutPlot"))
                  # bookmarkButton()    # does not work here
