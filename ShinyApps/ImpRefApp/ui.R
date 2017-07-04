@@ -29,6 +29,16 @@ ui <- function(request) {
              tags$style(HTML(".irs-slider {width: 1px; height: 15px; top: 15px;}")),
              
              fluidRow(
+               column(8, actionButton("GoButton", "Click to recalculate the graphs after changing input data")),
+              
+               ######### bookmark button does not work ????????????????????
+                column(4, bookmarkButton(
+                 title = "Bookmark this application's state and get a URL for saving and sharing.",
+                 id = "bookmark"))
+             ),
+             
+             fluidRow(
+               hr(),
                column(4, wellPanel(tags$b("Index test"),
                                    sliderInput("irSen", label = "\b \b measured sensitivity", value =c (0.7, 0.9), min = 0, max = 1, step = 0.01, width = "125%"),
                                    sliderInput("irSpec", label = "\b \b measured specificity", value = c(0.8, 0.95), min = 0, max = 1, step = 0.01)
@@ -41,7 +51,9 @@ ui <- function(request) {
                column(4, wellPanel(tags$b("Index test - true accuracy"),
                                    sliderInput("igSen", label = "\b \b \b \b guestimated sensitivity for PUA of specificity", value = c(0.6, 0.8), min = 0, max = 1, step = 0.01, width='100%'),
                                    sliderInput("igSpec", label = "\b \b \b \b guestimated specificity for PUA of sensitivity", value = c(0.6, 0.75), min = 0, max = 1, step = 0.01, width='100%')
-               ))      ),
+               ))
+               
+               ),
              
              fluidRow(
                column(4, wellPanel(tags$b("Lables and titles for graphs and tables: Overtype with:"),
@@ -76,7 +88,6 @@ ui <- function(request) {
     navbarMenu("Tables",
                tabPanel("Index test measurments of diagnostic accuracy",
                         #div(id = "plot-container",
-                        tags$img(src = urlSpinner, id = "loading-spinner"),
                         tags$h5("contingency matrix for index test"),
                         hr(),
                         tags$h3("under construction", style="color:red"),
@@ -112,7 +123,6 @@ ui <- function(request) {
                # tab for tables for Index test (adjusted)
                tabPanel(" -> Index test guestimates and estimates of true diagnostic accuracy",
                         #div(id = "plot-container",
-                        tags$img(src = urlSpinner, id = "loading-spinner"),
                         tags$h5("contingency matrix for index test adjusted for imperfect reference test"),
                         hr(),
                         tags$h3("under construction", style="color:red"),
@@ -204,16 +214,11 @@ ui <- function(request) {
                )
     ),
     
-    hr(),
-    column(3, actionButton("GoButton", "Recalculate")),
-    column(3, bookmarkButton(
-      title = "Bookmark this application's state and get a URL for saving and sharing."),
-      id = "bookmark"),
     column(12, hr(),
            tags$b("Cite as:"),
            tags$p("Michael Power, Joy Allen."),
            tags$em("A ShinyApp tool to explore dependence of rule-in and rule-out decisions on prevalence, sensitivity, specificity, and confidence intervals"),
-           tags$p("NIHR Diagnostic Evidence Co-operative Newcastle. September 2016"),
+           tags$p("NIHR Diagnostic Evidence Co-operative Newcastle. July 2017"),
            tags$br(),
            tags$img(src = urlNIHRlogo, width = "80px", height = "28px", align = "right")) # add the NIHR logo
     , title = "Explore uncertainties in diagnostic accuracy when evaluating with an imperfect reference")
