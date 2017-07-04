@@ -4,21 +4,11 @@
 # http://shiny.rstudio.com
 #
 
-# browser()
-# setwd("/Users/michaelpower/Google Drive/GIT-project/GitHub/R-tools/ShinyApps/ImpRefV2.0")
-isolate({ source("FunctionsUsedByImpRefV2.R", local = TRUE)})
-LoadPackages()
-enableBookmarking("url")
- options(shiny.error = browser)
-
-# initialise Dx accuracy list for index test (measured), reference test, index test (true)
-#
 shinyServer <- function(input, output, session) {
   
-  # Trigger bookmarking with either button
-  # observeEvent(input$bookmark, {
-  #   session$doBookmark()
-  # })
+  session$onSessionEnded(stopApp) # it can be annoying that when you close the browser window, the app is still running and you need to manually press “Esc” to kill it
+
+ 
   
   # inputs from ui:   
   #   input$Title = "title for tables and graphs"
@@ -37,10 +27,15 @@ shinyServer <- function(input, output, session) {
   #   input$igSen
   #   input$igSpec
   #
+  igDxAcc <-rgDxAcc <- irDxAcc <- initDxAccList() # initialise diagnostic accuracy lists
   
-  irDxAcc <- initDxAccList() 
-  rgDxAcc <- irDxAcc
-  igDxAcc <- irDxAcc
+  output$debug1 <- renderPrint({
+    sessionInfo()
+  })
+  
+  output$debug2 <- renderPrint({
+    irTitle()
+  })
   
   # Tabulate (for the index test)
   # true accuracy measures, absolute errors, percentage errors (for mid-ranges of given parameters). And lower and upper uncertainty intervals with 95% limits derived from a probability sensitivity analysis which varies measured and assumed parameters across their limits with PDFs able to be selected by the user from on option list.
@@ -74,7 +69,7 @@ shinyServer <- function(input, output, session) {
                            })
   rgTitle <- eventReactive(input$GoButton, 
                            {
-                             paste0("Contingency matrix and diagnostic accuracy stats for ", input$ReferenceTest, " compared to ", input$ReferenceTest)
+                             paste0("Contingency matrix and diagnostic accuracy stats for ", input$ReferenceTest, " compared to gold standard")
                            })
   igTitle <- eventReactive(input$GoButton, 
                            {
@@ -84,18 +79,23 @@ shinyServer <- function(input, output, session) {
   
   IT <- eventReactive(input$GoButton, {
     irDxAcc$Title <- input$Title
-    irDxAcc$Subtitle <- input$Subtitle
     irDxAcc$IndexTest <- input$IndexTest
     irDxAcc$ReferenceTest <- input$ReferenceTest
     
     
     #  set population and prevalence
-    irDxAcc$DxStats["Estimate","Prevalence"] <- input$Prevalence
-    irDxAcc$DxStats["Estimate","Population"] <- input$Population
+    irDxAcc$DxStats["Estimate","Prevalence"] <- input$gPrevalence
+    irDxAcc$DxStats["Estimate","Population"] <- input$iPopulation
     
     # set sensitivity and specificity
-    irDxAcc$DxStats["Estimate","Sensitivity"] <- input$ITsenMeas
-    irDxAcc$DxStats["Estimate","Specificity"] <- input$ITspecMeas
+    # use the given range for low and high limits, and their mean for the estimate
+    irDxAcc$DxStats["Conf_Low","Sensitivity"] <- input$irSen[1]
+    irDxAcc$DxStats["Estimate","Sensitivity"] <- mean(input$irSen) 
+    irDxAcc$DxStats["Conf_high","Sensitivity"] <- input$irSen[2]
+    
+    irDxAcc$DxStats["Conf_Low","Specificity"] <- input$irSpec[1]
+    irDxAcc$DxStats["Estimate","Specificity"] <- mean(input$irSpec) 
+    irDxAcc$DxStats["Conf_high","Specificity"] <- input$irSpec[2]
     
     # calculate contingency matrix and diagnostic accuracy stats 
     ##### to do: update function to calculate confidence limits 
@@ -107,23 +107,22 @@ shinyServer <- function(input, output, session) {
   
   RT <- eventReactive(input$GoButton, {
     rgDxAcc$Title <- input$Title
-    rgDxAcc$Subtitle <- input$Subtitle
     rgDxAcc$IndexTest <- input$IndexTest
     rgDxAcc$ReferenceTest <- input$ReferenceTest
     
     #  assume same population and prevalence for reference test as for index test
-    rgDxAcc$DxStats["Estimate","Prevalence"] <- input$Prevalence
-    rgDxAcc$DxStats["Estimate","Population"] <- input$Population
+    rgDxAcc$DxStats["Estimate","Prevalence"] <- input$gPrevalence
+    rgDxAcc$DxStats["Estimate","Population"] <- input$iPopulation
     
     # set sensitivity and specificity
     # use the given range for low and high limits, and their mean for the estimate
-    rgDxAcc$DxStats["Conf_Low","Sensitivity"] <- input$RTsenEst[1]
-    rgDxAcc$DxStats["Estimate","Sensitivity"] <- mean(input$RTsenEst) 
-    rgDxAcc$DxStats["Conf_high","Sensitivity"] <- input$RTsenEst[2]
+    rgDxAcc$DxStats["Conf_Low","Sensitivity"] <- input$rgSen[1]
+    rgDxAcc$DxStats["Estimate","Sensitivity"] <- mean(input$rgSen) 
+    rgDxAcc$DxStats["Conf_high","Sensitivity"] <- input$rgSen[2]
     
-    rgDxAcc$DxStats["Conf_Low","Specificity"] <- input$RTspecEst[1]
-    rgDxAcc$DxStats["Estimate","Specificity"] <- mean(input$RTspecEst) 
-    rgDxAcc$DxStats["Conf_high","Specificity"] <- input$RTspecEst[2]
+    rgDxAcc$DxStats["Conf_Low","Specificity"] <- input$rgSpec[1]
+    rgDxAcc$DxStats["Estimate","Specificity"] <- mean(input$rgSpec) 
+    rgDxAcc$DxStats["Conf_high","Specificity"] <- input$rgSpec[2]
     
     # calculate contingency matrix and diagnostic accuracy stats 
     rgDxAcc <- DxAcc(rgDxAcc, direction = "From stats", CImethod = "estimated range")
@@ -132,9 +131,9 @@ shinyServer <- function(input, output, session) {
   })
   
   # print tables for index test (measured)
-  output$ITtitle <- renderText(ITtitle())
-  output$ITStatsTable <- renderTable(IT()$DxStats)
+  output$ITtitle <- renderText(irTitle())
   output$ITCMTable <- renderTable(IT()$DxCM)
+  output$ITStatsTable <- renderTable(IT()$DxStats)
   
   # print tables for reference test (estimated)
   output$RTtitle <- renderText(RTtitle())
