@@ -1,4 +1,4 @@
-#################    server     ################
+################# server for ShinyApp to explore clinical accuracy and clinical utility    ################
 
 # inputs
 #
@@ -18,50 +18,47 @@ shinyServer <- function(input, output, session) {
   
    session$onSessionEnded(stopApp) # it can be annoying that when you close the browser window, the app is still running and you need to manually press “Esc” to kill it
   
-    DxCondition <- eventReactive(input$GoButton, {input$DxCondition})
-    DxTestName <- eventReactive(input$GoButton, {input$DxTestName})
-    DxRuleInDecision <- eventReactive(input$GoButton, {input$DxRuleInDecision})
-    DxRuleOutDecision <- eventReactive(input$GoButton, {input$DxRuleOutDecision})
-    prevalence <- eventReactive(input$GoButton, {input$prevalence})
-    n <- eventReactive(input$GoButton, {input$n})
-    sensitivity <- eventReactive(input$GoButton, {input$sensitivity})
-    specificity <- eventReactive(input$GoButton, {input$specificity})
-    RuleInDecisionThreshold <- eventReactive(input$GoButton, {input$RuleInDecisionThreshold})
-    IndeterminateDecision <- eventReactive(input$GoButton, {input$IndeterminateDecision})
-    RuleOutDecisionThreshold <- eventReactive(input$GoButton, {input$RuleOutDecisionThreshold})
+  values <- reactiveValues()
+  go <- function() {
+    values$GoButton <- isolate(values$GoButton) + 1
+  }
+  observe({
+    if (input$GoButton == 0) isolate( go())
+  })
+ 
+  
+    Dpos <- eventReactive(input$GoButton, {round(input$n * input$prevalence)}, ignoreNULL = FALSE)
+    Dneg <- eventReactive(input$GoButton, {round(input$n - Dpos())}, ignoreNULL = FALSE)
 
-    Dpos <- eventReactive(input$GoButton, {round(input$n * input$prevalence)})
-    Dneg <- eventReactive(input$GoButton, {round(input$n - Dpos())})
+    Tp <- eventReactive(input$GoButton, {input$sensitivity * Dpos()}, ignoreNULL = FALSE)
+    Tn <- eventReactive(input$GoButton, {input$specificity * Dneg()}, ignoreNULL = FALSE)
 
-    Tp <- eventReactive(input$GoButton, {input$sensitivity * Dpos()})
-    Tn <- eventReactive(input$GoButton, {input$specificity * Dneg()})
+    Fn <- eventReactive(input$GoButton, {(1 - input$sensitivity) * Dpos()}, ignoreNULL = FALSE)
+    Fp <- eventReactive(input$GoButton, {(1 - input$specificity) * Dneg()}, ignoreNULL = FALSE)
 
-    Fn <- eventReactive(input$GoButton, {(1 - input$sensitivity) * Dpos()})
-    Fp <- eventReactive(input$GoButton, {(1 - input$specificity) * Dneg()})
+    PPV <- eventReactive(input$GoButton, {Tp()/(Tp() + Fp())}, ignoreNULL = FALSE)
+    NPV <- eventReactive(input$GoButton, {Tn()/(Tn() + Fn())}, ignoreNULL = FALSE)
 
-    PPV <- eventReactive(input$GoButton, {Tp()/(Tp() + Fp())})
-    NPV <- eventReactive(input$GoButton, {Tn()/(Tn() + Fn())})
-
-    LRp <- eventReactive(input$GoButton, {(input$sensitivity/(1 - input$specificity))})
-    LRn <- eventReactive(input$GoButton, {(1 - input$sensitivity)/(input$specificity)})
+    LRp <- eventReactive(input$GoButton, {(input$sensitivity/(1 - input$specificity))}, ignoreNULL = FALSE)
+    LRn <- eventReactive(input$GoButton, {(1 - input$sensitivity)/(input$specificity)}, ignoreNULL = FALSE)
     
-    PreTestOddsP <- eventReactive(input$GoButton, {(input$prevalence)/(1 - input$prevalence)})
-    PreTestOddsN <- eventReactive(input$GoButton, {(1 - input$prevalence)/(input$prevalence)})
+    PreTestOddsP <- eventReactive(input$GoButton, {(input$prevalence)/(1 - input$prevalence)}, ignoreNULL = FALSE)
+    PreTestOddsN <- eventReactive(input$GoButton, {(1 - input$prevalence)/(input$prevalence)}, ignoreNULL = FALSE)
 
-    PostTestOddsP <- eventReactive(input$GoButton, {PreTestOddsP()*LRp()})
-    PostTestOddsN <- eventReactive(input$GoButton, {PreTestOddsN()*LRn()})
+    PostTestOddsP <- eventReactive(input$GoButton, {PreTestOddsP()*LRp()}, ignoreNULL = FALSE)
+    PostTestOddsN <- eventReactive(input$GoButton, {PreTestOddsN()*LRn()}, ignoreNULL = FALSE)
 
-    PostTestProbP <- eventReactive(input$GoButton, {PostTestOddsP()/(PostTestOddsP() + 1)})
-    PostTestProbN <- eventReactive(input$GoButton, {PostTestOddsN()/(PostTestOddsN() + 1)})
+    PostTestProbP <- eventReactive(input$GoButton, {PostTestOddsP()/(PostTestOddsP() + 1)}, ignoreNULL = FALSE)
+    PostTestProbN <- eventReactive(input$GoButton, {PostTestOddsN()/(PostTestOddsN() + 1)}, ignoreNULL = FALSE)
 
     ### confidence  limits for the post=test probabilities
     
     ### the following are numbers; the same names in the data.frame label 2 item columns (vectors)
     
-    TPY_ciL <- eventReactive(input$GoButton, {DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)$TPY_ciL})
-    TPY_ciU <- eventReactive(input$GoButton, {DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)$TPY_ciU})
-    TNY_ciL <- eventReactive(input$GoButton, {DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)$TNY_ciL})
-    TNY_ciU <- eventReactive(input$GoButton, {DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)$TNY_ciU})
+    TPY_ciL <- eventReactive(input$GoButton, {DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)$TPY_ciL}, ignoreNULL = FALSE)
+    TPY_ciU <- eventReactive(input$GoButton, {DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)$TPY_ciU}, ignoreNULL = FALSE)
+    TNY_ciL <- eventReactive(input$GoButton, {DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)$TNY_ciL}, ignoreNULL = FALSE)
+    TNY_ciU <- eventReactive(input$GoButton, {DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)$TNY_ciU}, ignoreNULL = FALSE)
   
     # lines for plot 1
     linesDf <- eventReactive(input$GoButton, {
@@ -79,10 +76,10 @@ shinyServer <- function(input, output, session) {
         PrevY = c(input$prevalence, input$prevalence),
         
         RuleInDecisionThresholdX = c(0, 1),
-        RuleInDecisionThresholdY = c(RuleInDecisionThreshold(), RuleInDecisionThreshold()),
+        RuleInDecisionThresholdY = c(input$RuleInDecisionThreshold, input$RuleInDecisionThreshold),
         
         RuleOutDecisionThresholdX = c(0, 1),
-        RuleOutDecisionThresholdY = c(RuleOutDecisionThreshold(), RuleOutDecisionThreshold()),
+        RuleOutDecisionThresholdY = c(input$RuleOutDecisionThreshold, input$RuleOutDecisionThreshold),
         
         TestPosX = c(0, 1),
         TestPosY = c(input$prevalence, Dx$PostTestProbP),
@@ -96,33 +93,33 @@ shinyServer <- function(input, output, session) {
         TNY_ciL = c(input$prevalence, round(Dx$TNY_ciL,3)),
         TNY_ciU = c(input$prevalence, round(Dx$TNY_ciU,3))
       )})
-    })
+    }, ignoreNULL = FALSE)
     
 ### coordinates and labels for plot 1
     fixedlabels <- eventReactive(input$GoButton, {
       data.frame(
         x = c(0.35, 0.85, 0.35, 0.35),
         y = c(
-          RuleInDecisionThreshold() + 0.05, 
-          prevalence() + 0.05, 
-          RuleOutDecisionThreshold() + 0.05,
-          RuleInDecisionThreshold() - 0.05
+          input$RuleInDecisionThreshold + 0.05, 
+          input$prevalence + 0.05, 
+          input$RuleOutDecisionThreshold + 0.05,
+          input$RuleInDecisionThreshold - 0.05
         ),
         labels = c(
-          paste0(RuleInDecisionThreshold()*100, "%  = threshold for rule-in decision: ", DxRuleInDecision()),
-          paste0("Prevalence = ", prevalence()*100, "%"),
-          paste0(RuleOutDecisionThreshold()*100, "%  = threshold for rule-out decision: ", DxRuleOutDecision()),
-          paste0("Action when indeterminate: ", IndeterminateDecision())),
+          paste0(input$RuleInDecisionThreshold*100, "%  = threshold for rule-in decision: ", input$DxRuleInDecision),
+          paste0("Prevalence = ", input$prevalence*100, "%"),
+          paste0(input$RuleOutDecisionThreshold*100, "%  = threshold for rule-out decision: ", input$DxRuleOutDecision),
+          paste0("Action when indeterminate: ", input$IndeterminateDecision)),
           fillColours = c("firebrick4", "springgreen4")
        )
-    })
+    }, ignoreNULL = FALSE)
 
     postTestLabels <- eventReactive(input$GoButton, {
       ### save stats so don't have to call many times
       Dx <- DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)
       Nudge <- 0.02
-      if (Dx$TPY_ciU - Dx$TPY_ciL < 3*Nudge) NudgeCIp = +Nudge else NudgeCIp = -Nudge/3
-      if (Dx$TNY_ciU - Dx$TNY_ciL < 3*Nudge) NudgeCIn = +Nudge else NudgeCIn = -Nudge/3
+      if (Dx$TPY_ciU - Dx$TPY_ciL < 3*Nudge) NudgeCIp = + Nudge else NudgeCIp = - Nudge/3
+      if (Dx$TNY_ciU - Dx$TNY_ciL < 3*Nudge) NudgeCIn = + Nudge else NudgeCIn = - Nudge/3
       data.frame(
         x = c(0.85, 0.85, 1.05, 1.05, 1.05, 1.05),
         y = c(
@@ -144,7 +141,7 @@ shinyServer <- function(input, output, session) {
         )
       )
     
-    })
+    }, ignoreNULL = FALSE)
     
 #==========================================================
     
@@ -154,7 +151,7 @@ shinyServer <- function(input, output, session) {
                                          dom = 't'))
     
     output$RuleInOutPlot<-renderPlot({
-    #  Sys.sleep(2)
+      # Sys.sleep(2)
       ggplot(linesDf()) +
         geom_line(aes(x = linesDf()$PriorAxisX, y = linesDf()$PriorAxisY), data = linesDf(), stat = "identity", position = "identity") +
         geom_line(aes(x = linesDf()$PostAxisX, y = linesDf()$PostAxisY), data = linesDf(), stat = "identity", position = "identity") +
@@ -169,15 +166,15 @@ shinyServer <- function(input, output, session) {
           axis.text.x = element_blank(),
           legend.position="none"
         ) +
-        labs(x = "", y = paste0("probability of ", DxCondition())) +
-        ggtitle(paste("Post-test probabilities after", DxTestName(), "for", DxCondition())) +
+        labs(x = "", y = paste0("probability of ", input$DxCondition)) +
+        ggtitle(paste("Post-test probabilities after", input$DxTestName, "for", input$DxCondition)) +
         theme(plot.title = element_text(size = 14, face = "bold")) +
         geom_text(data = fixedlabels(), size = 4, aes(x,y,label = labels)) + 
         geom_text(data = postTestLabels(), size = 3, aes(x, y, label = labels))
     })
 
     graphPre2PostProb <- eventReactive(input$GoButton, {
-      x <- seq(from = 0, to = 1, by = 0.02) ### preTest probability along the x-axis
+      x <- seq(from = 0, to = 1, by = 0.01) ### preTest probability along the x-axis
       ### y-axis for post test probability
       ## initialize variables for post test probabilities
       
@@ -211,7 +208,7 @@ shinyServer <- function(input, output, session) {
         yN = yN,
         yNciU = yNciU
       )
-    })
+    }, ignoreNULL = FALSE)
 
   linesPre2PostProb <- eventReactive(input$GoButton, {
     Dx <- DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)
@@ -229,7 +226,7 @@ shinyServer <- function(input, output, session) {
       PostProbNegY    = c(Dx$PostTestProbN, Dx$PostTestProbN),
       PostProbNegYciU = c(Dx$TNY_ciU, Dx$TNY_ciU)
     )
-  })
+  }, ignoreNULL = FALSE)
 
   prepostLabels <- eventReactive(input$GoButton, {
     ### save stats so don't have to call many times
@@ -248,7 +245,7 @@ shinyServer <- function(input, output, session) {
       )
     )
     
-  })
+  }, ignoreNULL = FALSE)
   
   
   
@@ -268,8 +265,8 @@ shinyServer <- function(input, output, session) {
                   ymax = graphPre2PostProb()$yNciU,
                   alpha = 0.03), fill  = "darkseagreen3") +
       theme(legend.position="none") +
-      labs(x = "Pre-test probability (prevalence)", y = paste0("Post test probability after ", DxTestName())) +
-      ggtitle(paste("Pre- and post-test probabilities after", DxTestName(), "for", DxCondition())) +
+      labs(x = "Pre-test probability (prevalence)", y = paste0("Post test probability after ", input$DxTestName)) +
+      ggtitle(paste("Pre- and post-test probabilities after", input$DxTestName, "for", input$DxCondition)) +
       theme(plot.title = element_text(size = 12, face = "bold")) +
 
 

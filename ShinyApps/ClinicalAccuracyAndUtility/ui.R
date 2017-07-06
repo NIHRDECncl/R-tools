@@ -1,4 +1,4 @@
-#################### ui ###############################
+#################### ui for ShinyApp to explore clinical accuracy and utility ###############################
 
 ui <- function(request) {
   navbarPage(h4("Explore the clinically useful measures of test accuracy"),
