@@ -1,8 +1,7 @@
 
-# This is the user-interface definition of a Shiny web application.
-# 
+# User interface for app to explore unceretainties when the reference standard is imperfect# 
 #
-# conventions for naming variables
+# Conventions for naming variables
 # Prefixes indicate the group the varible belongs to:
 #    i - for variables related to the Index test
 #    r - for variables related to the Reference test
