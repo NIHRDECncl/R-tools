@@ -1,0 +1,17 @@
+---
+title: "Dynamic report"
+output: pdf_document
+params:
+  n: NA
+---
+
+```{r}
+# The `params` object is available in the document.
+
+```
+
+A plot of random points.
+
+```{r}
+#plot(rnorm(params$n), rnorm(params$n))
+```

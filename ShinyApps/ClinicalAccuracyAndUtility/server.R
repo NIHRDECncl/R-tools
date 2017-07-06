@@ -292,4 +292,36 @@ shinyServer <- function(input, output, session) {
     geom_text(data = prepostLabels(), size = 4, aes(x,y,label = labels)) 
       
   })
+  
+  ## Thanks to Mark Strong for this code
+  # https://github.com/Sheffield-Accelerated-VoI/SAVI/blob/master/server.R
+  
+  output$downloadReport <- downloadHandler(
+    filename = function() {#"my-report.pdf"
+      paste('my-report', sep = '.', switch(
+        input$format, PDF = 'pdf', HTML = 'html', Word = 'docx'
+      ))
+    },
+    
+    content = function(file) {
+      src <- normalizePath('report.Rmd')
+      # temporarily switch to the temp dir, in case you do not have write
+      # permission to the current working directory
+      owd <- setwd(tempdir())
+      on.exit(setwd(owd))
+      file.copy(src, 'report.Rmd', overwrite=TRUE)
+      
+      library(rmarkdown)
+      out <- render(input = 'report.Rmd', #pdf_document()
+                    output_format = switch(
+                      input$format,
+                      PDF = pdf_document(), HTML = html_document(), 
+                      Word = word_document())#,
+                    #     envir = cache
+      )
+      file.copy(out, file)
+    },
+    contentType = "text/plain"
+  )
+  
   }
