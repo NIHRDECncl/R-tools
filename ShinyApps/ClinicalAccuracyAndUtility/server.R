@@ -27,38 +27,38 @@ shinyServer <- function(input, output, session) {
   })
  
   
-    Dpos <- eventReactive(input$GoButton, {round(input$n * input$prevalence)}, ignoreNULL = FALSE)
-    Dneg <- eventReactive(input$GoButton, {round(input$n - Dpos())}, ignoreNULL = FALSE)
+    Dpos <- eventReactive(input$GoButton, {round(input$n * input$prevalence)}, ignoreNULL = FALSE, ignoreInit = FALSE)
+    Dneg <- eventReactive(input$GoButton, {round(input$n - Dpos())}, ignoreNULL = FALSE, ignoreInit = FALSE)
 
-    Tp <- eventReactive(input$GoButton, {input$sensitivity * Dpos()}, ignoreNULL = FALSE)
-    Tn <- eventReactive(input$GoButton, {input$specificity * Dneg()}, ignoreNULL = FALSE)
+    Tp <- eventReactive(input$GoButton, {input$sensitivity * Dpos()}, ignoreNULL = FALSE, ignoreInit = FALSE)
+    Tn <- eventReactive(input$GoButton, {input$specificity * Dneg()}, ignoreNULL = FALSE,ignoreInit = FALSE)
 
-    Fn <- eventReactive(input$GoButton, {(1 - input$sensitivity) * Dpos()}, ignoreNULL = FALSE)
-    Fp <- eventReactive(input$GoButton, {(1 - input$specificity) * Dneg()}, ignoreNULL = FALSE)
+    Fn <- eventReactive(input$GoButton, {(1 - input$sensitivity) * Dpos()}, ignoreNULL = FALSE, ignoreInit = FALSE)
+    Fp <- eventReactive(input$GoButton, {(1 - input$specificity) * Dneg()}, ignoreNULL = FALSE, ignoreInit = FALSE)
 
-    PPV <- eventReactive(input$GoButton, {Tp()/(Tp() + Fp())}, ignoreNULL = FALSE)
-    NPV <- eventReactive(input$GoButton, {Tn()/(Tn() + Fn())}, ignoreNULL = FALSE)
+    PPV <- eventReactive(input$GoButton, {Tp()/(Tp() + Fp())}, ignoreNULL = FALSE, ignoreInit = FALSE)
+    NPV <- eventReactive(input$GoButton, {Tn()/(Tn() + Fn())}, ignoreNULL = FALSE, ignoreInit = FALSE)
 
-    LRp <- eventReactive(input$GoButton, {(input$sensitivity/(1 - input$specificity))}, ignoreNULL = FALSE)
-    LRn <- eventReactive(input$GoButton, {(1 - input$sensitivity)/(input$specificity)}, ignoreNULL = FALSE)
+    LRp <- eventReactive(input$GoButton, {(input$sensitivity/(1 - input$specificity))}, ignoreNULL = FALSE, ignoreInit = FALSE)
+    LRn <- eventReactive(input$GoButton, {(1 - input$sensitivity)/(input$specificity)}, ignoreNULL = FALSE, ignoreInit = FALSE)
     
-    PreTestOddsP <- eventReactive(input$GoButton, {(input$prevalence)/(1 - input$prevalence)}, ignoreNULL = FALSE)
-    PreTestOddsN <- eventReactive(input$GoButton, {(1 - input$prevalence)/(input$prevalence)}, ignoreNULL = FALSE)
+    PreTestOddsP <- eventReactive(input$GoButton, {(input$prevalence)/(1 - input$prevalence)}, ignoreNULL = FALSE, ignoreInit = FALSE)
+    PreTestOddsN <- eventReactive(input$GoButton, {(1 - input$prevalence)/(input$prevalence)}, ignoreNULL = FALSE, ignoreInit = FALSE)
 
-    PostTestOddsP <- eventReactive(input$GoButton, {PreTestOddsP()*LRp()}, ignoreNULL = FALSE)
-    PostTestOddsN <- eventReactive(input$GoButton, {PreTestOddsN()*LRn()}, ignoreNULL = FALSE)
+    PostTestOddsP <- eventReactive(input$GoButton, {PreTestOddsP()*LRp()}, ignoreNULL = FALSE, ignoreInit = FALSE)
+    PostTestOddsN <- eventReactive(input$GoButton, {PreTestOddsN()*LRn()}, ignoreNULL = FALSE, ignoreInit = FALSE)
 
-    PostTestProbP <- eventReactive(input$GoButton, {PostTestOddsP()/(PostTestOddsP() + 1)}, ignoreNULL = FALSE)
-    PostTestProbN <- eventReactive(input$GoButton, {PostTestOddsN()/(PostTestOddsN() + 1)}, ignoreNULL = FALSE)
+    PostTestProbP <- eventReactive(input$GoButton, {PostTestOddsP()/(PostTestOddsP() + 1)}, ignoreNULL = FALSE, ignoreInit = FALSE)
+    PostTestProbN <- eventReactive(input$GoButton, {PostTestOddsN()/(PostTestOddsN() + 1)}, ignoreNULL = FALSE, ignoreInit = FALSE)
 
     ### confidence  limits for the post=test probabilities
     
     ### the following are numbers; the same names in the data.frame label 2 item columns (vectors)
     
-    TPY_ciL <- eventReactive(input$GoButton, {DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)$TPY_ciL}, ignoreNULL = FALSE)
-    TPY_ciU <- eventReactive(input$GoButton, {DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)$TPY_ciU}, ignoreNULL = FALSE)
-    TNY_ciL <- eventReactive(input$GoButton, {DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)$TNY_ciL}, ignoreNULL = FALSE)
-    TNY_ciU <- eventReactive(input$GoButton, {DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)$TNY_ciU}, ignoreNULL = FALSE)
+    TPY_ciL <- eventReactive(input$GoButton, {DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)$TPY_ciL}, ignoreNULL = FALSE, ignoreInit = FALSE)
+    TPY_ciU <- eventReactive(input$GoButton, {DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)$TPY_ciU}, ignoreNULL = FALSE, ignoreInit = FALSE)
+    TNY_ciL <- eventReactive(input$GoButton, {DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)$TNY_ciL}, ignoreNULL = FALSE, ignoreInit = FALSE)
+    TNY_ciU <- eventReactive(input$GoButton, {DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)$TNY_ciU}, ignoreNULL = FALSE, ignoreInit = FALSE)
   
     # lines for plot 1
     linesDf <- eventReactive(input$GoButton, {
@@ -93,7 +93,7 @@ shinyServer <- function(input, output, session) {
         TNY_ciL = c(input$prevalence, round(Dx$TNY_ciL,3)),
         TNY_ciU = c(input$prevalence, round(Dx$TNY_ciU,3))
       )})
-    }, ignoreNULL = FALSE)
+    }, ignoreNULL = FALSE, ignoreInit = FALSE)
     
 ### coordinates and labels for plot 1
     fixedlabels <- eventReactive(input$GoButton, {
@@ -112,7 +112,7 @@ shinyServer <- function(input, output, session) {
           paste0("Action when indeterminate: ", input$IndeterminateDecision)),
           fillColours = c("firebrick4", "springgreen4")
        )
-    }, ignoreNULL = FALSE)
+    }, ignoreNULL = FALSE, ignoreInit = FALSE)
 
     postTestLabels <- eventReactive(input$GoButton, {
       ### save stats so don't have to call many times
@@ -141,7 +141,7 @@ shinyServer <- function(input, output, session) {
         )
       )
     
-    }, ignoreNULL = FALSE)
+    }, ignoreNULL = FALSE, ignoreInit = FALSE)
     
 #==========================================================
     
@@ -208,7 +208,7 @@ shinyServer <- function(input, output, session) {
         yN = yN,
         yNciU = yNciU
       )
-    }, ignoreNULL = FALSE)
+    }, ignoreNULL = FALSE, ignoreInit = FALSE)
 
   linesPre2PostProb <- eventReactive(input$GoButton, {
     Dx <- DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)
@@ -226,7 +226,7 @@ shinyServer <- function(input, output, session) {
       PostProbNegY    = c(Dx$PostTestProbN, Dx$PostTestProbN),
       PostProbNegYciU = c(Dx$TNY_ciU, Dx$TNY_ciU)
     )
-  }, ignoreNULL = FALSE)
+  }, ignoreNULL = FALSE, ignoreInit = FALSE)
 
   prepostLabels <- eventReactive(input$GoButton, {
     ### save stats so don't have to call many times
@@ -245,11 +245,12 @@ shinyServer <- function(input, output, session) {
       )
     )
     
-  }, ignoreNULL = FALSE)
+  }, ignoreNULL = FALSE, ignoreInit = FALSE)
   
   
   
   output$PrePostProb <- renderPlot({
+ # output$PrePostProb <- eventReactive(input$GoButton, {
     ggplot(graphPre2PostProb()) +
       geom_line(aes(x = graphPre2PostProb()$x, y = graphPre2PostProb()$yP), stat = "identity", position = "identity") +
       geom_ribbon(data = graphPre2PostProb(),
@@ -316,7 +317,8 @@ shinyServer <- function(input, output, session) {
                     output_format = switch(
                       input$format,
                       PDF = pdf_document(), HTML = html_document(), 
-                      Word = word_document())#,
+                      Word = word_document())
+                    #  params = list(plot1 = PrePostProb )
                     #     envir = cache
       )
       file.copy(out, file)
