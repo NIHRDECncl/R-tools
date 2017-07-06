@@ -72,6 +72,16 @@ ui <- function(request) {
                )
              )),
     
+    tabPanel("Download summary report",
+             p("This document contains all the tables and figures generated from your input data."),
+             radioButtons('format', 'Please select the document format you require', 
+                          c('PDF', 'HTML', 'Word'),
+                          inline = TRUE),
+             downloadButton('downloadReport', 'Download summary report'),
+             br(), br(), 
+             p("NB generating the document can take some time.")
+    ),
+    
 
 ###################################
 #
