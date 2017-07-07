@@ -16,17 +16,24 @@
 
 shinyServer <- function(input, output, session) {
   
+   # `cache' is the environment unique to each user visit
+   # This is where we will save values that need to persist, 
+   # and that can be picked up and included in the report
+  
+   if(exists("cache")) rm(cache, inherits = TRUE) # we shouldn't need this
+   cache <- new.env()
+  
    session$onSessionEnded(stopApp) # it can be annoying that when you close the browser window, the app is still running and you need to manually press “Esc” to kill it
   
-  values <- reactiveValues()
-  go <- function() {
-    values$GoButton <- isolate(values$GoButton) + 1
-  }
-  observe({
-    if (input$GoButton == 0) isolate( go())
-  })
- 
-  
+#   values <- reactiveValues()
+#   go <- function() {
+#     values$GoButton <- isolate(values$GoButton) + 1
+#   }
+#   observe({
+#     if (input$GoButton == 0) isolate( go())
+#   })
+#  
+#   
     Dpos <- eventReactive(input$GoButton, {round(input$n * input$prevalence)}, ignoreNULL = FALSE, ignoreInit = FALSE)
     Dneg <- eventReactive(input$GoButton, {round(input$n - Dpos())}, ignoreNULL = FALSE, ignoreInit = FALSE)
 
@@ -325,5 +332,19 @@ shinyServer <- function(input, output, session) {
     },
     contentType = "text/plain"
   )
+  
+  # test
+  dist <- eventReactive(input$goButton1 | input$goButton2, {
+    set.seed(123)
+    data.frame(
+      dist = rnorm(input$obs)
+    )
+  }, ignoreNULL = FALSE )
+  
+  # this looks rather roundabout, but it is meant to be a minimal representative example of the 
+  #    clini cal accuracy and utility app, which does not show plots until the actionButton is clicked
+  output$distPlot <- renderPlot({
+    hist(dist()$dist) 
+  })
   
   }

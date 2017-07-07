@@ -2,7 +2,19 @@
 
 ui <- function(request) {
   navbarPage(h4("Explore the clinically useful measures of test accuracy"),
+    navbarMenu("Home",
     tabPanel("About", includeHTML("www/tab1.html")), 
+    tabPanel("About graph 1", includeHTML("www/tab2.html")),
+    tabPanel("About graph 2", includeHTML("www/tab3.html")),
+    tabPanel("test",  
+    sidebarPanel(
+      sliderInput("obs", "Number of observations:",   min = 0, max = 1000, value = 500),
+      actionButton("goButton1", "Go1!"),
+      actionButton("goButton2", "Go2!")), 
+    mainPanel(
+      plotOutput("distPlot")
+    ))
+    ),
     
     tabPanel("Input labels, sensitivity, specificity, etc",
              fluidRow(
@@ -46,9 +58,17 @@ ui <- function(request) {
                 )
       ),
     
-    navbarMenu("Clinical accuracy: predictive values",
-        tabPanel("About graph 1", includeHTML("www/tab2.html")),
+    navbarMenu("Clinical accuracy and utility",
+               # need to put inputs in side bar panel
+       
         tabPanel("Graph 1: clinical accuracy: pre- and post-test probabilities; predictive values",
+                 sidebarPanel(
+                   fluidRow(
+                     column(4,actionButton("GoButton", "Update the graphs")),
+                     column(4, bookmarkButton())
+                   )
+                 ),
+                 mainPanel(     
                   conditionalPanel(
                      condition = "input.GoButton == 0",
                      h5("To see the graphs, go to the Inputs tab and click on the Update graphs button", style="color:red")
@@ -58,10 +78,11 @@ ui <- function(request) {
                      withSpinner(plotOutput("PrePostProb"))
                    )
         )),
-    
-    navbarMenu("Clinical utility: thresholds to cross for clinical decisons",
-        tabPanel("About graph 2", includeHTML("www/tab3.html")),
         tabPanel("Graph 2: clinical utility: post-test probabilities and decision thresholds", 
+                 sidebarPanel(
+                   
+                 ),
+                 mainPanel(    
                 conditionalPanel(
                    condition = "input.GoButton == 0",
                    h5("To see the graphs, go to the Inputs tab and click on the Update graphs button", style="color:red")
@@ -70,7 +91,7 @@ ui <- function(request) {
                    condition = "input.GoButton !== 0",
                    withSpinner(plotOutput("RuleInOutPlot"))
                )
-             )),
+             ))),
     
     tabPanel("Download summary report",
              p("This document contains all the tables and figures generated from your input data."),
