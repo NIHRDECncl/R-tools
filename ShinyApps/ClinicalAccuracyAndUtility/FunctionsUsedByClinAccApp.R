@@ -121,3 +121,21 @@
       TNY_ciU = TNY_ciU
     )
   }
+  
+  # small input boxes
+  textInput3<-function (inputId, label, value = "",...) 
+  {
+    div(style="display:inline-block",
+        tags$label(label, `for` = inputId), 
+        tags$input(id = inputId, type = "text", value = value,...))
+  }
+  
+  
+  
+  
+  # side by side boxes
+  textInput2<-function (inputId, label, value = "",...) 
+  {
+    tagList(tags$label(label, `for` = inputId), tags$input(id = inputId, 
+                                                           type = "text", value = value,...))
+  }
