@@ -1,5 +1,4 @@
-###  a ShinyApp to visually explore the effects of sensitivity, specificity, and prevalence
-###  on post-test probablities (clinical accuracy), and their relation to thresholds for rule-in and rule-out decision thresholds.
+###  a ShinyApp to visually explore conditional survival probabilities
 # 
 if( !exists("LoadPackages", mode="function")) source("FunctionsUsedByClinAccApp.R")
 
@@ -17,8 +16,6 @@ options(shiny.error = browser)
 #                     text = NULL, 
 #                     width.cutoff = 80)
                     
-# spinner <- "https://onedrive.live.com/download?cid=B2035DBFA124EFE7&resid=B2035DBFA124EFE7%213204&authkey=AClmMWLejVuzT2k"
-
 ##########################################################
 #
 # load packages used by the App
@@ -35,6 +32,7 @@ LoadPackages <- function() {
   #      library(proportion)  package no longer being maintained :-(
   library(PropCIs)
   library(rsconnect)   # needed to upload to Shinyio
+  library(readxl)
   # ...
 }
 
@@ -62,74 +60,5 @@ ciprop <- function(x, n, alpha = 0.05)
       ciU = PropCIs::scoreci(x, n, conf.level)$conf.int[2]
     )
   })
-}
-
-DxStats <- function(n, prevalence, sensitivity, specificity) {
-  prevalence <- min(prevalence,0.9999)
-  prevalence <- max(prevalence,0.0001)
-  
-  Dpos <- n * prevalence
-  Dneg <- n - Dpos
-  
-  Tp <- sensitivity * Dpos
-  Tn <- specificity * Dneg
-  
-  Fn <- (1 - sensitivity) * Dpos
-  Fp <- (1 - specificity) * Dneg
-  
-  PPV <- Tp/(Tp + Fp)
-  NPV <- Tn/(Tn + Fn) 
-  
-  LRp <- sensitivity/(1 - specificity)
-  LRn <- (1 -sensitivity)/(specificity)
-  
-  PreTestOddsP <- prevalence/(1 - prevalence)
-  PreTestOddsN <- (prevalence)/(1 -prevalence)
-  
-  PostTestOddsP <- PreTestOddsP*LRp
-  PostTestOddsN <- PreTestOddsN*LRn
-  
-  PostTestProbP <- PostTestOddsP/(PostTestOddsP + 1) # = PPV
-  PostTestProbN <- PostTestOddsN/(PostTestOddsN + 1) # = (1 - NPV)
-  
-  cidf <- ciprop(PPV * n, n) # CI for post-positive test probability
-  TPY_ciL <- cidf$ciL
-  TPY_ciU <- cidf$ciU
-  
-  cidf <- ciprop(PostTestProbN * n, n) # CI for post-negative test probability
-  TNY_ciL <- cidf$ciL
-  TNY_ciU <- cidf$ciU
-  
-  data.frame(
-    Dpos = Dpos,
-    Dneg = Dneg,
-    
-    Tp = Tp,
-    Tn = Tn,
-    
-    Fn = Fn,
-    Fp = Fp,
-    
-    PPV = PPV,
-    NPV = NPV,
-    
-    LRp = LRp,
-    LRn = LRn,
-    
-    PreTestOddsP = PreTestOddsP,
-    PreTestOddsN = PreTestOddsN,
-    
-    PostTestOddsP = PostTestOddsP,
-    PostTestOddsN = PostTestOddsP,
-    
-    PostTestProbP = PostTestProbP,
-    PostTestProbN = PostTestProbN,
-    
-    TPY_ciL = TPY_ciL,
-    TPY_ciU = TPY_ciU,
-    
-    TNY_ciL = TNY_ciL,
-    TNY_ciU = TNY_ciU
-  )
 }
 
