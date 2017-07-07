@@ -18,15 +18,19 @@ ui <- function(request) {
     
     tabPanel("Input labels, sensitivity, specificity, etc",
              fluidRow(
-               column(4,actionButton("GoButton", "Update the graphs")),
-               column(4, bookmarkButton())
+              # column(4,actionButton("GoButton", "Update the graphs")),
+              # column(4, bookmarkButton())
              ),
              
              fluidRow(
                hr(),
                column(4, wellPanel(
-                                   textInput(inputId = "DxCondition", label = "Name of condition", value = "Example: Disease"),
-                                   textInput(inputId = "DxTestName", label = "Name of test", value = "Example: Test")
+                 textInput3(inputId="xlimitsmin", label="x-min", value = 0.0, class="input-mini"),
+                 textInput3(inputId="xlimitsmax", label="x-max", value = 0.5, class="input-small"),
+                 div(style="display:inline-block",textInput2(inputId="xlimitsmin", label="x-min", value = 0.0, class="input-small")),
+                 div(style="display:inline-block",textInput2(inputId="xlimitsmax", label="x-max", value = 0.5, class="input-small")),
+                 textInput(inputId = "DxCondition", label = "Name of condition", value = "Example: Disease"),
+                 textInput(inputId = "DxTestName", label = "Name of test", value = "Example: Test")
                )),
                column(4, wellPanel(
                                    numericInput("prevalence", "Prior probability (prevalence)", min=0, max=1, value=0.4, step = 0.01),
@@ -42,7 +46,7 @@ ui <- function(request) {
                fluidRow( 
                  h5(" Data for clinical decisions"),
                  column(4, wellPanel(
-                                     textInput(inputId = "DxRuleInDecision", label = "Rule-in decision", value = "Example: start treatment"),
+                                     textInput3(inputId = "DxRuleInDecision", label = "Rule-in decision", value = "Example: start treatment", class="input-mini"),
                                      numericInput("RuleInDecisionThreshold", "Rule-in PPV threshold", min=0, max=1, value= 0.5, step = 0.01)
                  )),
                  
@@ -58,14 +62,34 @@ ui <- function(request) {
                 )
       ),
     
-    navbarMenu("Clinical accuracy and utility",
-               # need to put inputs in side bar panel
-       
-        tabPanel("Graph 1: clinical accuracy: pre- and post-test probabilities; predictive values",
+
+     tabPanel("Clinical accuracy and utility",
                  sidebarPanel(
                    fluidRow(
-                     column(4,actionButton("GoButton", "Update the graphs")),
-                     column(4, bookmarkButton())
+                    actionButton("GoButton", "Update the graphs", class = 'middleAlign'),
+#                    wellPanel(
+                     br(),
+                      textInput(inputId = "DxCondition", label = "Name of condition", value = "Example: Disease"),
+                      textInput(inputId = "DxTestName", label = "Name of test", value = "Example: Test"),
+                
+                      column(6,numericInput("prevalence", "Prevalence", min=0, max=1, value=0.4, step = 0.01, width = '400px')),
+                      column(6,numericInput("n", paste("Study", "size", sep = "\n"), min=1, max=1000, value=300, width = '400px')),
+                 
+                      column(6, numericInput("sensitivity", "Sensitivity of test", min=0, max=1, value= 0.90, step = 0.01, width = '400px')),
+                      column(6, numericInput("specificity", "Specificity of test", min=0, max=1, value= 0.80, step = 0.01, width = '400px')),
+                 #  ), 
+                   wellPanel(
+                     h4(" Data for clinical decisions"),
+                     textInput(inputId = "DxRuleInDecision", label = "Rule-in decision", value = "Example: start treatment"),
+                     numericInput("RuleInDecisionThreshold", "Rule-in PPV threshold", min=0, max=1, value= 0.5, step = 0.01),
+                
+                     textInput(inputId = "IndeterminateDecision", label = "Indeterminate decision", value = "Example: investigate further"),
+                 
+                     textInput(inputId = "DxRuleOutDecision", label = "Rule-out decision", value = "Example: rule out the condition"),
+                     numericInput("RuleOutDecisionThreshold", "Rule-out NPV threshold", min=0, max=1, value= 0.1, step = 0.01)
+                   ),
+                 hr(),
+                 bookmarkButton()
                    )
                  ),
                  mainPanel(     
@@ -76,22 +100,18 @@ ui <- function(request) {
                  conditionalPanel(
                      condition = "input.GoButton !== 0",
                      withSpinner(plotOutput("PrePostProb"))
-                   )
-        )),
-        tabPanel("Graph 2: clinical utility: post-test probabilities and decision thresholds", 
-                 sidebarPanel(
-                   
-                 ),
-                 mainPanel(    
-                conditionalPanel(
+                   ), 
+                 conditionalPanel(
                    condition = "input.GoButton == 0",
                    h5("To see the graphs, go to the Inputs tab and click on the Update graphs button", style="color:red")
                  ),
-               conditionalPanel(
+                 conditionalPanel(
                    condition = "input.GoButton !== 0",
                    withSpinner(plotOutput("RuleInOutPlot"))
-               )
-             ))),
+                 )
+        )
+
+        ),
     
     tabPanel("Download summary report",
              p("This document contains all the tables and figures generated from your input data."),
