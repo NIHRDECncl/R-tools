@@ -1,6 +1,6 @@
 #################### ui for ShinyApp to explore the meaning of survival statistics ###############################
 
-ui <- function(request) {
+ui <- function(request) { 
 
   fluidPage(
     

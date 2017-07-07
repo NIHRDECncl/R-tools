@@ -19,6 +19,7 @@ LoadPackages <- function() {
   #      library(proportion)  package no longer being maintained :-(
   library(PropCIs)
   library(rsconnect)   # needed to upload to Shinyio
+  library(readxl)
   # ...
 }
 
