@@ -1,7 +1,7 @@
 ##########################################################
 # FunctionsUsedBySurvivalStatisticsApp.R()
 #
-# non-reactive functions used by the Shiny App to explore clinical accuracy measurements
+# non-reactive functions used by the Shiny App 
 
 ##########################################################
 #
