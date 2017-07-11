@@ -1,28 +1,7 @@
 
-# This is the user-interface definition of a Shiny web application.
-# 
+# User interface for app to explore unceretainties when the reference standard is imperfect# 
 #
-
-
-# initialise text variables for the "about" tabs
-#
-# browser()
-urlAbout <- "ImpRefTabAbout1.html"
-AboutHtml <- "html place holder until content(GET(urlAbout)... works"
-# AboutHtml <- content(GET(urlAbout), "text", encoding = "ISO-8859-1") # ERROR: Couldn't resolve host name
-# 
-# urlTab2 <- "https://onedrive.live.com/download?cid=B2035DBFA124EFE7&resid=B2035DBFA124EFE7%213332&authkey=AEung92_Q6bRkaY"
-# tab2Html <- content(GET(urlTab2), "text", encoding = "ISO-8859-1")
-# 
-# urlTab4 <- "https://onedrive.live.com/download?cid=B2035DBFA124EFE7&resid=B2035DBFA124EFE7%213333&authkey=AJcIpWL8ThA4eIg"
-# tab4Html <- content(GET(urlTab4), "text", encoding = "ISO-8859-1")
-
-urlNIHRlogo <- "nihr_colour.jpg" # in ~/www/
-
-urlSpinner <- "spinner.gif" # in ~/www/
-
-
-# conventions for naming variables
+# Conventions for naming variables
 # Prefixes indicate the group the varible belongs to:
 #    i - for variables related to the Index test
 #    r - for variables related to the Reference test
@@ -32,7 +11,6 @@ urlSpinner <- "spinner.gif" # in ~/www/
 #    irSens = the sensitivity of the Index test with the Reference test as the standard
 #    rgSpec = the specificity of the Reference test, with the Gold standard as the standard
 #    igNNT = the true NNT of Index test as it is compared to the Gold standard
-
 
 
 ui <- function(request) {
@@ -50,6 +28,16 @@ ui <- function(request) {
              tags$style(HTML(".irs-slider {width: 1px; height: 15px; top: 15px;}")),
              
              fluidRow(
+               column(8, actionButton("GoButton", "Click to recalculate the graphs after changing input data")),
+              
+               ######### bookmark button does not work ????????????????????
+                column(4, bookmarkButton(
+                 title = "Bookmark this application's state and get a URL for saving and sharing.",
+                 id = "bookmark"))
+             ),
+             
+             fluidRow(
+               hr(),
                column(4, wellPanel(tags$b("Index test"),
                                    sliderInput("irSen", label = "\b \b measured sensitivity", value =c (0.7, 0.9), min = 0, max = 1, step = 0.01, width = "125%"),
                                    sliderInput("irSpec", label = "\b \b measured specificity", value = c(0.8, 0.95), min = 0, max = 1, step = 0.01)
@@ -62,10 +50,12 @@ ui <- function(request) {
                column(4, wellPanel(tags$b("Index test - true accuracy"),
                                    sliderInput("igSen", label = "\b \b \b \b guestimated sensitivity for PUA of specificity", value = c(0.6, 0.8), min = 0, max = 1, step = 0.01, width='100%'),
                                    sliderInput("igSpec", label = "\b \b \b \b guestimated specificity for PUA of sensitivity", value = c(0.6, 0.75), min = 0, max = 1, step = 0.01, width='100%')
-               ))      ),
+               ))
+               
+               ),
              
              fluidRow(
-               column(4, wellPanel(tags$b("Overtype with:"),
+               column(4, wellPanel(tags$b("Lables and titles for graphs and tables: Overtype with:"),
                                    textInput("Title", label = NULL, value = "title for outputs", placeholder = "place holder"),
                                    textInput("IndexTest", label = NULL, value = "name of index test"),
                                    textInput("ReferenceTest", label = NULL, value = "name of reference test")
@@ -83,18 +73,28 @@ ui <- function(request) {
              ),
              value = "Inputs"),
     
+    # tab for debugging outputs
+    
+    tabPanel("Debugging", 
+             hr(),
+             verbatimTextOutput("debug1"),
+             hr(),
+             verbatimTextOutput("debug2"),
+             value = "Debugging"),
+    
+    
     # tab for tables for Index test (measured)
     navbarMenu("Tables",
                tabPanel("Index test measurments of diagnostic accuracy",
                         #div(id = "plot-container",
-                        tags$img(src = urlSpinner, id = "loading-spinner"),
                         tags$h5("contingency matrix for index test"),
                         hr(),
                         tags$h3("under construction", style="color:red"),
                         hr(),
                         tags$blockquote("this page will have table of diagostic accuracy statistics"),
-                        
+            
                         textOutput("ITtitle"),
+                       
                         tableOutput("ITCMTable"),
                         hr(),
                         tags$h5("Diagnostic accuracy stats for index test"),
@@ -106,13 +106,12 @@ ui <- function(request) {
                # tab for tables for Reference test (estimated)
                tabPanel(" +  Reference test guestimates of diagnostic accuracy",
                         #div(id = "plot-container",
-                        tags$img(src = urlSpinner, id = "loading-spinner"),
                         tags$h5("contingency matrix for reference test"),
                         hr(),
                         tags$h3("under construction", style="color:red"),
                         hr(),
                         textOutput("RTtitle"),
-                        tableOutput("RTCMTable"),
+                        withSpinner(tableOutput("RTCMTable")),
                         hr(),
                         tags$h5("Diagnostic accuracy stats for reference test"),
                         hr(),
@@ -123,7 +122,6 @@ ui <- function(request) {
                # tab for tables for Index test (adjusted)
                tabPanel(" -> Index test guestimates and estimates of true diagnostic accuracy",
                         #div(id = "plot-container",
-                        tags$img(src = urlSpinner, id = "loading-spinner"),
                         tags$h5("contingency matrix for index test adjusted for imperfect reference test"),
                         hr(),
                         tags$h3("under construction", style="color:red"),
@@ -131,7 +129,7 @@ ui <- function(request) {
                         tags$blockquote("this page will have table of diagostic accuracy statistics"),
                         
                         textOutput("ITAtitle"),
-                        tableOutput("ITACMTable"),
+                        withSpinner(tableOutput("ITACMTable")),
                         hr(),
                         tags$h5("Diagnostic accuracy stats for adjusted index test"),
                         hr(),
@@ -161,8 +159,7 @@ ui <- function(request) {
                         tags$li("X1-s = reference test’s sensitivity, with ranges rgSenLow – rgSenHigh"),
                         tags$li("X2-s = reference test’s specificity, with ranges rgSpecLow – rgSpecHigh"),
                         hr(),
-                        tags$img(src = urlSpinner, id = "loading-spinner"),
-                        textOutput("graphs"),
+                        withSpinner(textOutput("graphs"), type = 6, size = 0.5),
                         value = "IT adjustments"
                ),
                # tab for graphs
@@ -185,10 +182,8 @@ ui <- function(request) {
                         tags$p("Facet-plot box and whisker plots for data from nSamp:"),
                         tags$li("Estimates: igSen, igSpec, igPPV, and igNPV"),
                         tags$li("Differentials:  (irSen – igSen) and (irPPV – igPPV); or (irSpec – igSpec) and (irNPV – igNPV)"),
-                        
                         hr(),
-                        tags$img(src = urlSpinner, id = "loading-spinner"),
-                        textOutput("graphs"),
+                        withSpinner(textOutput("graphs"), type = 5, size = 1),
                         value = "IT adjustments"
                ),
                # tab for graphs
@@ -213,22 +208,16 @@ ui <- function(request) {
                         tags$li("Differentials:  (irSen – igSen) and (irPPV – igPPV); or (irSpec – igSpec) and (irNPV – igNPV)"),
                         
                         hr(),
-                        tags$img(src = urlSpinner, id = "loading-spinner"),
-                        textOutput("graphs"),
+                        withSpinner(textOutput("graphs"), type = 8, size = 2),
                         value = "IT adjustments"
                )
     ),
     
-    hr(),
-    column(3, actionButton("GoButton", "Recalculate")),
-    column(3, bookmarkButton(
-      title = "Bookmark this application's state and get a URL for saving and sharing."),
-      id = "bookmark"),
     column(12, hr(),
            tags$b("Cite as:"),
            tags$p("Michael Power, Joy Allen."),
            tags$em("A ShinyApp tool to explore dependence of rule-in and rule-out decisions on prevalence, sensitivity, specificity, and confidence intervals"),
-           tags$p("NIHR Diagnostic Evidence Co-operative Newcastle. September 2016"),
+           tags$p("NIHR Diagnostic Evidence Co-operative Newcastle. July 2017"),
            tags$br(),
            tags$img(src = urlNIHRlogo, width = "80px", height = "28px", align = "right")) # add the NIHR logo
     , title = "Explore uncertainties in diagnostic accuracy when evaluating with an imperfect reference")

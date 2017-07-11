@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # R script to load packages
 loadpackages <- function()
   
@@ -18,6 +18,18 @@ if (!require(dplyr)){
   install.packages("dplyr", repos="http://cran.rstudio.com/") 
   library("dplyr")
 }
+
+if (!require(tidyverse)){
+  install.packages("tidyverse", repos="http://cran.rstudio.com/") 
+  library("tidyverse")
+}
+
+if (!require(shinycssloaders)){
+  install.packages("shinycssloaders", repos="http://cran.rstudio.com/") 
+   library("shinycssloaders")
+}
+
+
 
 if (!require(sqldf)){
   install.packages("sqldf", repos="http://cran.rstudio.com/") 
