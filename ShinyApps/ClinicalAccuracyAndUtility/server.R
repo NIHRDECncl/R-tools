@@ -14,6 +14,10 @@
 # DxRuleOutDecision
 # RuleOutDecisionThreshold
 
+
+plist <- list() # IMPORTANT - outside server function
+# save plots in global environment for report printing
+
 shinyServer <- function(input, output, session) {
   
    # `cache' is the environment unique to each user visit
@@ -157,9 +161,9 @@ shinyServer <- function(input, output, session) {
                                          options = list(scrollX = TRUE, rownames = FALSE,
                                          dom = 't'))
     
-    output$RuleInOutPlot<-renderPlot({
+    RuleInOutPlot<-reactive({
       # Sys.sleep(2)
-      ggplot(linesDf()) +
+       ggplot(linesDf()) +
         geom_line(aes(x = linesDf()$PriorAxisX, y = linesDf()$PriorAxisY), data = linesDf(), stat = "identity", position = "identity") +
         geom_line(aes(x = linesDf()$PostAxisX, y = linesDf()$PostAxisY), data = linesDf(), stat = "identity", position = "identity") +
         geom_line(aes(x = linesDf()$PrevX, y = linesDf()$PrevY, colour="coral1"), size = 1.5, data = linesDf(), stat = "identity", position = "identity") +
@@ -180,7 +184,21 @@ shinyServer <- function(input, output, session) {
         geom_text(data = fixedlabels(), size = 4, aes(x,y,label = labels)) + 
         geom_text(data = postTestLabels(), size = 5, aes(x, y, label = labels))
     })
-
+      
+      output$RuleInOutPlot<-renderPlot({
+        RuleInOutPlot()
+    })
+     
+    # plotList <- eventReactive(input$plt2rprt, {
+    #   #       isolate(
+    #   plist[[length(plist)+1]] <<- p #IMPORTATNT <<- instead of <-
+    #   #       )
+    #   return(plist)
+    # })
+    
+    output$lengthOfList <- renderText({length(plotList())})
+    output$lll <- renderText({length(plist)})
+    
     graphPre2PostProb <- eventReactive(input$GoButton, {
       x <- seq(from = 0, to = 1, by = 0.01) ### preTest probability along the x-axis
       ### y-axis for post test probability
@@ -326,9 +344,8 @@ shinyServer <- function(input, output, session) {
                     output_format = switch(
                       input$format,
                       PDF = pdf_document(), HTML = html_document(), 
-                      Word = word_document())
-                    #  params = list(plot1 = PrePostProb )
-                    #     envir = cache
+                      Word = word_document()
+                    ),  params = list(plot = RuleInOutPlot())
       )
       file.copy(out, file)
     },

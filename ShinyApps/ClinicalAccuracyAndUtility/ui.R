@@ -6,14 +6,6 @@ ui <- function(request) {
     tabPanel("About", includeHTML("www/tab1.html")), 
     tabPanel("About graph 1", includeHTML("www/tab2.html")),
     tabPanel("About graph 2", includeHTML("www/tab3.html"))#,
-#   tabPanel("test",  
-#    sidebarPanel(
-#      sliderInput("obs", "Number of observations:",   min = 0, max = 1000, value = 500),
-#      actionButton("goButton1", "Go1!"),
-#      actionButton("goButton2", "Go2!")), 
-#    mainPanel(
-#      plotOutput("distPlot")
-    #)#)
     ),
     
 
