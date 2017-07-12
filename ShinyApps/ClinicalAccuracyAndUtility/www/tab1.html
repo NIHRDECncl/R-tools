@@ -2,6 +2,7 @@
 <html><head>
 
 
+
 <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>tab1</title></head><body>
 <div class="tabbable tabs-above" style="color: rgb(51, 51, 51); font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-size: 13.6364px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 18.1818px; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; background-color: rgb(255, 255, 255);">
 <div class="tab-content">
@@ -54,39 +55,21 @@ for rule-in and rule-out decisions<br>
 in assessing test accuracy when the reference standard is not perfect</a>.<br>
 </li>
 </ol>
-<h2 style="color: rgb(153, 0, 0);">How to use this app</h2>
-<h3><span style="font-weight: bold; color: rgb(51, 51, 255);">Use
-the left-hand panel to (re)draw the graphs and enter the variables </span></h3>
-<ul>
-<li>A
-button at the top to "Update the graphs", which are shown under the
-tabs "Decision thresholds" and "Pre- to post-test probablity".</li>
-<li>The "Input variables" which are used to:</li>
-<ul>
-<li>label the graphs</li>
-<li>set the variables which determine:</li>
-<ul>
-<li>the post test probability: disease prevalence and test
-accuracy (sensitivity and specificity)</li>
-<li>the decision-making: thresholds for rule-in results and
-rule-out results</li>
-<li>the precision of post-test probability estimations: the
-population size in the study which provides the sensitivity and
-specificity estimations</li>
-</ul>
-</ul>
-</ul>
-<h3><span style="color: rgb(51, 51, 255);">&nbsp;<span style="font-weight: bold;">Use the </span></span><span style="font-weight: bold; color: rgb(51, 51, 255);">tabs at
+<h2 style="color: rgb(153, 0, 0);">How to use this app</h2><h3><span style="color: rgb(51, 51, 255);"><span style="font-weight: bold;">Use the </span></span><span style="font-weight: bold; color: rgb(51, 51, 255);">tabs at
 the top (i) to review information about&nbsp;using the app and
-reading the graphs, and (ii) to view the graphs</span></h3>
+reading the graphs, (ii) to view the graphs, and (iii) download a summary report for your use.&nbsp; <br>
+</span></h3>
 <table style="text-align: left; width: 867px; height: 146px;" border="1" cellpadding="2" cellspacing="2">
 <tbody>
 <tr>
 <td><div style="text-align: left;">
 </div><img alt="" src="file:///Users/michaelpower/Google%20Drive/GIT-project/GitHub/R-tools/ShinyApps/ClinicalAccuracyAndUtility/www/tab1.html">
 
-<p><span style="font-weight: bold;">&nbsp;<span style="color: rgb(51, 51, 255);"><img style="width: 826px; height: 78px;" alt="tabs at the top of the app's window" src="SnipTabs.PNG">Figure.</span></span>
-The tabs at the top of the app's window.</p>
+<p><span style="font-weight: bold;"><img style="width: 521px; height: 96px;" alt="Application tabs" src="apptabs.png">&nbsp;<big><br>
+      </big></span></p>
+      <p><span style="font-weight: bold;"><big></big><span style="color: rgb(51, 51, 255);">Figure.</span></span>
+The tabs at the top of the app's window</p>
+
 </td>
 </tr>
 </tbody>
@@ -95,42 +78,66 @@ The tabs at the top of the app's window.</p>
 </ol>
 The tabs provide the following information: and graphs:
 <ol>
-<li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">About</span>"
+
+
+
+  <li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">About</span>"
 --- this tab, about using the input panel on the left to generate and
 modify the graphs, and the tabs at the top to select information and
 graphs.<br>
-<br>
-</li>
-<li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">About
-graph 1</span>" --- how to read the graph shown
-in tab 3<br>
-<br>
-</li>
-<li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">Graph 1:
+    <ol>
+      <li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">About
+graph 1</span>" --- how to read graph shown
+in tab 2, clinical accuracy<br>
+      </li>
+      <li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">About
+graph 2</span>" --- how to read the graph shown
+in tab 2, clinical utility<br>
+        <br>
+      </li>
+    </ol>
+  </li>
+
+<li>"<span style="font-weight: bold; color: rgb(51, 51, 255);">Clinical accuracy and utility</span>" <br>
+    <ol>
+      <li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">Graph 1:
 clinical accuracy</span>"
 ---- a graph showing the accuracy measure that are important to
-patients and clinicians: pre- and post-test probabilities, and how
-these
-relate to the pre-test probability or prevalence <br>
-.</li>
-<li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">About
-graph 2</span>" --- how to read the graph shown
-in tab 5<br>
-<br>
-</li>
-<li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">Graph 2:
-clinical utility</span>"
+patients and clinicians: pre- and post-test probabilities, and how&nbsp;&nbsp;&nbsp; these
+relate to the pre-test probability or prevalence.</li>
+      <li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">Graph 2:
+clinical utili<span class=""></span>ty</span>"
 --- a
 graph showing how clinical decisions depend on post-test probabilities,
 which in turn depend on prevalence, sensitivity (for
 rule-out&nbsp;decisions), and specificity (for rule-in decisions).<br>
+      </li>
+    </ol>
+
 <br>
 </li>
-<li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">Tables</span>":
-Tabulations of the key data shown in the graphs.</li>
-</ol>
+  <li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">Tables</span>" --- Tabulations of the key data shown in the graphs. - NEED TO UPDATE THIS<br>
+    <br>
+  </li>
+  <li>"<span style="font-weight: bold;"><span style="color: rgb(51, 51, 255);">Download summary report</span></span>" --- Choose a location on your computer to download a copy of your input data and graphs</li>
+
+</ol><br>
+<big><big><big><span style="color: rgb(204, 0, 0); font-weight: bold;">Inputing your data and generating graphs</span></big></big></big><br>
+<br>
+<small><big><big><span style="font-weight: bold; color: rgb(51, 51, 255);"><big><small>In the clinical accuracy and utility, graphical tabs:&nbsp; Use
+the left-hand panel to (re)draw the graphs and enter the variables</small></big></span></big></big><span style="font-weight: bold; color: rgb(51, 51, 255);"> </span></small>
+<ul style="font-family: Arial;">
+<li>A
+button at the top to "Update the graphs", which are shown under the
+tabs "Decision thresholds" and "Pre- to post-test probablity".</li><li>The "Input variables" which are used to:</li><ul><li>label the graphs</li><li>set the variables which determine:</li><ul><li>the post test probability: disease prevalence and test
+accuracy (sensitivity and specificity)</li><li>the decision-making: thresholds for rule-in results and
+rule-out results</li><li>the precision of post-test probability estimations: the
+population size in the study which provides the sensitivity and
+specificity estimations</li></ul></ul>
+</ul>
+
+
 </div>
 </div>
-</div>
-<br class="Apple-interchange-newline">
+</div><br class="Apple-interchange-newline">
 </body></html>

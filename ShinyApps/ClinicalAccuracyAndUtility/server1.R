@@ -173,11 +173,10 @@ shinyServer <- function(input, output, session) {
           axis.text.x = element_blank(),
           legend.position="none"
         ) +
-        labs(x = "", y = paste0("probability of ", input$DxCondition), size = 8) +
+        labs(x = "", y = paste0("probability of ", input$DxCondition)) +
         ggtitle(paste("Post-test probabilities after", input$DxTestName, "for", input$DxCondition)) +
-        theme(plot.title = element_text(size = 16, face = "bold"), axis.text = element_text(size = 12), 
-              axis.title = element_text(size = 14)) +
-        geom_text(data = fixedlabels(), size = 4, aes(x,y,label = labels)) + 
+        theme(plot.title = element_text(size = 18, face = "bold")) +
+        geom_text(data = fixedlabels(), size = 6, aes(x,y,label = labels)) + 
         geom_text(data = postTestLabels(), size = 5, aes(x, y, label = labels))
     })
 
@@ -276,8 +275,7 @@ shinyServer <- function(input, output, session) {
       theme(legend.position="none") +
       labs(x = "Pre-test probability (prevalence)", y = paste0("Post test probability after ", input$DxTestName)) +
       ggtitle(paste("Pre- and post-test probabilities after", input$DxTestName, "for", input$DxCondition)) +
-      theme(plot.title = element_text(size = 16, face = "bold"), axis.text = element_text(size = 12), 
-            axis.title = element_text(size = 14)) +
+      theme(plot.title = element_text(size = 12, face = "bold")) +
 
 
       geom_line(data = linesPre2PostProb(), aes(

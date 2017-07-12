@@ -14,6 +14,22 @@ if (!require(scales)){
   library("scales")
 }
 
+
+if (!require(shinycssloaders)){
+  install.packages("shinycssloaders", repos="http://cran.rstudio.com/") 
+  library("shinycssloaders")
+}
+
+
+install.packages("devtools")
+devtools::install_github("daattali/colourpicker")
+
+if (!require(shinythemes)){
+  install.packages("shinythemes", repos="http://cran.rstudio.com/") 
+  library("scales")
+}
+
+
 if (!require(dplyr)){
   install.packages("dplyr", repos="http://cran.rstudio.com/") 
   library("dplyr")
