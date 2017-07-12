@@ -20,6 +20,8 @@
     library(colourpicker) # http://deanattali.com/blog/plot-colour-helper/ 
     library(shinythemes)
     library(DT)
+    library(knitr)
+    library(rmarkdown)
     library(shinycssloaders)
     #      library(proportion)  package no longer being maintained :-(
     library(PropCIs)

@@ -341,7 +341,7 @@ shinyServer (
     hist(dist()$dist) 
   })
   
-  #}
+   #}
 
  #cache$testplot <- output$distPlot
   
@@ -378,6 +378,6 @@ shinyServer (
   
  
   
-   }
+  
 
 )
