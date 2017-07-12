@@ -1,0 +1,11 @@
+name: ClinicalAccuracyAndUtility
+title:
+account: hmichaelpower
+server: shinyapps.io
+appId: 134076
+bundleId: 598485
+url: https://decshinyapps.shinyapps.io/ClinicalAccuracyAndUtility/
+when: 1477582868.71627
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: App_OLD.r|SnipClinicalAccuracy.PNG|SnipClinicalUtility.PNG|SnipTabs.PNG|tab1.html|tab2.html|tab4.html|archive/VisualizeRuleInAndRuleOutDecisions v2.r|archive/VisualizeRuleInAndRuleOutDecisions v3.r|archive/VisualizeRuleInAndRuleOutDecisions v4 2.R|archive/VisualizeRuleInAndRuleOutDecisions v4.1.r|archive/VisualizeRuleInAndRuleOutDecisions v4.r|archive/VisualizeRuleInAndRuleOutDecisions v5.R|archive/VisualizeRuleInAndRuleOutDecisions.R|archive/Headstart/VisualizeRuleInAndRuleOutDecisions - headstart.r|archive/Headstart/VisualizeRuleInAndRuleOutDecisions v 6.r|archive/VisualiseRuleInAndRuleOutDecisions - CORS/VisualizeRuleInAndRuleOutDecisions - CORS.r|archive/VisualiseRuleInAndRuleOutDecisions - CORS/VisualizeRuleInAndRuleOutDecisions v 6.r|archive/VisualizeRuleInAndRuleOutDecisions/App.r|archive/VisualizeRuleInAndRuleOutDecisions/GraphDecisionThreshold.PNG|archive/VisualizeRuleInAndRuleOutDecisions/GraphPostTestProbabilities.PNG|archive/VisualizeRuleInAndRuleOutDecisions/tab1.html|archive/VisualizeRuleInAndRuleOutDecisions/tab2.html|archive/VisualizeRuleInAndRuleOutDecisions/tab4.html|archive/VisualizeRuleInAndRuleOutDecisions/VisualizeRuleInAndRuleOutDecisions - v7.r|archive/VisualizeRuleInAndRuleOutDecisions/VisualiseRuleInAndRuleOutDecisions - CORS/VisualizeRuleInAndRuleOutDecisions - CORS.r|archive/VisualizeRuleInAndRuleOutDecisions/VisualiseRuleInAndRuleOutDecisions - CORS/VisualizeRuleInAndRuleOutDecisions v 6.r
