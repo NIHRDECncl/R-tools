@@ -11,29 +11,24 @@ ui <- function(request) {
       tabPanel("Explore prognosis",
       sidebarLayout(
        sidebarPanel(
-         wellPanel(
-           h6("under construction: inputs"),
-           actionButton("goPrint", "Print"),
-           bookmarkButton()
-         ),
-        h5("under construction: choices for picklists will be read from a spreadsheet; when the choice is made, the input data will be dynakically populated"),
         wellPanel(
           selectInput("condition", label = "Condition", choices = c("generic", "ovarian cancer: high grade, stage IIIc")),
           selectInput("outcome", label = "Outcome", choices = c("Survival", "Disease-free survical")),
           selectInput("group", label = "Subgroup", choices = c("age", "stage", "histology"))
-        )
+        ),
+        bookmarkButton(), " ...... ",
+        actionButton("goPrint", "Print")
       ),
       mainPanel(
-        wellPanel(
-                  h6("under construction: plots"),
-                              
-                  tags$br("lines A1, A2, A3  will show survival curves over the horizon for the different treatment strategies"),
-                  tags$br("lines B2, B3  will show survival expectation curves over the horizon for the different treatment strategies"),
-                  tags$br("lines will actually be ribbons to show uncertainties in predictions")
-                            )
-      )
-      )
-      ),
+        fluidRow(
+          column(6,
+                  tags$br(),
+                  tags$img(src = "Figure 1. Ten-year survival ovarian cancer.png",
+                      width = "300px", height = "300px", align = "left")),
+          column(6,
+        tags$img(src = "Figure 2. Five-year conditional survival ovarian cancer.png", 
+                 width = "300px", height = "300px", align = "left")))
+      ))),
   navbarMenu("Viewpoints", 
             tabPanel("view1 title contributor",
                 h6("under construction: contributor list 1")),
@@ -58,13 +53,17 @@ ui <- function(request) {
  
  navbarMenu("Outputs for debugging",
             tabPanel("Sheets",
-                     tableOutput("sheets")),
+                     h4("Worksheets in ConditionalSurvival.xlsx"),
+                     dataTableOutput("sheets")),
             tabPanel("Conditions",
-                     tableOutput("conditions")),
+                     h4("Conditions worksheet"),
+                     dataTableOutput("conditions")),
             tabPanel("Survival data",
-                     tableOutput("survivalData")),
+                     h4("survivalData worksheet"),
+                     dataTableOutput("survivalData")),
             tabPanel("Viewpoints",
-                     tableOutput("Viewpoints"))),
+                     h4("Viewpoints worksheet"),
+                     dataTableOutput("Viewpoints"))),
  
     
     ###################################
