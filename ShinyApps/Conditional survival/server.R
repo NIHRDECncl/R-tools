@@ -15,8 +15,25 @@ server <- function(input, output, session) {
     output$survivalData <- renderDataTable(survivalData)
     output$viewpoints <- renderDataTable(viewpoints)
     
-    updateNavbarPage(session, "infoMenu", selected = "firstTab")
+  c <- conditions$Condition %>% 
+          sort %>% 
+            unique
+  updateSelectInput(session, "condition", label = NULL, choices = c)
+  
+observe({
+    o <- subset(conditions, Condition == input$condition)$Outcome %>% 
+          sort %>% 
+            unique
+    updateSelectInput(session, "outcome", label = NULL, choices = o)
+    })
     
+observe({
+    g <- subset(conditions, Condition == input$condition & Outcome == input$outcome)$Group %>% 
+          sort %>% 
+            unique
+  updateSelectInput(session, "group", label = NULL, choices = g)
+      })
+
   }, ignoreNULL = FALSE)
   
 }

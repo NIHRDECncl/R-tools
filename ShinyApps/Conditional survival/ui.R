@@ -19,10 +19,10 @@ ui <- function(request) {
                sidebarLayout(
        sidebarPanel(
         wellPanel(
-          selectInput("condition", label = "Condition", choices = c("generic", "ovarian cancer: high grade, stage IIIc")),
-          selectInput("outcome", label = "Outcome", choices = c("Survival", "Disease-free survical")),
-          selectInput("group", label = "Subgroup", choices = c("age", "stage", "histology")),
-          checkboxGroupInput("showUncertainties", label= "Show uncertainties", choices = c("average", "best/worst case"), selected = NULL,
+          selectInput("condition", label = "Condition", choices = c("condition a", "condition b")),
+          selectInput("outcome", label = "Outcome", choices = c("outcome 1", "outcome 2")),
+          selectInput("group", label = "Subgroup", choices = c("group 1", "group 2", "group 3")),
+          checkboxGroupInput("showUncertainties", label= "Show uncertainties", choices = c("in the average prognosis", "best and worst cases for individuals"), selected = NULL,
                              inline = FALSE, width = NULL, choiceNames = NULL, choiceValues = NULL)
         ),
         bookmarkButton(), " ...... ",
