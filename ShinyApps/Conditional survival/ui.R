@@ -2,49 +2,79 @@
 
 ui <- function(request) { 
   navbarPage("",
-    navbarMenu("About",
-        tabPanel("Introduction",
-          h6("under construction: Introduction")
-                        ),
-         tabPanel("Interpreting prognosis statistics",
-           h6("under construction: Interpreting prognosis statistics"))),       
-      tabPanel("Explore prognosis",
-      sidebarLayout(
+    navbarMenu("Information",
+               
+        tabPanel("Do you want to know your prognosis?",
+          h6("under construction: Do you want to know your prognosis?")),
+        
+        tabPanel("What will you do with information about your prognosis?",
+                 h6("under construction: Interpreting prognosis statistics")),
+        
+        tabPanel("How to use this app to understand and use information about prognosis",
+                 h6("under construction: How to use this app to understand and use information about prognosis"))
+        ),     
+    
+      tabPanel("Facts",
+      
+               sidebarLayout(
        sidebarPanel(
-         wellPanel(
-           h6("under construction: inputs"),
-           actionButton("goPrint", "Print"),
-           bookmarkButton()
-         ),
-        h5("under construction: choices for picklists will be read from a spreadsheet; when the choice is made, the input data will be dynakically populated"),
         wellPanel(
-          selectInput("condition", label = "Condition", choices = c("generic", "ovarian cancer: high grade, stage IIIc")),
-          selectInput("outcome", label = "Outcome", choices = c("Survival", "Disease-free survical")),
-          selectInput("group", label = "Subgroup", choices = c("age", "stage", "histology"))
-        )
+          selectInput("condition", label = "Condition", choices = c("condition a", "condition b")),
+          selectInput("outcome", label = "Outcome", choices = c("outcome 1", "outcome 2")),
+          selectInput("group", label = "Subgroup", choices = c("group 1", "group 2", "group 3")),
+          checkboxGroupInput("showUncertainties", label= "Show uncertainties", choices = c("in the average prognosis", "best and worst cases for individuals"), selected = NULL,
+                             inline = FALSE, width = NULL, choiceNames = NULL, choiceValues = NULL)
+        ),
+        bookmarkButton(), " ...... ",
+        actionButton("goPrint", "Print")
       ),
+      
       mainPanel(
-        wellPanel(
-                  h6("under construction: plots"),
-                              
-                  tags$br("lines A1, A2, A3  will show survival curves over the horizon for the different treatment strategies"),
-                  tags$br("lines B2, B3  will show survival expectation curves over the horizon for the different treatment strategies"),
-                  tags$br("lines will actually be ribbons to show uncertainties in predictions")
-                            )
-      )
-      )
-      ),
-  navbarMenu("Viewpoints", 
-            tabPanel("view1 title contributor",
+        fluidRow(
+          column(6, h5("figure 1 legend")),
+          column(6, h5("figure 2 legend")),
+          
+        fluidRow(
+          column(6,
+                  tags$br(),
+                  tags$img(src = "Figure 1. Ten-year survival ovarian cancer.png",
+                      width = "300px", height = "300px", align = "left")),
+          column(6,
+        tags$img(src = "Figure 2. Five-year conditional survival ovarian cancer.png", 
+                 width = "300px", height = "300px", align = "left")))
+      )))),
+    
+    navbarMenu("Advice", 
+               
+               tabPanel("view1 title contributor",
+                        h6("under construction: contributor list 1")),
+               
+               tabPanel("view2 title contributor",
+                        h6("under construction: contributor list 2"))), 
+    
+  navbarMenu("Experiences", 
+            
+             tabPanel("view1 title contributor",
                 h6("under construction: contributor list 1")),
-            tabPanel("view1 title contributor",
+  
+                      tabPanel("view2 title contributor",
                 h6("under construction: contributor list 2"))),
- navbarMenu("Contacts",
-            tabPanel("Maintainers",
-                 h6("under construction: maintainers")
-            ),
+
+   navbarMenu("Acknowledgments",
             tabPanel("Developers",
-                h6("under construction: developers"))),
+                 h6("under construction: Developers")),
+
+             tabPanel("Data providers",
+                h6("under construction: Data providers")),
+  
+             tabPanel("Reviewers",
+                h6("under construction: Reviewers")),
+  
+             tabPanel("Other support",
+               h6("under construction: Other support"))
+  ),
+  
+  
  navbarMenu("Contribute",
             tabPanel("Contribute addotional data on survival",
                h5("under construction: contribute data"),
@@ -58,13 +88,17 @@ ui <- function(request) {
  
  navbarMenu("Outputs for debugging",
             tabPanel("Sheets",
-                     tableOutput("sheets")),
+                     h4("Worksheets in ConditionalSurvival.xlsx"),
+                     dataTableOutput("sheets")),
             tabPanel("Conditions",
-                     tableOutput("conditions")),
+                     h4("Conditions worksheet"),
+                     dataTableOutput("conditions")),
             tabPanel("Survival data",
-                     tableOutput("survivalData")),
+                     h4("survivalData worksheet"),
+                     dataTableOutput("survivalData")),
             tabPanel("Viewpoints",
-                     tableOutput("Viewpoints"))),
+                     h4("Viewpoints worksheet"),
+                     dataTableOutput("Viewpoints"))),
  
     
     ###################################
