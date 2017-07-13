@@ -2,24 +2,38 @@
 
 ui <- function(request) { 
   navbarPage("",
-    navbarMenu("About",
-        tabPanel("Introduction",
-          h6("under construction: Introduction")
-                        ),
-         tabPanel("Interpreting prognosis statistics",
-           h6("under construction: Interpreting prognosis statistics"))),       
-      tabPanel("Explore prognosis",
-      sidebarLayout(
+    navbarMenu("Information",
+               
+        tabPanel("Do you want to know your prognosis?",
+          h6("under construction: Do you want to know your prognosis?")),
+        
+        tabPanel("What will you do with information about your prognosis?",
+                 h6("under construction: Interpreting prognosis statistics")),
+        
+        tabPanel("How to use this app to understand and use information about prognosis",
+                 h6("under construction: How to use this app to understand and use information about prognosis"))
+        ),     
+    
+      tabPanel("Facts",
+      
+               sidebarLayout(
        sidebarPanel(
         wellPanel(
           selectInput("condition", label = "Condition", choices = c("generic", "ovarian cancer: high grade, stage IIIc")),
           selectInput("outcome", label = "Outcome", choices = c("Survival", "Disease-free survical")),
-          selectInput("group", label = "Subgroup", choices = c("age", "stage", "histology"))
+          selectInput("group", label = "Subgroup", choices = c("age", "stage", "histology")),
+          checkboxGroupInput("showUncertainties", label= "Show uncertainties", choices = c("average", "best/worst case"), selected = NULL,
+                             inline = FALSE, width = NULL, choiceNames = NULL, choiceValues = NULL)
         ),
         bookmarkButton(), " ...... ",
         actionButton("goPrint", "Print")
       ),
+      
       mainPanel(
+        fluidRow(
+          column(6, h5("figure 1 legend")),
+          column(6, h5("figure 2 legend")),
+          
         fluidRow(
           column(6,
                   tags$br(),
@@ -28,18 +42,39 @@ ui <- function(request) {
           column(6,
         tags$img(src = "Figure 2. Five-year conditional survival ovarian cancer.png", 
                  width = "300px", height = "300px", align = "left")))
-      ))),
-  navbarMenu("Viewpoints", 
-            tabPanel("view1 title contributor",
+      )))),
+    
+    navbarMenu("Advice", 
+               
+               tabPanel("view1 title contributor",
+                        h6("under construction: contributor list 1")),
+               
+               tabPanel("view2 title contributor",
+                        h6("under construction: contributor list 2"))), 
+    
+  navbarMenu("Experiences", 
+            
+             tabPanel("view1 title contributor",
                 h6("under construction: contributor list 1")),
-            tabPanel("view1 title contributor",
+  
+                      tabPanel("view2 title contributor",
                 h6("under construction: contributor list 2"))),
- navbarMenu("Contacts",
-            tabPanel("Maintainers",
-                 h6("under construction: maintainers")
-            ),
+
+   navbarMenu("Acknowledgments",
             tabPanel("Developers",
-                h6("under construction: developers"))),
+                 h6("under construction: Developers")),
+
+             tabPanel("Data providers",
+                h6("under construction: Data providers")),
+  
+             tabPanel("Reviewers",
+                h6("under construction: Reviewers")),
+  
+             tabPanel("Other support",
+               h6("under construction: Other support"))
+  ),
+  
+  
  navbarMenu("Contribute",
             tabPanel("Contribute addotional data on survival",
                h5("under construction: contribute data"),

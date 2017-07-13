@@ -15,6 +15,8 @@ server <- function(input, output, session) {
     output$survivalData <- renderDataTable(survivalData)
     output$viewpoints <- renderDataTable(viewpoints)
     
+    updateNavbarPage(session, "infoMenu", selected = "firstTab")
+    
   }, ignoreNULL = FALSE)
   
 }
