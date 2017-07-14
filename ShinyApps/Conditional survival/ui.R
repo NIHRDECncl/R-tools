@@ -16,12 +16,12 @@ ui <- function(request) {
     
       tabPanel("Facts",
       
-               sidebarLayout(
+     sidebarLayout(
        sidebarPanel(
         wellPanel(
-          selectInput("condition", label = "Condition", choices = c("condition a", "condition b")),
-          selectInput("outcome", label = "Outcome", choices = c("outcome 1", "outcome 2")),
-          selectInput("group", label = "Subgroup", choices = c("group 1", "group 2", "group 3")),
+          selectInput("condition", label = "choose condition", choices = c("Ovarian cancer", "condition b"), selected = "Ovarian cancer"),
+          selectInput("prognosisPlot", label = "choose prognosis graph", choices = c("prognosis plot 1", "prognosis plot 2")),
+          selectInput("conditionalSurvivalPlot", label = "choose conditional survival graph", choices = c("conditional survival 1", "conditional survival 2", "conditional survival 3")),
           checkboxGroupInput("showUncertainties", label= "Show uncertainties", choices = c("in the average prognosis", "best and worst cases for individuals"), selected = NULL,
                              inline = FALSE, width = NULL, choiceNames = NULL, choiceValues = NULL)
         ),
@@ -31,9 +31,9 @@ ui <- function(request) {
       
       mainPanel(
         fluidRow(
-          column(6, h5("figure 1 legend")),
-          column(6, h5("figure 2 legend")),
-          
+          column(6, h5(renderText(output$LegendPrognosisPlot))),
+          column(6, h5(renderText(output$LegendConditionalPlot))),
+                    
         fluidRow(
           column(6,
                   tags$br(),
@@ -90,16 +90,15 @@ ui <- function(request) {
             tabPanel("Sheets",
                      h4("Worksheets in ConditionalSurvival.xlsx"),
                      dataTableOutput("sheets")),
-            tabPanel("Conditions",
-                     h4("Conditions worksheet"),
-                     dataTableOutput("conditions")),
-            tabPanel("Survival data",
-                     h4("survivalData worksheet"),
-                     dataTableOutput("survivalData")),
-            tabPanel("Viewpoints",
-                     h4("Viewpoints worksheet"),
-                     dataTableOutput("Viewpoints"))),
- 
+            
+            tabPanel("plots metadata",
+                     h4("plotsMetadata worksheet"),
+                     dataTableOutput("plotsMetadata")),
+            
+            tabPanel("Plots data",
+                     h4("plotsData worksheet"),
+                     dataTableOutput("plotsData")),
+
     
     ###################################
     #
@@ -111,4 +110,4 @@ ui <- function(request) {
     tags$p("Michael Power, Joy Allen."),
     tags$em("A ShinyApp tool to show how survival statistics could be interpreted by patients"),
     hr()
-  )}
+  ))}

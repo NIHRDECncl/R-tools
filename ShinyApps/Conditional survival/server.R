@@ -6,34 +6,49 @@ server <- function(input, output, session) {
     path <- paste0(getwd(), "/data/ConditionalSurvival.xlsx")
     sheets <- data.frame(excel_sheets(path), stringsAsFactors = FALSE)
     names(sheets) <- "sheets"
-    conditions <- read_excel(path, sheets$sheets[1])
-    survivalData <- read_excel(path, sheets$sheets[2])
-    viewpoints <- read_excel(path, sheets$sheets[3])
-    
+    plotsMetadata <- read_excel(path, sheets$sheets[1])
+    plotsData <- read_excel(path, sheets$sheets[2])
+
     output$sheets <- renderDataTable(sheets)
-    output$conditions <- renderDataTable(conditions)
-    output$survivalData <- renderDataTable(survivalData)
-    output$viewpoints <- renderDataTable(viewpoints)
-    
-  c <- conditions$Condition %>% 
+    output$plotsMetadata <- renderDataTable(plotsMetadata)
+    output$plotsData <- renderDataTable(plotsData)
+
+    observe({
+      c <- plotsMetadata$Condition %>% 
           sort %>% 
             unique
   updateSelectInput(session, "condition", label = NULL, choices = c)
-  
-observe({
-    o <- subset(conditions, Condition == input$condition)$Outcome %>% 
-          sort %>% 
-            unique
-    updateSelectInput(session, "outcome", label = NULL, choices = o)
     })
     
 observe({
-    g <- subset(conditions, Condition == input$condition & Outcome == input$outcome)$Group %>% 
+    p <- subset(plotsMetadata, Condition == input$condition & View == "Prognosis")$PlotName %>% 
           sort %>% 
             unique
-  updateSelectInput(session, "group", label = NULL, choices = g)
+    updateSelectInput(session, "prognosisPlot", label = NULL, choices = p)
+    })
+    
+observe({
+    cs <- subset(plotsMetadata, Condition == input$condition & View == "Conditional survival")$PlotName %>% 
+          sort %>% 
+            unique
+  updateSelectInput(session, "conditionalSurvivalPlot", label = NULL, choices = cs)
       })
 
   }, ignoreNULL = FALSE)
   
-}
+  PlotLegendPrognosis <- reactive({
+    subset(plotsMetadata, Condition == input$condition & PlotName == input$prognosisPlot)$PlotLegend 
+    output$LegendPrognosisPlot <- paste0("test ", input$condition)
+  })
+  
+  output$LegendPrognosisPlot <- renderText(PlotLegendPrognosis())
+  
+  PlotLegendConditional <- reactive({
+    subset(plotsMetadata, Condition == input$condition & PlotName == input$conditionalSurvivalPlot)$PlotLegend 
+  })
+  
+  output$LegendConditionalPlot <- renderText(PlotLegendConditional())
+  
+  
+  
+  }
