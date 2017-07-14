@@ -57,7 +57,7 @@ ui <- function(request) {
                  ),
                  conditionalPanel(
                    condition = "input.GoButton !== 0",
-                   withSpinner(plotOutput("RuleInOutPlot"))
+                   withSpinner(plotOutput("RuleInOutPlot2"))
                  )
         )
 
