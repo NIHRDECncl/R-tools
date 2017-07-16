@@ -14,8 +14,13 @@ Welcome to the NIHR Diagnostic Evidence Co-operative Newcastle's Clinical Diagno
 
 A plot of `r input$n` random points.
 
-`r output$distPlot`
+```{r}
 
+
+
+})
+
+```
 <!---
 A plot of `r input$n` random points.
 -->
