@@ -6,6 +6,7 @@ ui <- function(request) {
                
         tabPanel("Do you want to know your prognosis?",
           h6("under construction: Do you want to know your prognosis?")),
+        renderText("test"),
         
         tabPanel("What will you do with information about your prognosis?",
                  h6("under construction: Interpreting prognosis statistics")),
@@ -31,9 +32,10 @@ ui <- function(request) {
       
       mainPanel(
         fluidRow(
-          column(6, h5(renderText(output$LegendPrognosisPlot))),
-          column(6, h5(renderText(output$LegendConditionalPlot))),
-                    
+          column(6, renderText("test")),
+          column(6, renderText("LegendPrognosisPlot")),
+          column(6, renderText("LegendConditionalPlot")),
+          
         fluidRow(
           column(6,
                   tags$br(),

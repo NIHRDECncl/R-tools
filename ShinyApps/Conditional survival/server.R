@@ -35,20 +35,34 @@ observe({
       })
 
   }, ignoreNULL = FALSE)
+
+  ############ why is text output not working?????????
+  
+  output$test <- renderText(input$conditionalSurvivalPlot)
   
   PlotLegendPrognosis <- reactive({
     subset(plotsMetadata, Condition == input$condition & PlotName == input$prognosisPlot)$PlotLegend 
-    output$LegendPrognosisPlot <- paste0("test ", input$condition)
   })
   
   output$LegendPrognosisPlot <- renderText(PlotLegendPrognosis())
   
-  PlotLegendConditional <- reactive({
-    subset(plotsMetadata, Condition == input$condition & PlotName == input$conditionalSurvivalPlot)$PlotLegend 
+  output$LegendConditionalPlot <- renderText({
+    subset(plotsMetadata, 
+           Condition == input$condition & PlotName == input$conditionalSurvivalPlot)$PlotLegend
+    })
+
+  output$PlotPrognosis <- renderPlot({
+    prognosisData <- 
+      prognosisPlotsData %>% 
+        filter(Condition == input$condition & PlotName == input$prognosisPlot)
+ggplot(prognosisData
   })
   
-  output$LegendConditionalPlot <- renderText(PlotLegendConditional())
-  
-  
+  output$PlotConditionalSurvival <- renderPlot({
+    conditionalSurvivalData <- 
+      conditionalSurvivalPlotsData %>% 
+      filter(Condition == input$condition & PlotName == input$conditionalSurvivalPlot)
+
+  })
   
   }
