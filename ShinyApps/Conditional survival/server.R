@@ -1,41 +1,39 @@
 ################# server for ShinyApp to explore survival aand conditional survival
 server <- function(input, output, session) {
   session$onSessionEnded(stopApp) # it can be annoying that when you close the browser window, the app is still running and you need to manually press “Esc” to kill it
-  observeEvent("", {
-    wd <- getwd()
-    path <- paste0(getwd(), "/data/ConditionalSurvival.xlsx")
-    sheets <- data.frame(excel_sheets(path), stringsAsFactors = FALSE)
-    names(sheets) <- "sheets"
-    plotsMetadata <- read_excel(path, sheets$sheets[1])
-    plotsData <- read_excel(path, sheets$sheets[2])
 
     output$sheets <- renderDataTable(sheets)
-    output$plotsMetadata <- renderDataTable(plotsMetadata)
-    output$plotsData <- renderDataTable(plotsData)
-
-    observe({
-      c <- plotsMetadata$Condition %>% 
-          sort %>% 
-            unique
-  updateSelectInput(session, "condition", label = NULL, choices = c)
+    output$metadata4Plots <- renderDataTable(metadata4Plots)
+    output$data4Plots <- renderDataTable(data4Plots)
+    
+    observeEvent({
+      updateSelectInput(session, "condition", label = NULL, choices = conditionChoices)
+    }, ignoreNULL = FALSE)
+    
+    prognosisPlotChoices <- reactive({
+      subset(metadata4Plots, condition == input$condition & view == "Prognosis")$plotNameAndDataset %>% 
+      sort()
     })
     
-observe({
-    p <- subset(plotsMetadata, Condition == input$condition & View == "Prognosis")$PlotName %>% 
-          sort %>% 
-            unique
-    updateSelectInput(session, "prognosisPlot", label = NULL, choices = p)
+    observeEvent({
+      updateSelectInput(session, "prognosisPlot", label = NULL, choices = prognosisPlotChoices())
+    }, ignoreNULL = FALSE)
+ 
+    datasetChoice <- reactive({
+      subset(metadata4Plots, plotNameAndDataset == input$prognosisPlot)$dataset[1]
     })
     
-observe({
-    cs <- subset(plotsMetadata, Condition == input$condition & View == "Conditional survival")$PlotName %>% 
-          sort %>% 
-            unique
-  updateSelectInput(session, "conditionalSurvivalPlot", label = NULL, choices = cs)
-      })
-
-  }, ignoreNULL = FALSE)
-
+    csPlotChoices <- reactive({
+      subset(metadata4Plots, dataset == datasetChoice() & view == "Conditional survival")$plotNameAndDataset %>% 
+        sort()
+        unique()
+    })
+    
+    observeEvent({
+      updateSelectInput(session, "conditionalSurvivalPlot", label = NULL, choices = csPlotChoices())
+    }, ignoreNULL = FALSE)
+    
+#########################        =======================
   ############ why is text output not working?????????
   
   output$test <- renderText(input$conditionalSurvivalPlot)
