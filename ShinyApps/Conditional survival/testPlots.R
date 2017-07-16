@@ -26,7 +26,7 @@
     datasetChoice
  
     pData <- subset(data4Plots, plotNameAndDataset == prognosisPlotChoice)
-    pMetaData <- subset(metadata4Plots, plotNameAndDataset == prognosisPlotChoice)
+    pMetadata <- subset(metadata4Plots, plotNameAndDataset == prognosisPlotChoice)
       
       csPlotChoices <- 
       subset(metadata4Plots, condition == conditionChoice & view == "Conditional survival")$plotNameAndDataset %>% 
@@ -34,14 +34,14 @@
       csPlotChoice <- csPlotChoices[1]
   
     csData <- subset(data4Plots, plotNameAndDataset == csPlotChoice)
-    csMetaData <- subset(metadata4Plots, plotNameAndDataset == csPlotChoice)
+    csMetadata <- subset(metadata4Plots, plotNameAndDataset == csPlotChoice)
     
-    pXlab <- pMetaData$xLabel[1]
-    pYlab <- pMetaData$yLabel[1]
-    pGroup1Name <- pData$legend4Line[1] ##########  check
+    pXlab <- pMetadata$xLabel[1]
+    pYlab <- pMetadata$yLabel[1]
+    pLegendTitle <- pMetadata$title4Legend[1] ##########  check
     
 pPlot <- ggplot(pData, aes(time, proportion, group = legend4Line, colour = legend4Line, fill = legend4Line)) 
-pPlot <- pPlot + labs(x = pXlab, y = pYlab, colour = pGroup1Name, fill = NULL)
+pPlot <- pPlot + labs(x = pXlab, y = pYlab, colour = pLegendTitle, fill = NULL)
 pPlot <- pPlot + geom_line() + geom_point()
 pPlot <- pPlot + geom_ribbon(
   aes(ymin = wbMin, ymax = wbMax, fill = factor(legend4Line), colour = factor(legend4Line)), 
@@ -58,12 +58,13 @@ pPlot
 
 
 
-csXlab <- csMetaData$xLabel[1]
-csYlab <- csMetaData$yLabel[1]
-csGroup1Name <- csData$legend4Line[1] ##########  check
+csXlab <- csMetadata$xLabel[1]
+csYlab <- csMetadata$yLabel[1]
+csLegendTitle <- csMetadata$title4Legend[1] ##########  check
 
 csPlot <- ggplot(csData, aes(time, proportion, group = legend4Line, colour = legend4Line, fill = legend4Line)) 
-csPlot <- csPlot + labs(x = csXlab, y = csYlab, colour = csGroup1Name, fill = NULL)
+# csPlot <- csPlot + labs(x = csXlab, y = csYlab, colour = "Stage and\nage group", fill = NULL)
+csPlot <- csPlot + labs(x = csXlab, y = csYlab, colour = csLegendTitle, fill = NULL)
 csPlot <- csPlot + geom_line() + geom_point()
 
 csPlot <- csPlot + geom_ribbon(

@@ -32,19 +32,26 @@ ui <- function(request) {
       
       mainPanel(
         fluidRow(
-          column(6, renderText("test")),
-          column(6, renderText("LegendPrognosisPlot")),
-          column(6, renderText("LegendConditionalPlot")),
-          
+          ##### pronosis plots
+          hr(),
+          column(4, renderText("LegendPrognosisPlot")),
+          column(8,
+                tags$img(src = "Figure 1. Ten-year survival ovarian cancer.png",
+                   width = "300px", height = "300px", align = "left"),
+                renderPlot("PlotPrognosis"))
+          ),
+        
         fluidRow(
-          column(6,
-                  tags$br(),
-                  tags$img(src = "Figure 1. Ten-year survival ovarian cancer.png",
-                      width = "300px", height = "300px", align = "left")),
-          column(6,
-        tags$img(src = "Figure 2. Five-year conditional survival ovarian cancer.png", 
-                 width = "300px", height = "300px", align = "left")))
-      )))),
+          ##### conditional survival plots
+          hr(),  
+          column(4, renderText("LegendConditionalPlot")),
+          column(8,
+                 tags$img(src = "Figure 2. Five-year conditional survival ovarian cancer.png", 
+                          width = "300px", height = "300px", align = "left"),
+                renderPlot("PlotConditionalSurvival")),
+          hr()
+          )
+        ))),
     
     navbarMenu("Advice", 
                
