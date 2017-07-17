@@ -237,7 +237,7 @@
        theme(plot.title = element_text(size = 16, face = "bold"), axis.text = element_text(size = 5), 
              axis.title = element_text(size = 14)) +
      geom_text(size = 3, data = fixedlabels, aes(x,y,label = labels)) + 
-      geom_text(data = postTestLabels, aes(x,y, label = labels), size = 2)
+      geom_text(data = postTestLabels, aes(x,y, label = labels), size = 4)
   
 
   }
