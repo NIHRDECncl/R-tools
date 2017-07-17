@@ -120,22 +120,6 @@ shinyServer (
   })
   
   
-  
-  # test
-  dist <- eventReactive(input$goButton1 | input$goButton2, {
-    set.seed(123)
-    data.frame(
-      dist = rnorm(input$obs)
-    )
-  }, ignoreNULL = FALSE )
-  
-  # this looks rather roundabout, but it is meant to be a minimal representative example of the 
-  #    clini cal accuracy and utility app, which does not show plots until the actionButton is clicked
-  output$distPlot <- renderPlot({
-    hist(dist()$dist) 
-  })
-  
-  #}
 
   
   ## Thanks to Mark Strong for this code
