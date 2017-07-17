@@ -1,22 +1,10 @@
-
-
 name: ClinicalAccuracyAndUtility
+title:
 account: decncltools
 server: shinyapps.io
 appId: 133761
-bundleId: 638129
+bundleId: 906100
 url: https://decncltools.shinyapps.io/ClinicalAccuracyAndUtility/
-when: 1481057358.22968
+when: 1500301295.98314
 asMultiple: FALSE
 asStatic: FALSE
-
-name: ClinicalAccuracyAndUtility
-account: decncltools
-server: shinyapps.io
-appId: 133761
-bundleId: 596237
-url: https://decncltools.shinyapps.io/ClinicalAccuracyAndUtility/
-when: 1477416002.81767
-
-
-

@@ -14,13 +14,22 @@ Welcome to the NIHR Diagnostic Evidence Co-operative Newcastle's Clinical Diagno
 
 A plot of `r input$n` random points.
 
-```{r}
-
-
-
-})
+```{r, echo = FALSE}
+ ruleinoutplot(input$n, input$prevalence, input$sensitivity, input$specificity,
+                      input$RuleInDecisionThreshold, input$RuleOutDecisionThreshold, 
+                      input$DxCondition, input$DxTestName,  
+                      input$DxRuleInDecision, input$DxRuleOutDecision, input$IndeterminateDecision)
+        
 
 ```
+
+```{r, echo = FALSE}
+prepostprobplot(input$n, input$prevalence, input$sensitivity, input$specificity,
+                input$DxCondition, input$DxTestName)
+```
+
+
+
 <!---
 A plot of `r input$n` random points.
 -->
