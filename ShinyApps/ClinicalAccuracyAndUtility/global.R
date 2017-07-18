@@ -7,4 +7,5 @@ if( !exists("LoadPackages", mode="function"))
 LoadPackages()
 enableBookmarking("url")
 options(shiny.error = browser)
+options(shiny.reactlog = TRUE) # True for debugging
 

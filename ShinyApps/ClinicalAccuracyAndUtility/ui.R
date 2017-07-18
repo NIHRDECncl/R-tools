@@ -43,15 +43,15 @@ ui <- function(request) {
                    )
                  ),
                  mainPanel(     
-                   conditionalPanel(
-                     condition = "input.GoButton == 0",
-                     h5("To see the graphs, click on the Update graphs button!", style="color:red")
-                     ),
-                  conditionalPanel(
-                      condition = "input.GoButton !== 0",
+            #      conditionalPanel(
+            #         condition = "input.GoButton == 0",
+            #       h5("To see the graphs, click on the Update graphs button!", style="color:red")
+            #         ),
+            #      conditionalPanel(
+            #          condition = "input.GoButton !== 0",
                      withSpinner(plotOutput("PrePostProb2")),
                      withSpinner(plotOutput("RuleInOutPlot2"))
-                    ) 
+            #        ) 
 #                  conditionalPanel(
 #                    condition = "input.GoButton == 0",
 #                    withSpinner(plotOutput("RuleInOutPlot"))
