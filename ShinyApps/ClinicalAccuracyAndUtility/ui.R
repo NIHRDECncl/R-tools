@@ -43,24 +43,24 @@ ui <- function(request) {
                    )
                  ),
                  mainPanel(     
-                  conditionalPanel(
+                   conditionalPanel(
                      condition = "input.GoButton == 0",
-                     h5("To see the graphs, go to the Inputs tab and click on the Update graphs button", style="color:red")
-                    ),
-                 conditionalPanel(
-                     condition = "input.GoButton !== 0",
-                     withSpinner(plotOutput("PrePostProb"))
-                   ), 
-                 conditionalPanel(
-                   condition = "input.GoButton == 0",
-                   h5("To see the graphs, go to the Inputs tab and click on the Update graphs button", style="color:red")
-                 ),
-                 conditionalPanel(
-                   condition = "input.GoButton !== 0",
-                   withSpinner(plotOutput("RuleInOutPlot2"))
+                     h5("To see the graphs, click on the Update graphs button!", style="color:red")
+                     ),
+                  conditionalPanel(
+                      condition = "input.GoButton !== 0",
+                     withSpinner(plotOutput("PrePostProb2")),
+                     withSpinner(plotOutput("RuleInOutPlot2"))
+                    ) 
+#                  conditionalPanel(
+#                    condition = "input.GoButton == 0",
+#                    withSpinner(plotOutput("RuleInOutPlot"))
+#                 ),
+#                   conditionalPanel(
+#                     condition = "input.GoButton !== 0",
+#                    withSpinner(plotOutput("RuleInOutPlot2"))
+#         )
                  )
-        )
-
         ),
     
     tabPanel("Download summary report",
