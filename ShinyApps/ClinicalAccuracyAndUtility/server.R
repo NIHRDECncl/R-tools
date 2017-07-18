@@ -14,7 +14,7 @@
 # DxRuleOutDecision
 # RuleOutDecisionThreshold
 
-
+source("global.R")
 
 shinyServer (
    function(input, output, session) {
@@ -49,7 +49,7 @@ shinyServer (
      cache$DxRuleInDecision <- input$DxRuleInDecision
      cache$DxRuleOutDecision <- input$DxRuleOutDecision 
      cache$IndeterminateDecision <- input$IndeterminateDecision
-     }
+     }, ignoreNULL = FALSE
    )
    
   
@@ -106,7 +106,7 @@ shinyServer (
                       cache$DxCondition, cache$DxTestName,  
                       cache$DxRuleInDecision, cache$DxRuleOutDecision, cache$IndeterminateDecision)
       })
-    })
+   }, ignoreNULL = FALSE)
     
 #==========================================================
   
@@ -117,7 +117,7 @@ shinyServer (
       prepostprobplot(cache$n, cache$prevalence, cache$sensitivity, cache$specificity,
                     cache$DxCondition, cache$DxTestName)
     })
-  })
+  }, ignoreNULL = FALSE)
   
   
 
