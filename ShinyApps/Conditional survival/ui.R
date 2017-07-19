@@ -3,17 +3,17 @@
 ui <- function(request) { 
   navbarPage("",
     navbarMenu("Information",
-               
+
         tabPanel("Do you want to know your prognosis?",
           h6("under construction: Do you want to know your prognosis?")),
-        renderText("test"),
-        
+        # renderText("test"),
+
         tabPanel("What will you do with information about your prognosis?",
                  h6("under construction: Interpreting prognosis statistics")),
-        
+
         tabPanel("How to use this app to understand and use information about prognosis",
                  h6("under construction: How to use this app to understand and use information about prognosis"))
-        ),     
+        ),
     
       tabPanel("Facts",
       
@@ -21,51 +21,47 @@ ui <- function(request) {
        sidebarPanel(
         wellPanel(
           selectInput("condition", label = "choose condition", choices = c("Ovarian cancer", "condition b"), selected = "Ovarian cancer"),
-          selectInput("prognosisPlot", label = "choose prognosis graph", choices = c("prognosis plot 1", "prognosis plot 2")),
-          selectInput("conditionalSurvivalPlot", label = "choose conditional survival graph", choices = c("conditional survival 1", "conditional survival 2", "conditional survival 3")),
-          checkboxGroupInput("showUncertainties", label= "Show uncertainties", choices = c("in the average prognosis", "best and worst cases for individuals"), selected = NULL,
-                             inline = FALSE, width = NULL, choiceNames = NULL, choiceValues = NULL)
+          selectInput("prognosisPlot", label = "choose prognosis graph", choices = c("Ovarian cancer 10-yr overall survival (SEER 1988-2001)")),
+          selectInput("conditionalSurvivalPlot", label = "choose conditional survival graph", choices = c("Ovarian cancer 5-yr conditional survival by stage (SEER 1988-2001)", "Ovarian cancer 5-yr conditional survival by age-group and stage (SEER 1988-2001)")),
+          checkboxGroupInput("showUncertainties", label= "show uncertainties", choices = c("in the average prognosis", "best and worst cases for individuals"), selected = NULL,
+                             inline = FALSE, width = NULL, choiceNames = NULL, choiceValues = NULL),
+          checkboxInput("facetPlot", label = "show separate plots", value = FALSE)
         ),
         bookmarkButton(), " ...... ",
-        actionButton("goPrint", "Print")
+        actionButton("goPrint", "Download for printing")
       ),
       
       mainPanel(
         fluidRow(
           ##### pronosis plots
           hr(),
-          column(4, renderText("LegendPrognosisPlot")),
-          column(8,
-                tags$img(src = "Figure 1. Ten-year survival ovarian cancer.png",
-                   width = "300px", height = "300px", align = "left"),
-                renderPlot("PlotPrognosis"))
+          column(4, renderText("pText4Figure")),
+          column(8, renderPlot("pPlot")),
+          hr()
           ),
         
         fluidRow(
           ##### conditional survival plots
           hr(),  
           column(4, renderText("LegendConditionalPlot")),
-          column(8,
-                 tags$img(src = "Figure 2. Five-year conditional survival ovarian cancer.png", 
-                          width = "300px", height = "300px", align = "left"),
-                renderPlot("PlotConditionalSurvival")),
+          column(8, renderPlot("csPlot")),
           hr()
           )
         ))),
-    
-    navbarMenu("Advice", 
-               
+
+    navbarMenu("Advice",
+
                tabPanel("view1 title contributor",
                         h6("under construction: contributor list 1")),
-               
+
                tabPanel("view2 title contributor",
-                        h6("under construction: contributor list 2"))), 
-    
-  navbarMenu("Experiences", 
-            
+                        h6("under construction: contributor list 2"))),
+
+  navbarMenu("Experiences",
+
              tabPanel("view1 title contributor",
                 h6("under construction: contributor list 1")),
-  
+
                       tabPanel("view2 title contributor",
                 h6("under construction: contributor list 2"))),
 
@@ -75,15 +71,15 @@ ui <- function(request) {
 
              tabPanel("Data providers",
                 h6("under construction: Data providers")),
-  
+
              tabPanel("Reviewers",
                 h6("under construction: Reviewers")),
-  
+
              tabPanel("Other support",
                h6("under construction: Other support"))
   ),
-  
-  
+
+
  navbarMenu("Contribute",
             tabPanel("Contribute addotional data on survival",
                h5("under construction: contribute data"),
@@ -94,21 +90,36 @@ ui <- function(request) {
                ),
              tabPanel("Linking, licencing, and fair use",
                 h6("under construction: licensing"))),
- 
+
  navbarMenu("Outputs for debugging",
             tabPanel("Sheets",
                      h4("Worksheets in ConditionalSurvival.xlsx"),
                      dataTableOutput("sheets")),
-            
+
             tabPanel("plots metadata",
                      h4("plotsMetadata worksheet"),
-                     dataTableOutput("plotsMetadata")),
-            
+                     dataTableOutput("metadata4Plots")),
+
             tabPanel("Plots data",
                      h4("plotsData worksheet"),
-                     dataTableOutput("plotsData")),
+                     dataTableOutput("data4Plots")),
 
-    
+            tabPanel("Prognosis plot data",
+                     br("plot title"), textOutput("pPlot"),
+                     br("plot choices"),textOutput("prognosisPlotChoices"),
+                     br("plot choice"), textOutput("prognosisPlotChoice"),
+                     dataTableOutput("pData")
+                     ),
+            
+            tabPanel("Conditional plot data",
+                     br("plot title"), textOutput("csPlot"),
+                     br("plot choices"),textOutput("csPlotChoices"),
+                     br("plot choice"), textOutput("csPlotChoice"),
+                     dataTableOutput("pData")
+            ),
+            
+            
+            
     ###################################
     #
     #     credits as a running footer
