@@ -2,6 +2,7 @@
 # 
 if( !exists("LoadPackages", mode="function")) source("FunctionsUsedByConditionalSurvivalApp.R")
 
+source("FunctionsUsedByConditionalSurvivalApp.R")
 LoadPackages()
 enableBookmarking("url")
 options(shiny.error = browser)

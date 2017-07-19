@@ -1,5 +1,4 @@
 ################# server for ShinyApp to explore survival aand conditional survival
-source("global.R")
 
 # load data as unreactive objects
 browser()
@@ -19,9 +18,7 @@ conditionChoices <-
   sort() %>%
   unique()
 
-source("global.R")
-
-shinyServer (
+shinyServer( 
   function(input, output, session) {
   session$onSessionEnded(stopApp) # it can be annoying that when you close the browser window, the app is still running and you need to manually press “Esc” to kill it
 
@@ -112,10 +109,13 @@ shinyServer (
   pPlotTitle <- reactive({pMetadata$text4Figure[1]})
   pLegendTitle <-reactive({ pMetadata$title4Legend[1]}) 
   output$pText4Figure <- renderText(pMetadata$text4Figure[1])
+  
+  showCI <- reactive({input$showUncertainties[1] == "group averages"})
+  showBW <- reactive({input$showUncertainties[2] == "individual best and worst prospects"})
 
   # plot prognosis
   output$pPlot <- renderPlot({
-    pplot(pData(), pPlotTitle(), pXlab(), pYlab(), pLegendTitle(), facetWrap = FALSE, ncols = 2)  
+    pplot(pData(), pPlotTitle(), pXlab(), pYlab(), pLegendTitle(), showCI(), showBW(), input$facetWrap, ncols = 2)  
   })
 
   # labels for plots
@@ -128,6 +128,6 @@ shinyServer (
   
   # plot conditional survival
   output$csPlot <- renderPlot({
-    pplot(csData(), csPlotTitle(), csXlab(), csYlab(), csLegendTitle(), facetWrap = TRUE, ncols = 2)  
+    pplot(csData(), csPlotTitle(), csXlab(), csYlab(), csLegendTitle(), showCI(), showBW(), input$facetWrap, ncols = 2L)  
       })
 })

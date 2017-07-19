@@ -23,9 +23,10 @@ ui <- function(request) {
           selectInput("condition", label = "choose condition", choices = c("Ovarian cancer", "condition b"), selected = "Ovarian cancer"),
           selectInput("prognosisPlot", label = "choose prognosis graph", choices = c("Ovarian cancer 10-yr overall survival (SEER 1988-2001)")),
           selectInput("conditionalSurvivalPlot", label = "choose conditional survival graph", choices = c("Ovarian cancer 5-yr conditional survival by stage (SEER 1988-2001)", "Ovarian cancer 5-yr conditional survival by age-group and stage (SEER 1988-2001)")),
-          checkboxGroupInput("showUncertainties", label= "show uncertainties", choices = c("in the average prognosis", "best and worst cases for individuals"), selected = NULL,
+          checkboxGroupInput("showUncertainties", label= "show uncertainties for:", choices = c("group averages", "individual best and worst prospects"), selected = NULL,
                              inline = FALSE, width = NULL, choiceNames = NULL, choiceValues = NULL),
-          checkboxInput("facetPlot", label = "show separate plots", value = FALSE)
+          h5("For main subgroup:"),
+          checkboxInput("facetWrap", label = "show separate plots", value = FALSE)
         ),
         bookmarkButton(), " ...... ",
         actionButton("goPrint", "Download for printing")

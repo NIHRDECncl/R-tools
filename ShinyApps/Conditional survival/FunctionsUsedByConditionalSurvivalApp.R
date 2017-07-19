@@ -25,21 +25,25 @@ LoadPackages <- function() {
 
 #########################################################
 
-pplot <- function(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, facetWrap = TRUE, nocol = 2)  {
+pplot <- function(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = TRUE, showBW = TRUE, facetWrap = TRUE, ncol = 2L)  {
   pPlot <- ggplot(pData, aes(time, proportion, group = legend4Line, colour = legend4Line, fill = legend4Line)) 
   pPlot <- pPlot + labs(title = pPlotTitle, x = pXlab, y = pYlab, colour = pLegendTitle, fill = NULL)
   pPlot <- pPlot + theme(plot.title = element_text(size = 12, colour = "darkseagreen4", face = "bold"))
+  
   if (facetWrap) 
-    pPlot <- pPlot + facet_wrap(~group1, ncol = 2)
+    pPlot <- pPlot + facet_wrap(~group1, ncol = ncol)
   
   pPlot <- pPlot + geom_line() + geom_point()
-  pPlot <- pPlot + geom_ribbon(
-    aes(ymin = wbMin, ymax = wbMax, fill = factor(legend4Line), colour = factor(legend4Line)), 
-    alpha = 1/10, linetype = 0)
   
-  pPlot <- pPlot + geom_ribbon(
-    aes(ymin = ciMin, ymax = ciMax, fill = factor(legend4Line), colour = factor(legend4Line)), 
-    alpha = 1/10, linetype = 0)
+  if (showCI) 
+    pPlot <- pPlot + geom_ribbon(
+      aes(ymin = wbMin, ymax = wbMax, fill = factor(legend4Line), colour = factor(legend4Line)), 
+      alpha = 1/10, linetype = 0)
+  
+  if (showBW) 
+    pPlot <- pPlot + geom_ribbon(
+      aes(ymin = ciMin, ymax = ciMax, fill = factor(legend4Line), colour = factor(legend4Line)), 
+      alpha = 1/10, linetype = 0)
   
   pPlot <- pPlot + scale_fill_discrete(breaks = NULL)
   
