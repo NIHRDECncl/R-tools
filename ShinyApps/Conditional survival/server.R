@@ -23,14 +23,14 @@ server <-
   # session$onSessionEnded(stopApp) # it can be annoying that when you close the browser window, the app is still running and you need to manually press “Esc” to kill it
 
      observe({
-    updateSelectInput(session, "condition", label = NULL, choices = conditionChoices)
-  })
+      updateSelectInput(session, "condition", label = NULL, choices = conditionChoices)
+    })
 
     datasetChoices <- reactive({
-    subset(metadata4Plots, plotNameAndDataset == input$prognosisPlot)$dataset %>%
-    sort() %>%
-    unique()
-})
+      subset(metadata4Plots, plotNameAndDataset == input$prognosisPlot)$dataset %>%
+      sort() %>%
+      unique()
+    })
 
     # reactively update prognosis plot choices
     # build the list
@@ -107,16 +107,45 @@ server <-
   pXlab <- reactive({pMetadata()$xLabel[1]})
   pYlab <- reactive({pMetadata()$yLabel[1]})
   pPlotTitle <- reactive({pMetadata()$title4Plot[1]})
-  pLegendTitle <-reactive({ pMetadata()$title4Legend[1]}) 
+  pLegendTitle <-reactive({pMetadata()$title4Legend[1]}) 
   output$pText4Figure <- renderText(pMetadata()$text4Figure[1])
   
+  # update input labels for prognosis groups
+  pGroup1Name <-reactive({pMetadata()$group1Name[1]})
+  pGroup2Name <- reactive({pMetadata()$group2Name[1]})
+  pCgroupChoicesV <- reactive({
+    ifelse (
+      is.na(pGroup2Name()),
+            c("group1"),
+            c("group1", "group2")
+      )
+  })
+  pCgroupChoicesN <- reactive({
+    ifelse (
+      is.na(pGroup2Name()),
+            c(pGroup1Name()),
+            c(pGroup1Name(), pGroup2Name())
+      )
+  })
+  
+  observe(
+    updateCheckboxGroupInput(session, "pShowGroups", choiceNames = pCgroupChoicesN(), choiceValues = pCgroupChoicesV())
+  )
+
+
   output$QApXlab <- renderText(pXlab())
   output$QApYlab <- renderText(pYlab())
   output$QApPlotTitle <- renderText(pPlotTitle())
   output$QApLegendTitle <- renderText(pLegendTitle())
   output$QAptext4Figure <- renderText(pMetadata()$text4Figure[1])
   output$QAshowUncertainties <- renderText(input$showUncertainties)
+  
+  output$QApGroup1Name <- renderText(pGroup1Name())
+  output$QApGroup2Name <- renderText(pGroup2Name())
+  output$QApCgroupChoicesN <- renderText(pCgroupChoicesN())
+  output$QApCgroupChoicesV <- renderText(pCgroupChoicesV())
 
+  
   showCI <- reactive({ sum(input$showUncertainties == "CI") == 1})
   showBW <- reactive({sum(input$showUncertainties == "BW") == 1})
 
@@ -133,6 +162,28 @@ server <-
   csPlotTitle <- reactive({csMetadata()$title4Plot[1]})
   csLegendTitle <-reactive({csMetadata()$title4Legend[1]}) 
   output$csText4Figure <- renderText(csMetadata()$text4Figure[1])
+  
+  # update input labels for prognosis groups
+  csGroup1Name <-reactive({csMetadata()$group1Name[1]})
+  csGroup2Name <- reactive({csMetadata()$group2Name[1]})
+  csCgroupChoicesV <- reactive({
+    ifelse (
+      is.na(csGroup2Name()),
+            c("group1"),
+            c("group1", "group2")
+      )
+  })
+  csCgroupChoicesN <- reactive({
+    ifelse (
+      is.na(csGroup2Name()),
+            c(csGroup1Name()),
+            c(csGroup1Name(), csGroup2Name())
+      )
+  })
+  
+  observe(
+    updateCheckboxGroupInput(session, "csShowGroups", choiceNames = csCgroupChoicesN(), choiceValues = pCgroupChoicesV())
+  )
   
   # plot conditional survival
   output$csPlot <- renderPlot({
