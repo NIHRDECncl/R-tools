@@ -1,16 +1,16 @@
 ################# server for ShinyApp to explore survival aand conditional survival
 
 # load data as unreactive objects
-browser()
+# browser()
 path <- "data/ConditionalSurvival.xlsx"
 sheets <- data.frame(excel_sheets(path), stringsAsFactors = FALSE)
 names(sheets) <- "sheets"
-cat(file=stderr(), "spreadsheets", sheets[[1]])
+# cat(file=stderr(), "spreadsheets", sheets[[1]])
 
 
 metadata4Plots <- read_excel(path, sheets$sheets[1])
 data4Plots <- read_excel(path, sheets$sheets[2])
-cat(file=stderr(), "spreadsheets", metadata4Plots)
+# cat(file=stderr(), "spreadsheets", metadata4Plots)
 
 # initialise condition choices
 conditionChoices <- 
@@ -18,11 +18,11 @@ conditionChoices <-
   sort() %>%
   unique()
 
-shinyServer( 
+server <- 
   function(input, output, session) {
-  session$onSessionEnded(stopApp) # it can be annoying that when you close the browser window, the app is still running and you need to manually press “Esc” to kill it
+  # session$onSessionEnded(stopApp) # it can be annoying that when you close the browser window, the app is still running and you need to manually press “Esc” to kill it
 
-  observe({
+     observe({
     updateSelectInput(session, "condition", label = NULL, choices = conditionChoices)
   })
 
@@ -52,7 +52,7 @@ shinyServer(
     # build the list
     csPlotChoices <- reactive({
       subset(metadata4Plots, dataset == datasetChoice() & view == "Conditional survival")$plotNameAndDataset %>%
-        sort()
+        sort()  %>%
         unique()
     })
 
@@ -64,16 +64,16 @@ shinyServer(
     # render datatables so that they can be checked when debugging
     # wrap in observe to ensure this is done on start up
     observe({
-      output$sheets <- renderDataTable(sheets)
-      output$metadata4Plots <- renderDataTable(metadata4Plots)
-      output$data4Plots <- renderDataTable(data4Plots)
-      output$prognosisPlotChoices <- renderText(prognosisPlotChoices())
-      output$prognosisPlotChoice <- renderText(input$prognosisPlot)
-      output$pData <- renderDataTable(pData())
+      output$QAsheets <- renderDataTable(sheets)
+      output$QAmetadata4Plots <- renderDataTable(metadata4Plots)
+      output$QAdata4Plots <- renderDataTable(data4Plots)
+      output$QAprognosisPlotChoices <- renderDataTable(data_frame(prognosisPlotChoices()))
+      output$QAprognosisPlotChoice <- renderText(input$prognosisPlot)
+      output$QApData <- renderDataTable(pData())
    
-      output$csPlotChoices <- renderText(csPlotChoices())
-      output$csPlotChoice <- renderText(input$csPlot)
-      output$scData <- renderDataTable(csData())
+      output$QAcsPlotChoices <- renderDataTable(data_frame(csPlotChoices()))
+      output$QAcsPlotChoice <- renderText(input$conditionalSurvivalPlot)
+      output$QAcsData <- renderDataTable(csData())
     })
     
     
@@ -104,30 +104,38 @@ shinyServer(
   })
 
   # labels for plots
-  pXlab <- reactive({pMetadata$xLabel[1]})
-  pYlab <- reactive({pMetadata$yLabel[1]})
-  pPlotTitle <- reactive({pMetadata$text4Figure[1]})
-  pLegendTitle <-reactive({ pMetadata$title4Legend[1]}) 
-  output$pText4Figure <- renderText(pMetadata$text4Figure[1])
+  pXlab <- reactive({pMetadata()$xLabel[1]})
+  pYlab <- reactive({pMetadata()$yLabel[1]})
+  pPlotTitle <- reactive({pMetadata()$title4Plot[1]})
+  pLegendTitle <-reactive({ pMetadata()$title4Legend[1]}) 
+  output$pText4Figure <- renderText(pMetadata()$text4Figure[1])
   
-  showCI <- reactive({input$showUncertainties[1] == "group averages"})
-  showBW <- reactive({input$showUncertainties[2] == "individual best and worst prospects"})
+  output$QApXlab <- renderText(pXlab())
+  output$QApYlab <- renderText(pYlab())
+  output$QApPlotTitle <- renderText(pPlotTitle())
+  output$QApLegendTitle <- renderText(pLegendTitle())
+  output$QAptext4Figure <- renderText(pMetadata()$text4Figure[1])
+  output$QAshowUncertainties <- renderText(input$showUncertainties)
+
+  showCI <- reactive({ sum(input$showUncertainties == "CI") == 1})
+  showBW <- reactive({sum(input$showUncertainties == "BW") == 1})
 
   # plot prognosis
+  
+
   output$pPlot <- renderPlot({
-    pplot(pData(), pPlotTitle(), pXlab(), pYlab(), pLegendTitle(), showCI(), showBW(), input$facetWrap, ncols = 2)  
+    pplot(pData(), pPlotTitle(), pXlab(), pYlab(), pLegendTitle(), showCI(), showBW(), input$facetWrap, ncol = 2)  
   })
 
-  # labels for plots
-  csXlab <- reactive({csMetadata$xLabel[1]})
-  csYlab <- reactive({csMetadata$yLabel[1]})
-  csPlotTitle <- reactive({csMetadata$text4Figure[1]})
-  csLegendTitle <-reactive({csMetadata$title4Legend[1]}) 
-  
-  output$csText4Figure <- renderText(csMetadata$text4Figure[1])
+  # labels for conditional survival plots
+  csXlab <- reactive({csMetadata()$xLabel[1]})
+  csYlab <- reactive({csMetadata()$yLabel[1]})
+  csPlotTitle <- reactive({csMetadata()$title4Plot[1]})
+  csLegendTitle <-reactive({csMetadata()$title4Legend[1]}) 
+  output$csText4Figure <- renderText(csMetadata()$text4Figure[1])
   
   # plot conditional survival
   output$csPlot <- renderPlot({
-    pplot(csData(), csPlotTitle(), csXlab(), csYlab(), csLegendTitle(), showCI(), showBW(), input$facetWrap, ncols = 2L)  
+    pplot(csData(), csPlotTitle(), csXlab(), csYlab(), csLegendTitle(), showCI(), showBW(), input$facetWrap, ncol = 2L)  
       })
-})
+}
