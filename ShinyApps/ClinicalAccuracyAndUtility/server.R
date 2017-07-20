@@ -34,59 +34,7 @@ shinyServer (
 
    session$onSessionEnded(stopApp) # it can be annoying that when you close the browser window, the app is still running and you need to manually press “Esc” to kill it
   
-   
-    
-   observeEvent(input$GoButton, {
-     cache$n <- input$n
-     cache$prevalence <- input$prevalence
-     cache$sensitivity <- input$sensitivity
-     cache$specificity <- input$specificity
-    # cache$GoButton <- input$GoButton
-     cache$RuleInDecisionThreshold <- input$RuleInDecisionThreshold
-     cache$RuleOutDecisionThreshold <-  input$RuleOutDecisionThreshold
-     cache$DxCondition <- input$DxCondition
-     cache$DxTestName <- input$DxTestName
-     cache$DxRuleInDecision <- input$DxRuleInDecision
-     cache$DxRuleOutDecision <- input$DxRuleOutDecision 
-     cache$IndeterminateDecision <- input$IndeterminateDecision
-     }, ignoreNULL = FALSE
-   )
-   
-  
-    Dpos <- reactive({round(cache$n * cache$prevalence)})
-    Dneg <- reactive({round(cache$n - Dpos())})
 
-    Tp <- reactive({cache$sensitivity * Dpos()})
-    Tn <- reactive({cache$specificity * Dneg()})
-
-    Fn <- reactive({(1 - cache$sensitivity) * Dpos()})
-    Fp <- reactive({(1 - cache$specificity) * Dneg()})
-
-    PPV <- reactive({Tp()/(Tp() + Fp())})
-    NPV <- reactive({Tn()/(Tn() + Fn())})
-
-    LRp <- reactive({(cache$sensitivity/(1 - cache$specificity))})
-    LRn <- reactive({(1 - cache$sensitivity)/(cache$specificity)})
-    
-    PreTestOddsP <- reactive({(cache$prevalence)/(1 - cache$prevalence)})
-    PreTestOddsN <- reactive({(1 - cache$prevalence)/(cache$prevalence)})
-
-    PostTestOddsP <- reactive({PreTestOddsP()*LRp()})
-    PostTestOddsN <- reactive({PreTestOddsN()*LRn()})
-
-    PostTestProbP <- reactive({PostTestOddsP()/(PostTestOddsP() + 1)})
-    PostTestProbN <- reactive({PostTestOddsN()/(PostTestOddsN() + 1)})
-
-    
-
-    ### confidence  limits for the post=test probabilities
-    
-    ### the following are numbers; the same names in the data.frame label 2 item columns (vectors)
-    
-    TPY_ciL <- reactive({DxStats(cache$n, cache$prevalence, cache$sensitivity, cache$specificity)$TPY_ciL})
-    TPY_ciU <- reactive({DxStats(cache$n, cache$prevalence, cache$sensitivity, cache$specificity)$TPY_ciU})
-    TNY_ciL <- reactive({DxStats(cache$n, cache$prevalence, cache$sensitivity, cache$specificity)$TNY_ciL})
-    TNY_ciU <- reactive({DxStats(cache$n, cache$prevalence, cache$sensitivity, cache$specificity)$TNY_ciU})
  
 #==========================================================
     
@@ -101,10 +49,10 @@ shinyServer (
           output$RuleInOutPlot2<-renderPlot({
         # Sys.sleep(2)
         
-        ruleinoutplot(cache$n, cache$prevalence, cache$sensitivity, cache$specificity,
-                      cache$RuleInDecisionThreshold, cache$RuleOutDecisionThreshold, 
-                      cache$DxCondition, cache$DxTestName,  
-                      cache$DxRuleInDecision, cache$DxRuleOutDecision, cache$IndeterminateDecision)
+        isolate(ruleinoutplot(input$n, input$prevalence, input$sensitivity, input$specificity,
+                      input$RuleInDecisionThreshold, input$RuleOutDecisionThreshold, 
+                      input$DxCondition, input$DxTestName,  
+                      input$DxRuleInDecision, input$DxRuleOutDecision, input$IndeterminateDecision))
       })
    }, ignoreNULL = FALSE)
     
@@ -114,11 +62,11 @@ shinyServer (
     output$PrePostProb2<-renderPlot({
       # Sys.sleep(2)
       
-      prepostprobplot(cache$n, cache$prevalence, cache$sensitivity, cache$specificity,
-                    cache$DxCondition, cache$DxTestName)
+      isolate(prepostprobplot(input$n, input$prevalence, input$sensitivity, input$specificity,
+                      input$DxCondition, input$DxTestName))
     })
   }, ignoreNULL = FALSE)
-  
+    
   
 
   
@@ -145,7 +93,7 @@ shinyServer (
                     output_format = switch(
                       input$format,
                       PDF = pdf_document(), HTML = html_document(), 
-                      Word = word_document(),  envir = cache)
+                      Word = word_document())
       )
       file.copy(out, file)
     },

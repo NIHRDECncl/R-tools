@@ -320,7 +320,7 @@
   
   
   
- prepostprobplot <- function(n, prevalence, sensitivity, specificity, DxTestName, DxCondition){
+ prepostprobplot <- function(n, prevalence, sensitivity, specificity, DxCondition, DxTestName){
    
    graphPre2PostProb <-  graphPre2PostProb(n, prevalence, sensitivity, specificity)
    linesPre2PostProb <- linesPre2PostProb(n, prevalence, sensitivity, specificity)
