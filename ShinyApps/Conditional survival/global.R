@@ -5,8 +5,8 @@ if( !exists("LoadPackages", mode="function")) source("FunctionsUsedByConditional
 source("FunctionsUsedByConditionalSurvivalApp.R")
 LoadPackages()
 enableBookmarking("url")
-options(shiny.error = browser)
-options(shiny.reactlog = TRUE)
+# options(shiny.error = browser)
+# options(shiny.reactlog = TRUE)
 
 
 
