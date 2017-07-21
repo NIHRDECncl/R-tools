@@ -125,6 +125,7 @@ library(readxl)
   
 
 
-
+s <- levels(factor(c(data4Plots$group1)))
+s
 
 

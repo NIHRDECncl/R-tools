@@ -35,12 +35,12 @@ pplot <- function(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = TRUE, 
   
   pPlot <- pPlot + geom_line() + geom_point()
   
-  if (showCI)
+  if (showBW)
     pPlot <- pPlot + geom_ribbon(
       aes(ymin = wbMin, ymax = wbMax, fill = factor(legend4Line), colour = factor(legend4Line)),
       alpha = 1/10, linetype = 0)
 
-   if (showBW) 
+   if (showCI) 
     pPlot <- pPlot + geom_ribbon(
       aes(ymin = ciMin, ymax = ciMax, fill = factor(legend4Line), colour = factor(legend4Line)),
       alpha = 1/10, linetype = 0)

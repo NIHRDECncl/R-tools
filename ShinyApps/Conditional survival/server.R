@@ -14,9 +14,7 @@ data4Plots <- read_excel(path, sheets$sheets[2])
 
 # initialise condition choices
 conditionChoices <- 
-  metadata4Plots$condition %>%
-  sort() %>%
-  unique()
+  levels(factor(metadata4Plots$condition))
 
 server <- 
   function(input, output, session) {
@@ -114,18 +112,10 @@ server <-
   pGroup1Name <-reactive({pMetadata()$group1Name[1]})
   pGroup2Name <- reactive({pMetadata()$group2Name[1]})
   pCgroupChoicesV <- reactive({
-    ifelse (
-      is.na(pGroup2Name()),
-            c("group1"),
-            c("group1", "group2")
-      )
+    levels(factor(c(pGroup1Name(), pGroup2Name())))
   })
   pCgroupChoicesN <- reactive({
-    ifelse (
-      is.na(pGroup2Name()),
-            c(pGroup1Name()),
-            c(pGroup1Name(), pGroup2Name())
-      )
+    levels(factor(c(pGroup1Name(), pGroup2Name())))
   })
   
   observe(
@@ -167,22 +157,14 @@ server <-
   csGroup1Name <-reactive({csMetadata()$group1Name[1]})
   csGroup2Name <- reactive({csMetadata()$group2Name[1]})
   csCgroupChoicesV <- reactive({
-    ifelse (
-      is.na(csGroup2Name()),
-            c("group1"),
-            c("group1", "group2")
-      )
+    levels(factor(c(csGroup1Name(), csGroup2Name())))
   })
   csCgroupChoicesN <- reactive({
-    ifelse (
-      is.na(csGroup2Name()),
-            c(csGroup1Name()),
-            c(csGroup1Name(), csGroup2Name())
-      )
+    levels(factor(c(csGroup1Name(), csGroup2Name())))
   })
   
   observe(
-    updateCheckboxGroupInput(session, "csShowGroups", choiceNames = csCgroupChoicesN(), choiceValues = pCgroupChoicesV())
+    updateCheckboxGroupInput(session, "csShowGroups", choiceNames = csCgroupChoicesN(), choiceValues = csCgroupChoicesV())
   )
   
   # plot conditional survival
