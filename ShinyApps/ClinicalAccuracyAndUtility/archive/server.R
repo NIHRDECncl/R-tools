@@ -26,27 +26,15 @@ shinyServer (
   # This is where we will save values that need to persist, 
   # and that can be picked up and included in the report
   
-  if(exists("cache")) rm(cache, inherits = TRUE) # we shouldn't need this
+ # if(exists("cache")) rm(cache, inherits = TRUE) # we shouldn't need this
   cache <- new.env()
   
-
+  cache$params <- NULL
+  cache$test <- 0
+  
+  
    session$onSessionEnded(stopApp) # it can be annoying that when you close the browser window, the app is still running and you need to manually press “Esc” to kill it
   
-   observe({
-     if(input$GoButton){
-     cache$n <- input$n
-     cache$prevalence <- input$prevalence
-     cache$sensitivity <- input$sensitivity
-     cache$specificity <- input$specificity
-     cache$GoButton <- input$GoButton
-     cache$RuleInDecisionThreshold <- input$RuleInDecisionThreshold
-     cache$RuleOutDecisionThreshold <-  input$RuleOutDecisionThreshold
-     cache$DxCondition <- input$DxCondition
-     cache$DxTestName <- input$DxTestName
-     }
-   })
-   
-   
 #   values <- reactiveValues()
 #   go <- function() {
 #     values$GoButton <- isolate(values$GoButton) + 1
@@ -56,9 +44,6 @@ shinyServer (
 #   })
 #  
 #   
-   
-   
-   
     Dpos <- eventReactive(input$GoButton, {round(input$n * input$prevalence)}, ignoreNULL = FALSE, ignoreInit = FALSE)
     Dneg <- eventReactive(input$GoButton, {round(input$n - Dpos())}, ignoreNULL = FALSE, ignoreInit = FALSE)
 
@@ -83,34 +68,6 @@ shinyServer (
     PostTestProbP <- eventReactive(input$GoButton, {PostTestOddsP()/(PostTestOddsP() + 1)}, ignoreNULL = FALSE, ignoreInit = FALSE)
     PostTestProbN <- eventReactive(input$GoButton, {PostTestOddsN()/(PostTestOddsN() + 1)}, ignoreNULL = FALSE, ignoreInit = FALSE)
 
-    
-    # cache all of these values
-    
-#     cache$Dpos <- Dpos
-#     cache$Dneg <- Dneg
-#     
-#     cache$Tp <- Tp
-#     cache$Tn <- Tn
-#     cache$Fn <- Fn
-#     cache$Fp <- Fp
-#     
-#     cache$PPV <- PPV
-#     cache$NPV <- NPV
-#     
-#     cache$LRp <- LRp
-#     cache$LFn <- LRn
-#     
-#     cache$PreTestOddsP <- PreTestOddsP
-#     cache$PreTestOddsN <- PreTestOddsN
-#     
-#     cache$PostTestOddsP <- PostTestOddsP
-#     cache$PostTestOddsN <- PostTestOddsN
-#     
-#     cache$PostTestProbP <- PostTestProbP
-#     cache$PostTestProbN <- PostTestProbN
-#     
-#     
-    
     ### confidence  limits for the post=test probabilities
     
     ### the following are numbers; the same names in the data.frame label 2 item columns (vectors)
@@ -120,16 +77,6 @@ shinyServer (
     TNY_ciL <- eventReactive(input$GoButton, {DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)$TNY_ciL}, ignoreNULL = FALSE, ignoreInit = FALSE)
     TNY_ciU <- eventReactive(input$GoButton, {DxStats(input$n, input$prevalence, input$sensitivity, input$specificity)$TNY_ciU}, ignoreNULL = FALSE, ignoreInit = FALSE)
   
-    # cache all of these values
-    
-#     cache$TPY_ciL <- TPY_ciL
-#     cache$TPY_ciU <- TPY_ciU
-#     cache$TPY_ciL <- TPY_ciL
-#     cache$TNY_ciU <- TNY_ciU
-#     
-    
-    
-    
     # lines for plot 1
     linesDf <- eventReactive(input$GoButton, {
       ### save stats so don't have to call many times
@@ -163,26 +110,7 @@ shinyServer (
         TNY_ciL = c(input$prevalence, round(Dx$TNY_ciL,3)),
         TNY_ciU = c(input$prevalence, round(Dx$TNY_ciU,3))
       )})
-      
-      # cache values for plotting in document
-      cache$PriorAxisX <- linesDf()$PriorAxisX
-      cache$PriorAxisY <- linesDf()$PriorAxisY
-      cache$PostAxisX <- linesDf()$PostAxisX
-      cache$PostAxisY <- linesDf()$PostAxisY
-      
-      cache$RuleInDecisionThresholdX <-  linesDf()$RuleInDecisionThresholdX
-      cache$RuleInDecisionThresholdY <-  linesDf()$RuleInDecisionThresholdY
-      cache$TestPosX <- linesDf()$TestPosX
-      cache$TestPosY <- linesDf()$TestPosY
-      
-      cache$TestNegX <- linesDf()$TestNegX
-      cache$TestNegY <- linesDf()$TestNegY
-      
     }, ignoreNULL = FALSE, ignoreInit = FALSE)
-    
-
-      
-    
     
 ### coordinates and labels for plot 1
     fixedlabels <- eventReactive(input$GoButton, {
@@ -239,9 +167,9 @@ shinyServer (
                                          options = list(scrollX = TRUE, rownames = FALSE,
                                          dom = 't'))
     
-    output$RuleInOutPlot<-renderPlot({
+    RuleInOutPlot<-reactive({
       # Sys.sleep(2)
-     ggplot(linesDf()) +
+       ggplot(linesDf()) +
         geom_line(aes(x = linesDf()$PriorAxisX, y = linesDf()$PriorAxisY), data = linesDf(), stat = "identity", position = "identity") +
         geom_line(aes(x = linesDf()$PostAxisX, y = linesDf()$PostAxisY), data = linesDf(), stat = "identity", position = "identity") +
         geom_line(aes(x = linesDf()$PrevX, y = linesDf()$PrevY, colour="coral1"), size = 1.5, data = linesDf(), stat = "identity", position = "identity") +
@@ -261,24 +189,11 @@ shinyServer (
               axis.title = element_text(size = 14)) +
         geom_text(data = fixedlabels(), size = 4, aes(x,y,label = labels)) + 
         geom_text(data = postTestLabels(), size = 5, aes(x, y, label = labels))
-     g
-   
     })
-    
-   
-    
-    
-    output$RuleInOutPlot2<-renderPlot({
-      # Sys.sleep(2)
-   
-      ruleinoutplot(cache$n, cache$prevalence, cache$sensitivity, cache$specificity,
-                    cache$RuleInDecisionThreshold, cache$RuleOutDecisionThreshold, 
-                    cache$DxCondition, cache$DxTestName)
       
-      
+      output$RuleInOutPlot<-renderPlot({
+        RuleInOutPlot()
     })
-    
-    
      
     # plotList <- eventReactive(input$plt2rprt, {
     #   #       isolate(
@@ -426,7 +341,7 @@ shinyServer (
     hist(dist()$dist) 
   })
   
-  #}
+   #}
 
  #cache$testplot <- output$distPlot
   
@@ -463,6 +378,6 @@ shinyServer (
   
  
   
-   }
+  
 
 )

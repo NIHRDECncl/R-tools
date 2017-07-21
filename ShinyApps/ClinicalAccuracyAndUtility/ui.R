@@ -1,6 +1,7 @@
 #################### ui for ShinyApp to explore clinical accuracy and utility ###############################
 
 ui <- function(request) {
+
   navbarPage(h4("Explore the clinically useful measures of test accuracy"),
     navbarMenu("Home",
     tabPanel("About", includeHTML("www/tab1.html")), 
@@ -56,7 +57,7 @@ ui <- function(request) {
                  ),
                  conditionalPanel(
                    condition = "input.GoButton !== 0",
-                   withSpinner(plotOutput("RuleInOutPlot"))
+                   withSpinner(plotOutput("RuleInOutPlot2"))
                  )
         )
 
@@ -85,4 +86,5 @@ ui <- function(request) {
       tags$br(),
       tags$img(src = "nihr-logo.jpg", width = "80px", height = "28px", align = "right") # add the NIHR logo)
     
-)}
+  )
+  }

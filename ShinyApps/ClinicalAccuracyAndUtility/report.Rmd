@@ -6,25 +6,21 @@ Copyright (c) 2017, the authors (see AUTHORS.txt).
 title: "Report on Clinical Accuracy and Utility"
 output: pdf_document
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-params:
-  plot: 'NULL'
 ---
 
 
 # 1. Introduction
 Welcome to the NIHR Diagnostic Evidence Co-operative Newcastle's Clinical Diagnostic Accuracy and Utility application report.  The results of your analysis are reported below.
 
+A plot of `r input$n` random points.
 
 ```{r}
-#params[["RuleInOutPlot"]]
-#
-#Length of list of plots `r length(plotList())`
-# The `params` object is available in the document.
-#plot1
-```
 
-A plot of random points.
 
-```{r}
-#plot(rnorm(params$n), rnorm(params$n))
+
+})
+
 ```
+<!---
+A plot of `r input$n` random points.
+-->
