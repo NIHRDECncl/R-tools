@@ -38,28 +38,16 @@ ui <- function(request) {
                      textInput(inputId = "DxRuleOutDecision", label = "Rule-out decision", value = "Example: rule out the condition"),
                      numericInput("RuleOutDecisionThreshold", "Rule-out NPV threshold", min=0, max=1, value= 0.1, step = 0.01),
                #    ),
+                 checkboxInput('disper', 'Display as percentages?', value = FALSE), 
                  hr(),
                  bookmarkButton()
                    )
                  ),
                  mainPanel(     
-            #      conditionalPanel(
-            #         condition = "input.GoButton == 0",
-            #       h5("To see the graphs, click on the Update graphs button!", style="color:red")
-            #         ),
-            #      conditionalPanel(
-            #          condition = "input.GoButton !== 0",
+                     span(textOutput("validtext"), style="color:red"),
                      withSpinner(plotOutput("PrePostProb2")),
                      withSpinner(plotOutput("RuleInOutPlot2"))
-            #        ) 
-#                  conditionalPanel(
-#                    condition = "input.GoButton == 0",
-#                    withSpinner(plotOutput("RuleInOutPlot"))
-#                 ),
-#                   conditionalPanel(
-#                     condition = "input.GoButton !== 0",
-#                    withSpinner(plotOutput("RuleInOutPlot2"))
-#         )
+           
                  )
         ),
     
