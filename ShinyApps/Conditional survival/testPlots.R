@@ -18,8 +18,9 @@ library(readxl)
 
 #########################################################
 
-  pplot <- function(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = TRUE, showBW = TRUE, facetWrap = TRUE, ncol = 2L)  {
-  pPlot <- ggplot(pData, aes(time, proportion, group = legend4Line, colour = legend4Line, fill = legend4Line)) 
+  pplot <- function(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = TRUE, showBW = TRUE, facetWrap = TRUE, ncol = 2L, group1Name = "Group1", group2Name = "Group2")  {
+  # pPlot <- ggplot(pData, aes(time, proportion, group = legend4Line, colour = legend4Line, fill = legend4Line)) 
+  pPlot <- ggplot(pData, aes(time, proportion, group = legend4Line, colour = group1, fill = group2)) 
   pPlot <- pPlot + labs(title = pPlotTitle, x = pXlab, y = pYlab, colour = pLegendTitle, fill = NULL)
   pPlot <- pPlot + theme(plot.title = element_text(size = 12, colour = "darkseagreen4", face = "bold"))
   
@@ -95,27 +96,36 @@ library(readxl)
     pXlab <- pMetadata$xLabel[1]
     pYlab <- pMetadata$yLabel[1]
     pPlotTitle <- pMetadata$text4Figure[1]
-    pLegendTitle <- pMetadata$title4Legend[1] ##########  check
+    pLegendTitle <- pMetadata$title4Legend[1]
+    pGroup1Name <- pMetadata$group1Name[1]
+    pGroup2Name <- pMetadata$group2Name[1]
     
-    pplot(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = FALSE, showBW = FALSE, facetWrap = FALSE)  
-    pplot(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = TRUE, showBW = FALSE, facetWrap = FALSE)  
-    pplot(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = FALSE, showBW = TRUE, facetWrap = FALSE)  
-    pplot(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = TRUE, showBW = TRUE, facetWrap = FALSE)  
+    
+
+    
+    pplot(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = FALSE, showBW = FALSE, facetWrap = TRUE, ncol = 2L, group1Name = pGroup1Name, group2Name = pGroup2Name)  
+    pplot(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = TRUE, showBW = FALSE, facetWrap = TRUE, ncol = 2L, group1Name = pGroup1Name, group2Name = pGroup2Name)  
+    pplot(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = FALSE, showBW = TRUE, facetWrap = TRUE, ncol = 2L, group1Name = pGroup1Name, group2Name = pGroup2Name)  
+    pplot(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = TRUE, showBW = TRUE, facetWrap = TRUE, ncol = 2L, group1Name = pGroup1Name, group2Name = pGroup2Name)  
 
 
 
   csXlab <- csMetadata$xLabel[1]
   csYlab <- csMetadata$yLabel[1]
   csPlotTitle <- csMetadata$text4Figure[1]
-  csLegendTitle <- csMetadata$title4Legend[1] ##########  check
+  csLegendTitle <- csMetadata$title4Legend[1]
+  csGroup1Name <- csMetadata$group1Name[1]
+  csGroup2Name <- csMetadata$group2Name[1]
   
-  pplot(csData, csPlotTitle, csXlab, csYlab, csLegendTitle, showCI = FALSE, showBW = FALSE, facetWrap = TRUE, ncol = 2L)  
-  pplot(csData, csPlotTitle, csXlab, csYlab, csLegendTitle, showCI = TRUE, showBW = FALSE, facetWrap = TRUE, ncol = 2L)  
-  pplot(csData, csPlotTitle, csXlab, csYlab, csLegendTitle, showCI = FALSE, showBW = TRUE, facetWrap = TRUE, ncol = 2L)  
-  pplot(csData, csPlotTitle, csXlab, csYlab, csLegendTitle, showCI = TRUE, showBW = TRUE, facetWrap = TRUE, ncol = 2L)  
+  
+  pplot(csData, csPlotTitle, csXlab, csYlab, csLegendTitle, showCI = FALSE, showBW = FALSE, facetWrap = TRUE, ncol = 2L, group1Name = csGroup1Name, group2Name = csGroup2Name)  
+  pplot(csData, csPlotTitle, csXlab, csYlab, csLegendTitle, showCI = TRUE, showBW = FALSE, facetWrap = TRUE, ncol = 2L, group1Name = csGroup1Name, group2Name = csGroup2Name)  
+  pplot(csData, csPlotTitle, csXlab, csYlab, csLegendTitle, showCI = FALSE, showBW = TRUE, facetWrap = TRUE, ncol = 2L, group1Name = csGroup1Name, group2Name = csGroup2Name)  
+  pplot(csData, csPlotTitle, csXlab, csYlab, csLegendTitle, showCI = TRUE, showBW = TRUE, facetWrap = TRUE, ncol = 2L, group1Name = csGroup1Name, group2Name = csGroup2Name)  
   
 
 
-
+s <- levels(factor(c(data4Plots$group1)))
+s
 
 
