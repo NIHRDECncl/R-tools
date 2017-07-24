@@ -23,8 +23,18 @@ ui <- function(request) {
           selectInput("prognosisPlot", label = "choose prognosis graph", choices = c("Ovarian cancer 10-yr overall survival (SEER 1988-2001)")),
           selectInput("conditionalSurvivalPlot", label = "choose conditional survival graph", choices = c("Ovarian cancer 5-yr conditional survival by stage (SEER 1988-2001)", "Ovarian cancer 5-yr conditional survival by age-group and stage (SEER 1988-2001)")),
           checkboxGroupInput("showUncertainties", label= "show uncertainties for:", choices = c("group averages" = "CI", "individual best and worst prospects" = "BW")),
-          h5("For main subgroup:"),
-          checkboxInput("facetWrap", label = "show separate plots", value = FALSE)
+          
+          checkboxGroupInput("pShowGroups", label= "Prognosis grouping", 
+                             choiceNames = c("pGroup1", "pGroup2"),
+                             choiceValues = c("pG1", "pG2")
+          ),
+
+          checkboxGroupInput("csShowGroups", label= "Conditional survival grouping", 
+                             choiceNames = c("csGroup1", "csGroup2"),
+                             choiceValues = c("csG1", "csG2")
+          ),
+        hr(),
+        checkboxInput("facetWrap", label = "Plot groups separately", value = FALSE)
         ),
         bookmarkButton(), " ...... ",
         actionButton("goPrint", "Download for printing")
@@ -34,13 +44,15 @@ ui <- function(request) {
         fluidRow(
           ##### prognosis plots
           hr(),
-          column(4, textOutput("pText4Figure")),
-          column(8, plotOutput("pPlot")),
+          column(2, br(), br(), br(), br(), br(), br(), 
+                 textOutput("pText4Figure")),
+          column(10, plotOutput("pPlot")),
           
           ##### conditional survival plots
           hr(),
-          column(4, textOutput("csText4Figure")),
-          column(8, plotOutput("csPlot")),
+          column(2, br(), br(), br(), br(), br(), br(), 
+                 textOutput("csText4Figure")),
+          column(10, plotOutput("csPlot")),
           hr()
           )
         ))),
@@ -132,7 +144,13 @@ ui <- function(request) {
                      textOutput("QApLegendTitle"),
                      textOutput("QAptext4Figure"),
                      "show uncertainties: ",
-                     textOutput("QAshowUncertainties")
+                     textOutput("QAshowUncertainties"),
+                     "QApGroup Names",
+                     textOutput("QApGroup1Name"),
+                     textOutput("QApGroup2Name"),
+                     "QApCgroupChoicesN and V",
+                     verbatimTextOutput("QApCgroupChoicesN"),
+                     verbatimTextOutput("QApCgroupChoicesV")
                      )
             ),
 
