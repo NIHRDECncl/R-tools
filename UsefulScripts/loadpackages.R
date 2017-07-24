@@ -14,6 +14,12 @@ if (!require(scales)){
   library("scales")
 }
 
+if (!require(ggrepel)){
+  install.packages("ggrepel", repos="http://cran.rstudio.com/") 
+  library("ggrepel")
+}
+
+
 
 if (!require(shinycssloaders)){
   install.packages("shinycssloaders", repos="http://cran.rstudio.com/") 
