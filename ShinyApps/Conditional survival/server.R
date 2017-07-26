@@ -14,7 +14,10 @@ data4Plots <- read_excel(path, sheets$sheets[2])
 
 # initialise condition choices
 conditionChoices <- 
-  levels(factor(metadata4Plots$condition))
+  metadata4Plots$condition %>% 
+    factor() %>% 
+    levels()
+  
 
 server <- 
   function(input, output, session) {
@@ -108,19 +111,22 @@ server <-
   pLegendTitle <-reactive({pMetadata()$title4Legend[1]}) 
   output$pText4Figure <- renderText(pMetadata()$text4Figure[1])
   
-  # update input labels for prognosis groups
-  pGroup1Name <-reactive({pMetadata()$group1Name[1]})
-  pGroup2Name <- reactive({pMetadata()$group2Name[1]})
-  pCgroupChoicesV <- reactive({
-    levels(factor(c(pGroup1Name(), pGroup2Name())))
-  })
-  pCgroupChoicesN <- reactive({
-    levels(factor(c(pGroup1Name(), pGroup2Name())))
-  })
-  
-  observe(
-    updateCheckboxGroupInput(session, "pShowGroups", choiceNames = pCgroupChoicesN(), choiceValues = pCgroupChoicesV())
-  )
+  # # update input labels for prognosis groups
+  # pGroup1Name <-reactive({pMetadata()$group1Name[1]})
+  # pGroup2Name <- reactive({pMetadata()$group2Name[1]})
+  # pCgroupChoicesV <- reactive({
+  #   c(pGroup1Name(), pGroup2Name()) %>% 
+  #     factor() %>% 
+  #     levels()
+  # })
+  # pCgroupChoicesN <- reactive({
+  #   c(pGroup1Name(), pGroup2Name()) %>% 
+  #     factor() %>% 
+  #     levels()
+  #   })
+  # observe(
+  #   updateCheckboxGroupInput(session, "pShowGroups", choiceNames = pCgroupChoicesN(), choiceValues = pCgroupChoicesV())
+  # )
 
 
   output$QApXlab <- renderText(pXlab())
@@ -153,19 +159,23 @@ server <-
   csLegendTitle <-reactive({csMetadata()$title4Legend[1]}) 
   output$csText4Figure <- renderText(csMetadata()$text4Figure[1])
   
-  # update input labels for prognosis groups
-  csGroup1Name <-reactive({csMetadata()$group1Name[1]})
-  csGroup2Name <- reactive({csMetadata()$group2Name[1]})
-  csCgroupChoicesV <- reactive({
-    levels(factor(c(csGroup1Name(), csGroup2Name())))
-  })
-  csCgroupChoicesN <- reactive({
-    levels(factor(c(csGroup1Name(), csGroup2Name())))
-  })
-  
-  observe(
-    updateCheckboxGroupInput(session, "csShowGroups", choiceNames = csCgroupChoicesN(), choiceValues = csCgroupChoicesV())
-  )
+  # # update input labels for prognosis groups
+  # csGroup1Name <-reactive({csMetadata()$group1Name[1]})
+  # csGroup2Name <- reactive({csMetadata()$group2Name[1]})
+  # csCgroupChoicesN <- reactive({
+  #     c(csGroup1Name(), csGroup2Name()) %>% 
+  #       factor() %>% 
+  #       levels()
+  #   })
+  # csCgroupChoicesV <- reactive({
+  #   c(csGroup1Name(), csGroup2Name()) %>% 
+  #       factor() %>% 
+  #       levels()
+  #     })
+  # 
+  # observe(
+  #   updateCheckboxGroupInput(session, "csShowGroups", choiceNames = csCgroupChoicesN(), choiceValues = csCgroupChoicesV())
+  # )
   
   # plot conditional survival
   output$csPlot <- renderPlot({

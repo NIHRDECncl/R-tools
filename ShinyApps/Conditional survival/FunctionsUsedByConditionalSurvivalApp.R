@@ -25,13 +25,13 @@ LoadPackages <- function() {
 
 #########################################################
 
-pplot <- function(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = TRUE, showBW = TRUE, facetWrap = TRUE, ncol = 2L)  {
+pplot <- function(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = TRUE, showBW = TRUE, facetWrap = TRUE, ncol = 2L, group1Name = "Group1", group2Name = "Group2")  {
   pPlot <- ggplot(pData, aes(time, proportion, group = legend4Line, colour = legend4Line, fill = legend4Line)) 
   pPlot <- pPlot + labs(title = pPlotTitle, x = pXlab, y = pYlab, colour = pLegendTitle, fill = NULL)
   pPlot <- pPlot + theme(plot.title = element_text(size = 12, colour = "darkseagreen4", face = "bold"))
   
   if (facetWrap) 
-    pPlot <- pPlot + facet_wrap(~group1, ncol = ncol)
+    pPlot <- pPlot + facet_wrap(~group1 + group2, ncol = ncol)
   
   pPlot <- pPlot + geom_line() + geom_point()
   
