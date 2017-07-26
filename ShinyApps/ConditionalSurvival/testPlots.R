@@ -60,7 +60,7 @@ library(readxl)
 
     wd <- getwd()
     path <- paste0(getwd(), "/data/ConditionalSurvival.xlsx")
-    path <- paste0("/Users/michaelpower/Google Drive/GIT-project/GitHub/R-tools/ShinyApps/Conditional survival", "/data/ConditionalSurvival.xlsx")
+    path <- paste0("/Users/michaelpower/Google Drive/GIT-project/GitHub/R-tools/ShinyApps/ConditionalSurvival", "/data/ConditionalSurvival.xlsx")
     sheets <- data.frame(excel_sheets(path), stringsAsFactors = FALSE)
     names(sheets) <- "sheets"
     
@@ -123,9 +123,5 @@ library(readxl)
   pplot(csData, csPlotTitle, csXlab, csYlab, csLegendTitle, showCI = FALSE, showBW = TRUE, facetWrap = TRUE, ncol = 2L, group1Name = csGroup1Name, group2Name = csGroup2Name)  
   pplot(csData, csPlotTitle, csXlab, csYlab, csLegendTitle, showCI = TRUE, showBW = TRUE, facetWrap = TRUE, ncol = 2L, group1Name = csGroup1Name, group2Name = csGroup2Name)  
   
-
-
-s <- levels(factor(c(data4Plots$group1)))
-s
 
 

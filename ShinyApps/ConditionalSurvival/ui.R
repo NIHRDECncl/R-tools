@@ -24,15 +24,15 @@ ui <- function(request) {
           selectInput("conditionalSurvivalPlot", label = "choose conditional survival graph", choices = c("Ovarian cancer 5-yr conditional survival by stage (SEER 1988-2001)", "Ovarian cancer 5-yr conditional survival by age-group and stage (SEER 1988-2001)")),
           checkboxGroupInput("showUncertainties", label= "show uncertainties for:", choices = c("group averages" = "CI", "individual best and worst prospects" = "BW")),
           
-          checkboxGroupInput("pShowGroups", label= "Prognosis grouping", 
-                             choiceNames = c("pGroup1", "pGroup2"),
-                             choiceValues = c("pG1", "pG2")
-          ),
-
-          checkboxGroupInput("csShowGroups", label= "Conditional survival grouping", 
-                             choiceNames = c("csGroup1", "csGroup2"),
-                             choiceValues = c("csG1", "csG2")
-          ),
+          # checkboxGroupInput("pShowGroups", label= "Prognosis grouping", 
+          #                    choiceNames = c("pGroup1", "pGroup2"),
+          #                    choiceValues = c("pG1", "pG2")
+          # ),
+          # 
+          # checkboxGroupInput("csShowGroups", label= "Conditional survival grouping", 
+          #                    choiceNames = c("csGroup1", "csGroup2"),
+          #                    choiceValues = c("csG1", "csG2")
+          # ),
         hr(),
         checkboxInput("facetWrap", label = "Plot groups separately", value = FALSE)
         ),
