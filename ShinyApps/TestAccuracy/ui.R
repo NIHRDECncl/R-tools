@@ -2,18 +2,14 @@
 
 ui <- function(request) {
 
-  navbarPage(h4("Visually explore the effects of sensitivity, specificity, and prevalence on True positives, False postives, False negatives, True negatives"),
-   hr(),
-
-   hr(),
-   navbarMenu("Home",
-   tabPanel("About" ) #includeHTML("www/tab1.html")), 
-  #  tabPanel("About graph 1", includeHTML("www/tab2.html")),
-  #  tabPanel("About graph 2", includeHTML("www/tab3.html"))#,
-    ),
-    
-
-     tabPanel("Test Accuracy",
+  navbarPage(h5("Visually explore the effects of sensitivity, specificity, 
+                and prevalence on True positives, False postives, False negatives, 
+                True negatives"),
+  # navbarMenu("Home",
+  
+   tabPanel("About", includeHTML("www/tab1.html")),
+  #  ),
+   tabPanel("Test Accuracy",
              
                 sidebarPanel(
                   fluidRow(
@@ -29,20 +25,36 @@ ui <- function(request) {
                   )
                 ),
                 mainPanel(
-                  plotOutput("populationPlot"),
-                  tags$br(),
-                  plotOutput("testedPlots"),
-                 # verbatimTextOutput("dx2x2Table"),
-                  tags$br(),
-                  verbatimTextOutput("pv")
-                )
+                  tabsetPanel(id = "test",
+                  tabPanel("Test", verbatimTextOutput("please work"), value = 1),
+                  tabPanel("Population", plotOutput("populationPlot"), plotOutput("testedPlots"), value  = 2),
+                  tabPanel("Distributions", plotOutput("distributionplots"), value =)
+                   )
+                  )
+              # mainPanel(
+              #   tabsetPanel(
+              #     tabPanel("Plot", plotOutput("plot")),
+              #     tabPanel("Summary", verbatimTextOutput("summary")),
+              #     tabPanel("Table", tableOutput("table"))
+              #   )
+              # )
+              #    # verbatimTextOutput("dx2x2Table"),
+                  #tags$br(),
+                  #verbatimTextOutput("pv")
+     
      ),
         
   
     tabPanel("2 x 2 table",
            tableOutput("dx2x2Table"),
            tableOutput("pvdf")
-             ),     
+             ),    
+   
+   tabPanel("Distributions",
+
+              plotOutput("distributionplots")
+
+            ),
 
     tabPanel("Download summary report",
              p("This document contains all the tables and figures generated from your input data."),
