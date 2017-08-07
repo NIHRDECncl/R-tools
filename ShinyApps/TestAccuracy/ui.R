@@ -44,7 +44,7 @@ ui <- function(request) {
    
    tabPanel("Distributions",
 
-              plotOutput("distributionplots")
+              withSpinner(plotOutput("distributionplots"))
 
             ),
 
