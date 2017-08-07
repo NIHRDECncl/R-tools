@@ -476,7 +476,7 @@ distributionplots <- function(n, prevalence, sensitivity, specificity){
           axis.text.y=element_blank(),
           axis.ticks.y=element_blank())
   distri <- distri + 
-    geom_text(data = distritext, size = 5, aes(x = cmX, y = cmY, label = labs, colour = NULL, shape = NULL))
+    geom_text_repel(data = distritext, size = 5, aes(x = cmX, y = cmY, label = labs, colour = NULL, shape = NULL))
  distri
 
 }

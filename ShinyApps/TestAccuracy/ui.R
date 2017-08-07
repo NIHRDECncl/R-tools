@@ -25,23 +25,15 @@ ui <- function(request) {
                   )
                 ),
                 mainPanel(
-                  tabsetPanel(id = "test",
-                  tabPanel("Test", verbatimTextOutput("please work"), value = 1),
-                  tabPanel("Population", plotOutput("populationPlot"), plotOutput("testedPlots"), value  = 2),
-                  tabPanel("Distributions", plotOutput("distributionplots"), value =)
-                   )
+                  span(textOutput("validtext"), style="color:red"),
+                  withSpinner(plotOutput("populationPlot")), 
+                  withSpinner(plotOutput("testedPlots"))
+                  # would prefer for this to be in tabs.
+                  #("test",
+                  #tabPanel("Population", plotOutput("populationPlot"), plotOutput("testedPlots")),
+                  #tabPanel("Distributions", plotOutput("distributionplots"))
+                  #)
                   )
-              # mainPanel(
-              #   tabsetPanel(
-              #     tabPanel("Plot", plotOutput("plot")),
-              #     tabPanel("Summary", verbatimTextOutput("summary")),
-              #     tabPanel("Table", tableOutput("table"))
-              #   )
-              # )
-              #    # verbatimTextOutput("dx2x2Table"),
-                  #tags$br(),
-                  #verbatimTextOutput("pv")
-     
      ),
         
   
