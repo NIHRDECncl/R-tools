@@ -27,7 +27,7 @@ shinyServer (
       output$validtext  <- renderText({
         if(!isValid_num()){
           print("Inputs not valid, please check that the values for
-             prevalence, sensitivity, specificity and rule in/out decision thresholds specified, lie between 0 and 1. ")
+             prevalence, sensitivity and specificity specified, lie between 0 and 1. ")
         } else {
           return(NULL)
         }

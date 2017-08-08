@@ -398,7 +398,7 @@ popplot2 <- function(n, prevalence, sensitivity, specificity, sorted, ciFlag){
   }
   p2 <- p2 +
     labs(x = "", y = "", 
-         title ="Test accuracy: true and false positives; \nfalse and true negatives, sensitivity, specificity, ...") +
+         title ="Test accuracy: true and false positives; \n false and true negatives.") +
     theme(plot.title = element_text(size = rel(1.5), colour = "dodgerblue3"))
   #ggtitle("Test accuracy: true and false positives; \n false and true negatives, sensitivity, specificity, ...")
   p2
@@ -447,10 +447,10 @@ distritext <- function(n, prevalence, sensitivity, specificity){
       max2
     ), 
     labs = c(
-      paste("Tp = ", Dx$Tp),
-      paste("Fp = ", Dx$Fp),
-      paste("Fn = ", Dx$Fn),
-      paste("Tn = ", Dx$Tn)
+      paste0("Tp = ", Dx$Tp),
+      paste0("Fp = ", Dx$Fp),
+      paste0("Fn = ", Dx$Fn),
+      paste0("Tn = ", Dx$Tn)
     )
   )
   })
@@ -474,9 +474,8 @@ distributionplots <- function(n, prevalence, sensitivity, specificity){
           axis.ticks.x=element_blank(),
           axis.title.y=element_blank(),
           axis.text.y=element_blank(),
-          axis.ticks.y=element_blank())
-  distri <- distri + 
-    geom_text(data = distritext, size = 5, aes(x = cmX, y = cmY, label = labs, colour = NULL, shape = NULL))
+          axis.ticks.y=element_blank()) + 
+    geom_text_repel(data = distritext, size = 5, aes(x = cmX, y = cmY, label = labs, colour = NULL))
  distri
 
 }
