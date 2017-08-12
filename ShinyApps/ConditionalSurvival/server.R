@@ -23,6 +23,13 @@ server <-
   function(input, output, session) {
   # session$onSessionEnded(stopApp) # it can be annoying that when you close the browser window, the app is still running and you need to manually press “Esc” to kill it
 
+  # go to 2nd tab on navbarMenu
+    observeEvent(input$goToTabI2, {
+      updateTabsetPanel(session, "navbarPage",
+                        selected = "i2"
+      )
+    })
+    
      observe({
       updateSelectInput(session, "condition", label = NULL, choices = conditionChoices)
     })
@@ -39,6 +46,7 @@ server <-
       subset(metadata4Plots, condition == input$condition & view == "Prognosis")$plotNameAndDataset %>%
       sort()
     })
+    
     # update the picklist in ui
     observe({
       updateSelectInput(session, "prognosisPlot", label = NULL, choices = prognosisPlotChoices())
