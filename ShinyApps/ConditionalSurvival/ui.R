@@ -5,7 +5,7 @@ ui <- function(request) {
     navbarMenu("Information",
 
         tabPanel("Do you want to know your prognosis?",
-          h6("under construction: Do you want to know your prognosis?")),
+          includeHTML("www/Do you want to know your prognosis?.html")),
 
         tabPanel("What will you do with information about your prognosis?",
                  h6("under construction: Interpreting prognosis statistics")),

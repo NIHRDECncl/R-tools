@@ -1,6 +1,6 @@
 ################# server for ShinyApp to explore survival aand conditional survival
 
-# load data as unreactive objects
+# load data as unreactive objects available to all sessions
 # browser()
 path <- "data/ConditionalSurvival.xlsx"
 sheets <- data.frame(excel_sheets(path), stringsAsFactors = FALSE)
