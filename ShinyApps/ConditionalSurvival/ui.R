@@ -1,7 +1,7 @@
 #################### ui for ShinyApp to explore the meaning of survival statistics ###############################
 
 ui <- function(request) { 
-  navbarPage("", 
+  navbarPage("",
     navbarMenu("Information",
         tabPanel("Do you want to know your prognosis?", 
           tags$style(type="text/css", "body {padding-top: 90px;}"), # padding to make room for fixed navbar
@@ -14,12 +14,9 @@ ui <- function(request) {
           actionLink("goToTabI2", "What will you do with information about your prognosis?"),
           
          br(), br(),
-          'Our aim is expressed by:
-            <a href="https://www.ncbi.nlm.nih.gov/pubmed/15778417">First do no harm</a>
-            (which is often wrongly attributed to Hippocrates).',
-         br(), br(),
-            "Michael", br(), 
-            "August 2017",
+          "Our aim is expressed by: ",
+         tags$a(href="https://www.ncbi.nlm.nih.gov/pubmed/15778417", "First do no harm"),
+            "(which is often wrongly attributed to Hippocrates).",
           value = "i1"),
 
         tabPanel("What will you do with information about your prognosis?",
