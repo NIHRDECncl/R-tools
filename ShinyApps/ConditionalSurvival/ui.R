@@ -3,15 +3,31 @@
 ui <- function(request) { 
   navbarPage("",
     navbarMenu("Information",
-
-        tabPanel("Do you want to know your prognosis?",
-          h6("under construction: Do you want to know your prognosis?")),
+        tabPanel("Do you want to know your prognosis?", 
+          tags$style(type="text/css", "body {padding-top: 90px;}"), # padding to make room for fixed navbar
+          includeHTML("www/Do you want to know your prognosis?.html"), 
+          
+          # I ran the statement below to get the HTML for a link to the next tab, 
+          # and then copied and pasted it into the HTML file for this tab
+          # The link works in rStudio, but not in the browser :-(
+          
+          actionLink("goToTabI2", "What will you do with information about your prognosis?"),
+          
+         br(), br(),
+          "Our aim is expressed by: ",
+         tags$a(href="https://www.ncbi.nlm.nih.gov/pubmed/15778417", "First do no harm"),
+            "(which is often wrongly attributed to Hippocrates).",
+          value = "i1"),
 
         tabPanel("What will you do with information about your prognosis?",
-                 h6("under construction: Interpreting prognosis statistics")),
+                 h6("under construction: Interpreting prognosis statistics"), 
+                 tags$style(type="text/css", "body {padding-top: 90px;}"), # padding to make room for fixed navbar
+                 value = "i2"),
 
         tabPanel("How to use this app to understand and use information about prognosis",
-                 h6("under construction: How to use this app to understand and use information about prognosis"))
+                 h6("under construction: How to use this app to understand and use information about prognosis"), 
+                 tags$style(type="text/css", "body {padding-top: 90px;}"), # padding to make room for fixed navbar
+                 value = "i3")
         ),
     
       tabPanel("Facts",
@@ -166,5 +182,6 @@ ui <- function(request) {
     tags$b("Cite as:"),
     tags$p("Michael Power, Joy Allen."),
     tags$em("A ShinyApp tool to show how survival statistics could be interpreted by patients"),
-    hr()
+    hr(),
+ id = "navbarPage", position = "fixed-top", selected = "i1"
   )}
