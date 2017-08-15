@@ -1,0 +1,10 @@
+name: TestAccuracy
+title:
+account: decncltools
+server: shinyapps.io
+appId: 204705
+bundleId: 941421
+url: https://decncltools.shinyapps.io/TestAccuracy/
+when: 1502786554.06682
+asMultiple: FALSE
+asStatic: FALSE
