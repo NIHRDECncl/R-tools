@@ -68,7 +68,7 @@ ui <- function(request) {
 #
       tags$br(),
       tags$b("Cite as:"),
-      tags$p("Michael Power, Joy Allen."),
+      tags$p("Michael Power, Sara Graziadio and Joy Allen."),
       tags$em("A ShinyApp tool to explore dependence of rule-in and rule-out decisions on prevalence, sensitivity, specificity, and confidence intervals"),
       tags$p("NIHR Diagnostic Evidence Co-operative Newcastle. July 2017"),
       tags$br(),

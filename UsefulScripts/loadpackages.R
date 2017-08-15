@@ -27,6 +27,14 @@ if (!require(shinycssloaders)){
 }
 
 
+if (!require(kable)){
+  install.packages("kable", repos="http://cran.rstudio.com/") 
+  library("kable")
+}
+
+
+
+
 install.packages("devtools")
 devtools::install_github("daattali/colourpicker")
 
