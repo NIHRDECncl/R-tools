@@ -1,4 +1,8 @@
 Title: Clinical accuracy Shiny app
 Author: Michael and Joy
+AuthorUrl: http://www.newcastle.dec.nihr.ac.uk
 DisplayMode: Showcase
+DisplayMode: Normal
 Type: Shiny
+License: GPL-3
+Tags: Diagnostic accuracy

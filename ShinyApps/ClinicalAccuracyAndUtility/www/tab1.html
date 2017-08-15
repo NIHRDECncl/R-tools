@@ -1,143 +1,130 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html><head>
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>The clinical accuracy and clinical utility of a diagnostic test</title>
 
-
-
-<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>tab1</title></head><body>
+  
+</head><body style="color: rgb(0, 0, 0);" alink="#ee0000" link="#0000ee" vlink="#551a8b">
+<span style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;"><br>
+</span>
 <div class="tabbable tabs-above" style="color: rgb(51, 51, 51); font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-size: 13.6364px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 18.1818px; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; background-color: rgb(255, 255, 255);">
 <div class="tab-content">
 <div class="tab-pane active" data-value="Using the App" id="tab-7136-1" style="display: block;">
-<h3><span style="font-weight: bold; color: rgb(51, 51, 255);">Welcome
+<h3><span style="font-weight: bold;">Welcome
 to the NIHR DEC Newcastle's tool for assessing the clinical accuracy
-and clinical utility of a diagnostic test</span></h3>
+and clinical utility of a diagnostic test</span></h3>This
+is the second of three apps for learning about and exploring the
+factors that determine a diagnostic test's accuracy. Although anyone
+can use the apps, they have been developed as a learning aid for people
+who are developing and/or evaluating new tests. <br>
+
+<ol>
+  <li><a href="https://decshinyapps.shinyapps.io/Evaluating_test_accuracy/" target="_blank">Test accuracy</a>; <span style="font-weight: bold;">Go to </span>this app to explore the
+main technical measures of test accuracy: sensitivity and specificity, true and
+false postive rates, true and false negative rates.<br>
+<br>
+  </li>
+  <li><a href="https://decshinyapps.shinyapps.io/Evaluating_clinical_accuracy_and_clinical_utility/" target="_blank">Clinical accuracy and clinical utility</a>; <span style="font-weight: bold;">Use</span> this app to learn about and explore the measures of test accuracy and utility that are relevant to patients.<br>
+<br>
+  </li>
+  <li><a href="https://decshinyapps.shinyapps.io/ImpRefZoom/">Uncertainties
+in assessing test accuracy when the reference standard is not perfect</a>: <span style="font-weight: bold;">Go to</span> this app to learn about and explore
+how uncertainties in the accuracy of a test used as a reference in an
+evaluation can bias the measured accuracy of the new test.</li>
+</ol>This set of apps has three shared aims:<br>
+<ol>
+  <li>To enable people to develop an intuitive understanding of terms
+commonly used in the measurment of test accuracy (e.g.&nbsp; as
+sensitivity, specificity, and predictive values).<br>
+    <br>
+  </li>
+  <li>To contrast the measures of test accuracy that are relevant to technical evaluations (e.g. how well does test B perform in comparison to test A) with the measures that are relevant to patients and clinical decision-making (e.g. what is the probability of having the condition when it's test is positive, or negative?). <br>
+    <br>
+So app 1 is about <span style="font-weight: bold; font-style: italic;">technical accuracy</span>, and app 2 (this app) is about <span style="font-weight: bold; font-style: italic;">clinical accuracy</span> and <span style="font-weight: bold; font-style: italic;">clinical utility</span>. <br>
+    <br>
+  </li>
+  <li>To confront uncertainties in the measurements of test accuracy. <br>
+Apps 1 and 2 show uncertainties in evaluation measurements that arise from statistical variation. <br>
+App 3 allows you to explore the uncertainties that arise in the
+evaluation of a test when the reference test is not perfect. This is
+much more complex than might seem at first, as you will discover when
+you try the app out.</li>
+</ol>
+<br>
+
+
 This <a href="http://shiny.rstudio.com/" target="_blank">Shiny</a>
 app allows you to explore and discover the factors that
 affect:&nbsp;
 <ol>
-<li><span style="font-weight: bold;">Clinical
-accuracy: </span>How&nbsp;test accuracy measures that are
-important to patients and clinicians depend on:&nbsp;&nbsp;</li>
+  <li><span style="font-weight: bold;">Clinical
+accuracy: </span>How measures of test accuracy that are
+important to patients and clinicians depend on:</li>
 <ul>
-<li><span style="color: black;">Pre-test
+    <li><span style="color: black;">Pre-test
 probability (i.e. the prevalence of the condition)</span></li>
-<li><span style="color: black;"></span>Sensitivity
+    <li><span style="color: black;"></span>Sensitivity
 of the test (i.e. the true poitive rate)</li>
-<li>Specificity of the test (i.e. the true negative rate)</li>
-</ul>
-<li><span style="font-weight: bold;">Clinical
+    <li>Specificity of the test (i.e. the true negative rate)</li>
+  </ul>
+  <li><span style="font-weight: bold;">Clinical
 utility: </span>How results from a diagnostic test help with
 clinical
 decision-making.</li>
-<ul>
-<li><span style="color: rgb(204, 0, 0);">Result
-= rule in </span>warrants <span style="color: rgb(204, 0, 0);">treat the condition</span></li>
-<li><span style="color: rgb(0, 153, 0);"></span><span style="color: rgb(0, 153, 0);">Result = rule out </span>warrants
-<span style="color: rgb(0, 153, 0);">do not treat
+  <ul>
+    <li><span style="color: rgb(204, 0, 0);">When a postive result for a rule in decision </span>warrants <span style="color: rgb(204, 0, 0);">treat
 the condition</span></li>
-<li>Result = inconclusive may warrant further investigation</li>
-</ul>
-</ol>
-<p><span style="font-weight: bold;"></span>This
-is the second of three&nbsp;<a href="http://shiny.rstudio.com/" target="_blank">Shiny</a> apps for exploring the
-factors that determine a diagnostic test's accuracy:</p>
-<ol>
-<li><a href="https://decshinyapps.shinyapps.io/Evaluating_test_accuracy/" target="_blank">Test accuracy</a>&nbsp;- the
-technical measures of test accuracy: sensitivity, specificity, true and
-false postives, true and false negatives<br>
-</li>
-<li><a href="https://decshinyapps.shinyapps.io/Evaluating_clinical_accuracy_and_clinical_utility/" target="_blank">Clinical accuracy and clinical utility</a>
-&nbsp;- the patient-important measures of test accuracy: positive
-and negative predictive
-values and post-test probabilities; the role of probability thresholds
-for rule-in and rule-out decisions<br>
-</li>
-<li><a href="https://decshinyapps.shinyapps.io/ImpRefZoom/">Uncertainties
-in assessing test accuracy when the reference standard is not perfect</a>.<br>
-</li>
-</ol>
-<h2 style="color: rgb(153, 0, 0);">How to use this app</h2><h3><span style="color: rgb(51, 51, 255);"><span style="font-weight: bold;">Use the </span></span><span style="font-weight: bold; color: rgb(51, 51, 255);">tabs at
-the top (i) to review information about&nbsp;using the app and
-reading the graphs, (ii) to view the graphs, and (iii) download a summary report for your use.&nbsp; <br>
-</span></h3>
-<table style="text-align: left; width: 867px; height: 146px;" border="1" cellpadding="2" cellspacing="2">
-<tbody>
-<tr>
-<td><div style="text-align: left;">
-</div><img alt="" src="file:///Users/michaelpower/Google%20Drive/GIT-project/GitHub/R-tools/ShinyApps/ClinicalAccuracyAndUtility/www/tab1.html">
-
-<p><span style="font-weight: bold;"><img style="width: 521px; height: 96px;" alt="Application tabs" src="apptabs.png">&nbsp;<big><br>
-      </big></span></p>
-      <p><span style="font-weight: bold;"><big></big><span style="color: rgb(51, 51, 255);">Figure.</span></span>
-The tabs at the top of the app's window</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-<ol>
-</ol>
-The tabs provide the following information: and graphs:
-<ol>
-
-
-
-  <li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">About</span>"
---- this tab, about using the input panel on the left to generate and
-modify the graphs, and the tabs at the top to select information and
-graphs.<br>
-    <ol>
-      <li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">About
-graph 1</span>" --- how to read graph shown
-in tab 2, clinical accuracy<br>
-      </li>
-      <li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">About
-graph 2</span>" --- how to read the graph shown
-in tab 2, clinical utility<br>
-        <br>
-      </li>
-    </ol>
-  </li>
-
-<li>"<span style="font-weight: bold; color: rgb(51, 51, 255);">Clinical accuracy and utility</span>" <br>
-    <ol>
-      <li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">Graph 1:
-clinical accuracy</span>"
----- a graph showing the accuracy measure that are important to
-patients and clinicians: pre- and post-test probabilities, and how&nbsp;&nbsp;&nbsp; these
-relate to the pre-test probability or prevalence.</li>
-      <li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">Graph 2:
-clinical utili<span class=""></span>ty</span>"
---- a
-graph showing how clinical decisions depend on post-test probabilities,
-which in turn depend on prevalence, sensitivity (for
-rule-out&nbsp;decisions), and specificity (for rule-in decisions).<br>
-      </li>
-    </ol>
-
-<br>
-</li>
-  <li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">Tables</span>" --- Tabulations of the key data shown in the graphs. - NEED TO UPDATE THIS<br>
-    <br>
-  </li>
-  <li>"<span style="font-weight: bold;"><span style="color: rgb(51, 51, 255);">Download summary report</span></span>" --- Choose a location on your computer to download a copy of your input data and graphs</li>
-
+    <li><span style="color: rgb(0, 153, 0);"></span><span style="color: rgb(0, 153, 0);">When a negative result for ar ule out decison </span>warrants <span style="color: rgb(0, 153, 0);">do not treat
+the condition</span></li>
+    <li>When a result (positive or negative) is inconclusive, and may warrant further investigation</li>
+  </ul>
 </ol><br>
-<big><big><big><span style="color: rgb(204, 0, 0); font-weight: bold;">Inputing your data and generating graphs</span></big></big></big><br>
+
+<h2 style="color: rgb(0, 0, 153);">How to use this app</h2>
+<table style="text-align: left; width: 867px; height: 146px;" border="1" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(244, 251, 253);">
+      <p><img style="width: 99%; height: 99%;" alt="navigation tabs" title="navigation tabs" src="appTabs.PNG"><br>
+      <span style="font-weight: bold;">&nbsp;<big> </big></span></p>
+      <p><span style="font-weight: bold;"><span style="color: rgb(51, 51, 255);">Figure.</span></span>
+The navigation tabs at the top of the app's window</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
 <br>
-<small><big><big><span style="font-weight: bold; color: rgb(51, 51, 255);"><big><small>In the clinical accuracy and utility, graphical tabs:&nbsp; Use
-the left-hand panel to (re)draw the graphs and enter the variables</small></big></span></big></big><span style="font-weight: bold; color: rgb(51, 51, 255);"> </span></small>
-<ul style="font-family: Arial;">
-<li>A
-button at the top to "Update the graphs", which are shown under the
-tabs "Decision thresholds" and "Pre- to post-test probablity".</li><li>The "Input variables" which are used to:</li><ul><li>label the graphs</li><li>set the variables which determine:</li><ul><li>the post test probability: disease prevalence and test
-accuracy (sensitivity and specificity)</li><li>the decision-making: thresholds for rule-in results and
-rule-out results</li><li>the precision of post-test probability estimations: the
-population size in the study which provides the sensitivity and
-specificity estimations</li></ul></ul>
-</ul>
-
-
+Use the navigation tabs at the top of the window to access:
+<ol>
+  <li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">Information</span>"
+--- this is a drop down menu that allows acces to:<br>
+    <ul>
+      <li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">Introduction</span>"
+--- this section<br>
+</li>
+      <li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">About
+graph 1</span>" --- how to customise and interpret graph 1, clinical accuracy </li>
+      <li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">About
+graph 2</span>" --- how to customise and interpret graph 2, clinical untility</li>
+    </ul>
+  </li>
+  <li>"<span style="color: rgb(51, 51, 255); font-weight: bold;">Explore
+clinical accuracy and utility of diagnostic tests</span>"
+--- this allows you to customise and update the graphs. <br>
+There is also a "Bookmark" button that allows you to copy a link to
+this app. The link contains all the customisations, and the app will
+restart with all the updates that you have made.<br>
+</li>
+  <li>"<span style="font-weight: bold;"><span style="color: rgb(51, 51, 255);">Download a report for printing and
+sharing</span></span>"
+--- this allows you to download your graphs as a report that can be printed or shared electronically<br>
+</li>
+</ol><br>
 </div>
 </div>
-</div><br class="Apple-interchange-newline">
-</body></html>
+</div>
+
+<small><big><big><br class="Apple-interchange-newline">
+<br>
+</big></big></small></body></html>

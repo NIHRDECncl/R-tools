@@ -2,15 +2,15 @@
 
 ui <- function(request) {
 
-  navbarPage(h4("Explore the clinically useful measures of test accuracy"),
-    navbarMenu("Home",
-    tabPanel("About", includeHTML("www/tab1.html")), 
+  navbarPage(title = NULL,
+    navbarMenu("Information",
+    tabPanel("Introduction", includeHTML("www/tab1.html")), 
     tabPanel("About graph 1", includeHTML("www/tab2.html")),
     tabPanel("About graph 2", includeHTML("www/tab3.html"))#,
     ),
     
 
-     tabPanel("Clinical accuracy and utility",
+     tabPanel("Explore clinical accuracy and utility of diagnostic tests",
                  sidebarPanel(
                    fluidRow(
                     actionButton("GoButton", "Update the graphs", class = 'middleAlign'),
@@ -51,7 +51,7 @@ ui <- function(request) {
                  )
         ),
     
-    tabPanel("Download summary report",
+    tabPanel("Download report for printing and sharing",
              p("This document contains all the tables and figures generated from your input data."),
              radioButtons('format', 'Please select the document format you require', 
                           c('PDF', 'HTML', 'Word'),
@@ -66,13 +66,14 @@ ui <- function(request) {
 #
 #     credits as a running footer
 #
-      tags$br(),
+      tags$hr(),
       tags$b("Cite as:"),
       tags$p("Michael Power, Sara Graziadio and Joy Allen."),
       tags$em("A ShinyApp tool to explore dependence of rule-in and rule-out decisions on prevalence, sensitivity, specificity, and confidence intervals"),
       tags$p("NIHR Diagnostic Evidence Co-operative Newcastle. July 2017"),
       tags$br(),
-      tags$img(src = "nihr-logo.jpg", width = "80px", height = "28px", align = "right") # add the NIHR logo)
+      tags$img(src = "nihr-logo.jpg", width = "80px", height = "28px", align = "right"), # add the NIHR logo)
+      tags$hr()
     
   )
   }
