@@ -43,8 +43,8 @@ ui <- function(request) {
                  mainPanel(
                    wellPanel(
                      span(style="color: rgb(0, 0, 153)",
-                          h4(tags$b("Graph 0. "), "pre and post testing"),
-                          h5("(oooo)")),
+                          h4(tags$b("Graph 0. "), "How sensitivity and specificity reflect diagnostic accuracy"),
+                          h5("(True and false positives (Tp, Fp), False and true negatives (Fn, Tn))")),
                      withSpinner(plotOutput("RuleInOutPlot0")),
                      br()
                    ),

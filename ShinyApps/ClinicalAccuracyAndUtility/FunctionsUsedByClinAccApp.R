@@ -27,6 +27,7 @@
     library(PropCIs)
     library(rsconnect)   # needed to upload to Shinyio
     library(ggrepel)
+    library(rmarkdown)
     # ...
   }
   
@@ -173,12 +174,15 @@
                  0, TpPct, (TpPct + FnPct), (TpPct + FnPct + FpPct), 0, TpPct, 0, TnPct),
         ymax = c(Tp, (Tp + Fn), (Tp + Fn + Fp), n, Tp, TestPos, Tn, TestNeg,
                  TpPct, (TpPct + FnPct), (TpPct + FnPct + FpPct), 1, TpPct, 1, TnPct, 1),
-        plotLabels = rep( c(
+        plotLabels = c(
+          "Pre-testing", "Prevalence", "", "", 
+          "Tested positive", "", 
+          "Tested negative", "",
           "Pre-testing", "", "", "", 
-          "Tested +ve", "", 
-          "Tested -ve", ""), 2),
-        labelX = rep(c(0, 0, 0, 0, 4, 4, 8, 8), 2) + nudgeX,
-        labelY = c(n, 0, 0, 0, TestPos, 0 , TestNeg, 0, rep(1, 8))*nudgeY
+          "Tested positve", "", 
+          "Tested negatve", ""),
+  labelX = rep(c(0, 0, 0, 0, 4, 4, 8, 8), 2) + nudgeX,
+        labelY = c(n, Dpos, 0, 0, TestPos, 0 , TestNeg, 0, 1, 0, 0, 0, 1, 0, 1, 0)*nudgeY
         
       )
       
@@ -187,7 +191,7 @@
         geom_rect(aes(fill = result)) +
         scale_x_continuous(breaks = NULL) +
         facet_wrap(~ dx$display, scales = "free_y", ncol = 2) +
-        geom_text(aes(x = labelX, y = labelY, label = plotLabels))
+        geom_label(aes(x = labelX, y = labelY, label = plotLabels))
       
     }
     

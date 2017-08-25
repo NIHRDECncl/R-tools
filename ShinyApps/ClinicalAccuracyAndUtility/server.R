@@ -55,26 +55,27 @@ shinyServer (
   #                                       options = list(scrollX = TRUE, rownames = FALSE,
   #                                       dom = 't'))
 
-   
    #==========================================================
-   # graph 0: true and false postives; false and true negatives
    
    observeEvent(input$GoButton, {
+
+     # graph 1: posterior probability vs prior probability
      output$RuleInOutPlot0 <- renderPlot({
+       DxStats(input$n, input$prevalence, input$sensitivity, input$specificity, plot2x2 = TRUE)$barplot[[1]]
+     })
+     
+     # graph 2: decision thresholds comopared to posterior probabailities
+     output$RuleInOutPlot2<-renderPlot({
        # Sys.sleep(2)
        if(isValid_num()){
-         isolate(
-           DxStats(input$n, input$prevalence, input$sensitivity, input$specificity, plot2x2 = TRUE)$barplot[[1]]
-           
-           )
+         isolate(ruleinoutplot(input$n, input$prevalence, input$sensitivity, input$specificity,
+                               input$RuleInDecisionThreshold, input$RuleOutDecisionThreshold, 
+                               input$DxCondition, input$DxTestName,  
+                               input$DxRuleInDecision, input$DxRuleOutDecision, input$IndeterminateDecision, input$disper))
        }
      })
-   }, ignoreNULL = FALSE)
-   
-   #==========================================================
-   # graph 1: posterior probability vs prior probability
-   
-   observeEvent(input$GoButton, {
+     
+     # graph 3: true and false postives; false and true negatives
      output$PrePostProb2<-renderPlot({
        # Sys.sleep(2)
        if(isValid_num()){
@@ -84,23 +85,8 @@ shinyServer (
      })
    }, ignoreNULL = FALSE)
    
-   #==========================================================
-   # graph 2: decision thresholds comopared to posterior probabailities
-       
-    observeEvent(input$GoButton, {
-          output$RuleInOutPlot2<-renderPlot({
-        # Sys.sleep(2)
-        if(isValid_num()){
-        isolate(ruleinoutplot(input$n, input$prevalence, input$sensitivity, input$specificity,
-                      input$RuleInDecisionThreshold, input$RuleOutDecisionThreshold, 
-                      input$DxCondition, input$DxTestName,  
-                      input$DxRuleInDecision, input$DxRuleOutDecision, input$IndeterminateDecision, input$disper))
-        }
-      })
-   }, ignoreNULL = FALSE)
-    
-  
-  
+
+   
   ## Thanks to Mark Strong for this code
   # https://github.com/Sheffield-Accelerated-VoI/SAVI/blob/master/server.R
   
@@ -119,7 +105,6 @@ shinyServer (
       on.exit(setwd(owd))
       file.copy(src, 'report.Rmd', overwrite=TRUE)
       
-      library(rmarkdown)
       out <- render(input = 'report.Rmd', #pdf_document()
                     output_format = switch(
                       input$format,
