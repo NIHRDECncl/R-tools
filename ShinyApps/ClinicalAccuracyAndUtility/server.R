@@ -54,9 +54,23 @@ shinyServer (
   #  output$linesTable <- renderDataTable(linesDf(), 
   #                                       options = list(scrollX = TRUE, rownames = FALSE,
   #                                       dom = 't'))
-    
-#==========================================================
-    
+
+   #==========================================================
+   # graph 1: posterior probability vs prior probability
+   
+   observeEvent(input$GoButton, {
+     output$PrePostProb2<-renderPlot({
+       # Sys.sleep(2)
+       if(isValid_num()){
+         isolate(prepostprobplot(input$n, input$prevalence, input$sensitivity, input$specificity,
+                                 input$DxCondition, input$DxTestName, input$disper))
+       }
+     })
+   }, ignoreNULL = FALSE)
+   
+   #==========================================================
+   # graph 2: decision thresholds comopared to posterior probabailities
+       
     observeEvent(input$GoButton, {
           output$RuleInOutPlot2<-renderPlot({
         # Sys.sleep(2)
@@ -69,20 +83,27 @@ shinyServer (
       })
    }, ignoreNULL = FALSE)
     
-#==========================================================
   
-  observeEvent(input$GoButton, {
-    output$PrePostProb2<-renderPlot({
-      # Sys.sleep(2)
-      if(isValid_num()){
-      isolate(prepostprobplot(input$n, input$prevalence, input$sensitivity, input$specificity,
-                      input$DxCondition, input$DxTestName, input$disper))
-      }
-    })
-  }, ignoreNULL = FALSE)
-    
-  
-
+   
+   #==========================================================
+   # graph 3: true and false postives; false and true negatives
+   
+   observeEvent(input$GoButton, {
+     output$RuleInOutPlot3 <- renderPlot({
+       # Sys.sleep(2)
+       if(isValid_num()){
+         isolate(predictiveValues(input$n, input$prevalence, input$sensitivity, input$specificity,
+                               input$RuleInDecisionThreshold, input$RuleOutDecisionThreshold, 
+                               input$DxCondition, input$DxTestName,  
+                               input$DxRuleInDecision, input$DxRuleOutDecision, input$IndeterminateDecision, input$disper))
+       }
+     })
+   }, ignoreNULL = FALSE)
+   
+   
+   
+   
+   
   
   ## Thanks to Mark Strong for this code
   # https://github.com/Sheffield-Accelerated-VoI/SAVI/blob/master/server.R

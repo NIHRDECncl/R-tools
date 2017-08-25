@@ -8,7 +8,7 @@
   #install.packages("devtools")
   #devtools::install_github("daattali/colourpicker")
   #
-  ##########################################################
+  #===================================================================================================
   #
   # load packages used by the App 
   LoadPackages <- function() {
@@ -31,7 +31,9 @@
   }
   
   
-  
+  #
+  #===================================================================================================
+  #
   #################### confidence interval on a proportion ###############################
   #
   ### this is a wrapper to allow the choice of CI method to be easily changed
@@ -55,7 +57,9 @@
       )
     })
   }
-  
+  #
+  #===================================================================================================
+  #
   DxStats <- function(n, prevalence, sensitivity, specificity) {
     prevalence <- min(prevalence,0.9999)
     prevalence <- max(prevalence,0.0001)
@@ -125,8 +129,10 @@
     )
   }
   
+  #
+  #===================================================================================================
+  #
   
- 
   
   fixedlabels <- function(RuleInDecisionThreshold, prevalence, RuleOutDecisionThreshold, 
                           DxRuleInDecision, DxRuleOutDecision, IndeterminateDecision, disper)  {
@@ -157,9 +163,11 @@
 
   }
   
+  #
+  #===================================================================================================
+  #
   
   postTestLabels <- function(n, prevalence, sensitivity, specificity, disper){
-    
     
     if (disper) {
       percent <- 100
@@ -199,6 +207,9 @@
     )
   }
   
+  #
+  #===================================================================================================
+  #
   
   ruleinoutplot <- function(n, prevalence, sensitivity, specificity, RuleInDecisionThreshold, RuleOutDecisionThreshold, #}, 
                             DxCondition,  DxTestName, DxRuleInDecision, DxRuleOutDecision, IndeterminateDecision, disper){
@@ -268,6 +279,9 @@
 
   }
   
+  #
+  #===================================================================================================
+  #
   
   graphPre2PostProb <- function(n, prevalence, sensitivity, specificity) {
     x <- seq(from = 0, to = 1, by = 0.01) ### preTest probability along the x-axis
@@ -305,7 +319,12 @@
       yNciU = yNciU
     )
   }
+
+  #
+  #===================================================================================================
+  #
   
+    
   linesPre2PostProb <- function(n, prevalence, sensitivity, specificity) {
     Dx <- DxStats(n, prevalence, sensitivity, specificity)
     data.frame(
@@ -323,7 +342,9 @@
       PostProbNegYciU = c(Dx$TNY_ciU, Dx$TNY_ciU)
     )
   }
-  
+  #
+  #===================================================================================================
+  #
   prepostLabels <- function(n, prevalence, sensitivity, specificity, disper) {
     
     if (disper) {
@@ -353,9 +374,9 @@
     )
     
   }
-  
-  
-  
+  #
+  #===================================================================================================
+  #
   
  prepostprobplot <- function(n, prevalence, sensitivity, specificity, DxCondition, DxTestName, disper){
    
@@ -392,3 +413,15 @@
   #  geom_label()
  }
   
+ #
+ #===================================================================================================
+ #
+ 
+ predictiveValues <-  function(n, prevalence, sensitivity, specificity, 
+                               RuleInDecisionThreshold, RuleOutDecisionThreshold, 
+                               DxCondition,  DxTestName, DxRuleInDecision, DxRuleOutDecision, IndeterminateDecision, disper
+                             ) {
+                    NULL
+                  }
+  
+ 
