@@ -55,6 +55,22 @@ shinyServer (
   #                                       options = list(scrollX = TRUE, rownames = FALSE,
   #                                       dom = 't'))
 
+   
+   #==========================================================
+   # graph 0: true and false postives; false and true negatives
+   
+   observeEvent(input$GoButton, {
+     output$RuleInOutPlot0 <- renderPlot({
+       # Sys.sleep(2)
+       if(isValid_num()){
+         isolate(
+           DxStats(input$n, input$prevalence, input$sensitivity, input$specificity, plot2x2 = TRUE)$barplot[[1]]
+           
+           )
+       }
+     })
+   }, ignoreNULL = FALSE)
+   
    #==========================================================
    # graph 1: posterior probability vs prior probability
    
@@ -84,19 +100,6 @@ shinyServer (
    }, ignoreNULL = FALSE)
     
   
-   
-   #==========================================================
-   # graph 3: true and false postives; false and true negatives
-   
-   observeEvent(input$GoButton, {
-     output$RuleInOutPlot3 <- renderPlot({
-       # Sys.sleep(2)
-       if(isValid_num()){
-         isolate(DxStats(input$n, input$prevalence, input$sensitivity, input$specificity, plot2x2 = TRUE)$barplot[[1]])
-       }
-     })
-   }, ignoreNULL = FALSE)
-   
   
   ## Thanks to Mark Strong for this code
   # https://github.com/Sheffield-Accelerated-VoI/SAVI/blob/master/server.R
