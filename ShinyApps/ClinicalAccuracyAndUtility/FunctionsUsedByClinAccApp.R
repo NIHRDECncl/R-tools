@@ -60,7 +60,7 @@
   #
   #===================================================================================================
   #
-  DxStats <- function(n, prevalence, sensitivity, specificity) {
+  DxStats <- function(n, prevalence, sensitivity, specificity, plot2x2 = FALSE) {
     prevalence <- min(prevalence,0.9999)
     prevalence <- max(prevalence,0.0001)
     
@@ -70,8 +70,17 @@
     Tp <- sensitivity * Dpos
     Tn <- specificity * Dneg
     
+    TpPct = Tp/n
+    TnPct = Tn/n
+    
     Fn <- (1 - sensitivity) * Dpos
     Fp <- (1 - specificity) * Dneg
+    
+    FnPct = Fp/n
+    FpPct = Fp/n
+    
+    TestPos = Tp + Fp
+    TestNeg = Tn + Fn
     
     PPV <- Tp/(Tp + Fp)
     NPV <- Tn/(Tn + Fn) 
@@ -96,9 +105,12 @@
     TNY_ciL <- cidf$ciL
     TNY_ciU <- cidf$ciU
     
-    data.frame(
+    dx2x2 <- data_frame(
       Dpos = Dpos,
       Dneg = Dneg,
+      
+      TestPos = TestPos,
+      TestNeg = TestNeg,
       
       Tp = Tp,
       Tn = Tn,
@@ -108,6 +120,12 @@
       
       PPV = PPV,
       NPV = NPV,
+      
+      TpPct = TpPct,
+      TnPct = TnPct,
+      
+      FnPct = FnPct,
+      FpPct = FpPct,
       
       LRp = LRp,
       LRn = LRn,
@@ -125,9 +143,57 @@
       TPY_ciU = TPY_ciU,
       
       TNY_ciL = TNY_ciL,
-      TNY_ciU = TNY_ciU
+      TNY_ciU = TNY_ciU,
+      
+      n = n,
+      
+      barplot = list(NULL)
     )
+    if (plot2x2) {
+      
+      nudgeX <- 1
+      nudgeY <- 1.05
+      
+      dx <- data_frame(
+        display = c(
+          rep("Tested populations", 8), 
+          rep("Tested proportions", 8)),
+        population = 
+          rep(
+            c(
+              rep("Pre-testing", 4), 
+              rep("Post-positive test", 2), 
+              rep("Post-negative test", 2)),
+            2),
+        result = rep(c("TP", "FN", "FP", "TN", "TP", "FP", "TN", "FN"), 2),
+        label = rep(c("TP", "FN", "FP", "TN", "TP", "FP", "TN", "FN"), 2),
+        xmin = rep(c(0, 0, 0, 0, 4, 4, 8, 8), 2),
+        xmax = rep(c(2, 2, 2, 2, 6, 6, 10, 10), 2),
+        ymin = c(0, Tp, (Tp + Fn), (Tp + Fn + Fp), 0, Tp, 0, Tn,
+                 0, TpPct, (TpPct + FnPct), (TpPct + FnPct + FpPct), 0, TpPct, 0, TnPct),
+        ymax = c(Tp, (Tp + Fn), (Tp + Fn + Fp), n, Tp, TestPos, Tn, TestNeg,
+                 TpPct, (TpPct + FnPct), (TpPct + FnPct + FpPct), 1, TpPct, 1, TnPct, 1),
+        plotLabels = rep( c(
+          "Pre-testing", "", "", "", 
+          "Tested +ve", "", 
+          "Tested -ve", ""), 2),
+        labelX = rep(c(0, 0, 0, 0, 4, 4, 8, 8), 2) + nudgeX,
+        labelY = c(n, 0, 0, 0, TestPos, 0 , TestNeg, 0, rep(1, 8))*nudgeY
+        
+      )
+      
+      dx2x2$barplot[[1]] <- 
+        ggplot(dx, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax)) +
+        geom_rect(aes(fill = result)) +
+        scale_x_continuous(breaks = NULL) +
+        facet_wrap(~ dx$display, scales = "free_y", ncol = 2) +
+        geom_text(aes(x = labelX, y = labelY, label = plotLabels))
+      
+    }
+    
+    return(dx2x2)
   }
+  
   
   #
   #===================================================================================================

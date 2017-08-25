@@ -92,17 +92,10 @@ shinyServer (
      output$RuleInOutPlot3 <- renderPlot({
        # Sys.sleep(2)
        if(isValid_num()){
-         isolate(predictiveValues(input$n, input$prevalence, input$sensitivity, input$specificity,
-                               input$RuleInDecisionThreshold, input$RuleOutDecisionThreshold, 
-                               input$DxCondition, input$DxTestName,  
-                               input$DxRuleInDecision, input$DxRuleOutDecision, input$IndeterminateDecision, input$disper))
+         isolate(DxStats(input$n, input$prevalence, input$sensitivity, input$specificity, plot2x2 = TRUE)$barplot[[1]])
        }
      })
    }, ignoreNULL = FALSE)
-   
-   
-   
-   
    
   
   ## Thanks to Mark Strong for this code

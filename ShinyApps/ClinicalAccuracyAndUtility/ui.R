@@ -40,10 +40,18 @@ ui <- function(request) {
                  bookmarkButton()
                    )
                  ),
-                 mainPanel(     
+                 mainPanel(
+                   wellPanel(
+                     span(style="color: rgb(0, 0, 153)",
+                          h4(tags$b("Graph 1. "), "pre and post testing"),
+                          h5("(oooo)")),
+                     withSpinner(plotOutput("RuleInOutPlot3")),
+                     br()
+                   ),
+                   
                      wellPanel(
                        span(style="color: rgb(0, 0, 153)",
-                       h4(tags$b("Graph 1. "), "How post-test probabilities depend on prevalence"),
+                       h4(tags$b("Graph 2. "), "How post-test probabilities depend on prevalence"),
                        h5("(And sensitivity, and specificity)")),
                        withSpinner(plotOutput("PrePostProb2")),
                        br()
@@ -51,12 +59,11 @@ ui <- function(request) {
                      br(), 
                      wellPanel(
                        span(style="color: rgb(0, 0, 153)",
-                       h4(tags$b("Graph 2. "), "How diagnostic decisions depend on both the test result (positive or negative) and thresholds for decisions"),
+                       h4(tags$b("Graph 3. "), "How diagnostic decisions depend on both the test result (positive or negative) and thresholds for decisions"),
                        h5("(And prevalence, sensitivity, and specificity)")),
-                       withSpinner(plotOutput("RuleInOutPlot2")),
-                       br()
-                 )
-                 )
+                       withSpinner(plotOutput("RuleInOutPlot2"))
+                       )
+               )
         ),
     
     tabPanel("Download report for printing and sharing",
