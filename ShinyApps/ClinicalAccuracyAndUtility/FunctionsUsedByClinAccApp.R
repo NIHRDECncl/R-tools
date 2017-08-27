@@ -150,6 +150,7 @@
       
       barplot = list(NULL)
     )
+
     if (plot2x2) {
       
       nudgeX <- 1
@@ -157,8 +158,8 @@
       
       dx <- data_frame(
         display = c(
-          rep("Tested populations", 8), 
-          rep("Tested proportions", 8)),
+          rep("Tested population (numbers)", 8), 
+          rep("Tested population (proportions)", 8)),
         population = 
           rep(
             c(
@@ -175,24 +176,23 @@
         ymax = c(Tp, (Tp + Fn), (Tp + Fn + Fp), n, Tp, TestPos, Tn, TestNeg,
                  TpPct, (TpPct + FnPct), (TpPct + FnPct + FpPct), 1, TpPct, 1, TnPct, 1),
         plotLabels = c(
-          "Pre-testing", "Prevalence", "", "", 
-          "Tested positive", "", 
-          "Tested negative", "",
-          "Pre-testing", "", "", "", 
-          "Tested positve", "", 
-          "Tested negatve", ""),
+          "Pre-testing", "Prevalence", "Pre-testing", "", 
+          "Test positive", "Test positive", 
+          "Test negative", "Test negative",
+          "Pre-testing", "Pre-testing", "", "", 
+          "Test positve", "Test positve", 
+          "Test negatve", "Test negatve"),
   labelX = rep(c(0, 0, 0, 0, 4, 4, 8, 8), 2) + nudgeX,
-        labelY = c(n, Dpos, 0, 0, TestPos, 0 , TestNeg, 0, 1, 0, 0, 0, 1, 0, 1, 0)*nudgeY
-        
+        labelY = c(n, Dpos, -n/25, 0, TestPos, -n/25 , TestNeg, -n/25, 1, -1/25, -1/25, -1/25, 1, -1/25, 1, -1/25)*nudgeY
       )
-      
+      print(dx)
       dx2x2$barplot[[1]] <- 
         ggplot(dx, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax)) +
-        geom_rect(aes(fill = result)) +
-        scale_x_continuous(breaks = NULL) +
-        facet_wrap(~ dx$display, scales = "free_y", ncol = 2) +
-        geom_label(aes(x = labelX, y = labelY, label = plotLabels))
-      
+        geom_rect(aes(fill = result, label )) +
+        scale_x_discrete(breaks = NULL) +
+        labs(x = NULL, y = NULL) +
+       facet_wrap(~ dx$display, scales = "free_y", ncol = 2) +
+        geom_text(aes(x = labelX, y = labelY, label = plotLabels))
     }
     
     return(dx2x2)

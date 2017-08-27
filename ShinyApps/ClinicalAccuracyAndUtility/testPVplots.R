@@ -179,6 +179,7 @@ DxStats <- function(n, prevalence, sensitivity, specificity, plot2x2 = FALSE) {
       ggplot(dx, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax)) +
       geom_rect(aes(fill = result)) +
       scale_x_continuous(breaks = NULL) +
+      labs(x = NULL, y = NULL) +
       facet_wrap(~ dx$display, scales = "free_y", ncol = 2) +
       geom_text(aes(x = labelX, y = labelY, label = plotLabels))
     
