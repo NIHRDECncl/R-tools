@@ -13,7 +13,7 @@ ui <- function(request) {
      tabPanel("Explore clinical accuracy and utility of diagnostic tests",
                  sidebarPanel(
                    fluidRow(
-                    actionButton("GoButton", "Update the graphs", class = 'middleAlign'),
+                    actionButton("GoButton", "Update the graphs (will take a while)", class = 'middleAlign'),
                      hr(),
                       textInput(inputId = "DxCondition", label = "Name of condition", value = "<condition>"),
                       textInput(inputId = "DxTestName", label = "Name of test", value = "<test>"),
