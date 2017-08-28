@@ -75,7 +75,11 @@ shinyServer (
 
      output$RuleInOutPlot0 <- renderPlot({
        # DxStats(input$n, input$prevalence, input$sensitivity, input$specificity, plot2x2 = TRUE)$barplot[[1]]
-       DxStats(300, input$prevalence, .9, .85, plot2x2 = TRUE)$barplot[[1]]
+       iN <- isolate(input$n)
+       iPrev <- isolate(input$prevalence)
+       iSens <- isolate(input$sensitivity)
+       iSpec <- isolate(input$specificity)
+       DxStats(iN, iPrev, iSens, iSpec, plot2x2 = TRUE)$barplot[[1]]
      })
    },   ignoreNULL = FALSE, ignoreInit = FALSE)
 

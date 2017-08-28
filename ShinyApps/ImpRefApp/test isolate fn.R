@@ -5,7 +5,7 @@ ui <-
   sidebarPanel(
     sliderInput("obs", "Number of observations:",
                 min = 0, max = 1000, value = 500),
-    actionButton("goButton", "Go!")
+    actionButton("GoButton", "Go!")
   ),
   mainPanel(
     plotOutput("distPlot"),
@@ -17,15 +17,17 @@ ui <-
 
 
 server <- function(input, output, session) {
+  observeEvent(input$GoButton, {
   output$distPlot <- renderPlot({
     # Take a dependency on input$goButton
-    input$goButton
+    # input$goButton
     
     # Use isolate() to avoid dependency on input$obs
     dist <- isolate(input$obs)
     hist(rnorm(dist))
-    output$goButtonN <- renderText(input$goButton)
+    output$goButtonN <- renderText(input$GoButton)
   })
+  },   ignoreNULL = FALSE, ignoreInit = FALSE)
 }
 
 shinyApp(ui = ui, server = server)
