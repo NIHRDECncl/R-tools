@@ -148,6 +148,14 @@
       
       n = n,
       
+      df2x2 = list(
+        formattable(data_frame(
+          IndexTest = c("tested +ve", "tested -ve", "ConditionTotals"),
+          ConditionPresent = c(Tp, Fn, Dpos),
+          ConditionAbsent = c(Fp, Tn, Dneg),
+          TestTotals = c(TestPos, TestNeg, n))
+      )),
+      
       barplot = list(NULL)
     )
 

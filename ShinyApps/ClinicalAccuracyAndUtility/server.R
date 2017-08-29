@@ -53,13 +53,22 @@ shinyServer (
      } else {
        return(NULL)
      }
-
    })
-   },   ignoreNULL = FALSE)
+   },ignoreNULL = FALSE)
+   
     
-   output$linesTable <- renderDataTable(linesDf(),
-                                        options = list(scrollX = TRUE, rownames = FALSE,
-                                        dom = 't'))
+   observeEvent(input$GoButton, {
+     iN <- isolate(input$n)
+     iPrev <- isolate(input$prevalence)
+     iSens <- isolate(input$sensitivity)
+     iSpec <- isolate(input$specificity)
+     
+     
+     output$df2x2Table <- renderTable(
+       DxStats(iN, iPrev, iSens, iSpec, plot2x2 = TRUE)$df2x2[[1]])
+     
+   },   ignoreNULL = FALSE)
+
 
    #==========================================================
      
