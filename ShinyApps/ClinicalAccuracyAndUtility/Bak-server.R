@@ -1,12 +1,3 @@
-###### to trace the execution of reactives at runtime 
-###### 
-###### 1. at the R console run: options(shiny.reactlog=TRUE) 
-###### 2. start the Shiny app
-###### 3. run the trace with command-F3
-###### 4. step through with -> arrow
-###### 
-###### https://shiny.rstudio.com/articles/debugging.html
-
 ################# server for ShinyApp to explore clinical accuracy and clinical utility    ################
 
 # inputs
@@ -22,6 +13,8 @@
 # IndeterminateDecision
 # DxRuleOutDecision
 # RuleOutDecisionThreshold
+
+source("global.R")
 
 
 shinyServer (
@@ -41,9 +34,9 @@ shinyServer (
       } else {
         return(FALSE)
       }
-
+     
    },ignoreNULL = FALSE)
-
+ 
 #==========================================================
    observeEvent(input$GoButton, {
    output$validtext  <- renderText({
@@ -53,69 +46,52 @@ shinyServer (
      } else {
        return(NULL)
      }
-
+     
+     
    })
-   },   ignoreNULL = FALSE)
+   })
     
-   output$linesTable <- renderDataTable(linesDf(),
-                                        options = list(scrollX = TRUE, rownames = FALSE,
-                                        dom = 't'))
+  #  output$linesTable <- renderDataTable(linesDf(), 
+  #                                       options = list(scrollX = TRUE, rownames = FALSE,
+  #                                       dom = 't'))
 
    #==========================================================
+   
+   observeEvent(input$GoButton, {
+     print(input$GoButton)
+     session$sendCustomMessage(type = 'testmessage',
+                               message = 'Thank you for clicking')
      
-     # graph 0: bar charts of numbers and proportions pre- and post-test
-    observeEvent(input$GoButton, {
+#  ------------>>>>>>  I removed isolate() because (i) it doesn't work, and (ii) the manual says that observeEvent performs thew functionof isolate()
+     # https://shiny.rstudio.com/reference/shiny/latest/observeEvent.html 
+     
+     # if(isValid_num()){
+
      output$RuleInOutPlot0 <- renderPlot({
-
-       iN <- isolate(input$n)
-       iPrev <- isolate(input$prevalence)
-       iSens <- isolate(input$sensitivity)
-       iSpec <- isolate(input$specificity)
-       
-       DxStats(iN, iPrev, iSens, iSpec, plot2x2 = TRUE)$barplot[[1]]
+       DxStats(input$n, input$prevalence, input$sensitivity, input$specificity, plot2x2 = TRUE)$barplot[[1]]
      })
+   },   ignoreNULL = FALSE, ignoreInit = FALSE)
+   
+     # graph 2: decision thresholds comopared to posterior probabailities
+   observeEvent(input$GoButton, {
+     output$RuleInOutPlot2<-renderPlot({
+       # Sys.sleep(2)
+        ruleinoutplot(input$n, input$prevalence, input$sensitivity, input$specificity,
+                               input$RuleInDecisionThreshold, input$RuleOutDecisionThreshold, 
+                               input$DxCondition, input$DxTestName,  
+                               input$DxRuleInDecision, input$DxRuleOutDecision, input$IndeterminateDecision, input$disper)
+       })
    },   ignoreNULL = FALSE)
-
-     
- # graph 1: true and false postives; false and true negatives
-     observeEvent(input$GoButton, {
-       output$PrePostProb2<-renderPlot({
-
-         iN <- isolate(input$n)
-         iPrev <- isolate(input$prevalence)
-         iSens <- isolate(input$sensitivity)
-         iSpec <- isolate(input$specificity)
-         iCond <- isolate(input$DxCondition)
-         iTest <- isolate(input$DxTestName)
-         iDisp <- isolate(input$disper)
-       
-          prepostprobplot(iN, iPrev, iSens, iSpec, iCond, iTest, iDisp)
-         })
-   },   ignoreNULL = FALSE)
-
-
-   # graph 2: decision thresholds comopared to posterior probabailities
-     observeEvent(input$GoButton, {
-        output$RuleInOutPlot2<-renderPlot({
-         
-        iN <- isolate(input$n)
-        iPrev <- isolate(input$prevalence)
-        iSens <- isolate(input$sensitivity)
-        iSpec <- isolate(input$specificity)
-        iCond <- isolate(input$DxCondition)
-        iTest <- isolate(input$DxTestName)
-        iDisp <- isolate(input$disper)
-        iRuleInThreshold <- isolate(input$RuleInDecisionThreshold)
-        iRuleOutThreshold <- isolate(input$RuleOutDecisionThreshold)
-        iRuleInDecision <- isolate(input$DxRuleInDecision)
-        iRuleOutDecision <- isolate(input$DxRuleOutDecision)
-        iIndeterminateDecision <- isolate(input$IndeterminateDecision)
-           
-        ruleinoutplot(iN, iPrev, iSens, iSpec, iRuleInThreshold, iRuleOutThreshold,
-                      iCond, iTest, iRuleInDecision, iRuleOutDecision, iIndeterminateDecision, iDisp)
+   
+     # graph 3: true and false postives; false and true negatives
+   observeEvent(input$GoButton, {
+     output$PrePostProb2<-renderPlot({
+       # Sys.sleep(2)
+        prepostprobplot(input$n, input$prevalence, input$sensitivity, input$specificity,
+                                 input$DxCondition, input$DxTestName, input$disper)
        })
     },   ignoreNULL = FALSE)
-
+   
    
   ## Thanks to Mark Strong for this code
   # https://github.com/Sheffield-Accelerated-VoI/SAVI/blob/master/server.R
@@ -145,6 +121,8 @@ shinyServer (
     },
     contentType = "text/plain"
   )
-   })
 
+  
+   }
 
+)
