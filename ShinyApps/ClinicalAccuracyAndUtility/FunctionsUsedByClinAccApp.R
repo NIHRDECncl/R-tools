@@ -28,6 +28,7 @@
     library(rsconnect)   # needed to upload to Shinyio
     library(ggrepel)
     library(rmarkdown)
+    library(formattable)
     # ...
   }
   
@@ -150,10 +151,10 @@
       
       df2x2 = list(
         formattable(data_frame(
-          IndexTest = c("tested +ve", "tested -ve", "ConditionTotals"),
-          ConditionPresent = c(Tp, Fn, Dpos),
-          ConditionAbsent = c(Fp, Tn, Dneg),
-          TestTotals = c(TestPos, TestNeg, n))
+          IndexTest = c("tested +ve", "tested -ve", "Condition Totals"),
+          ConditionPresent = accounting(c(Tp, Fn, Dpos), digits = 0L),
+          ConditionAbsent = accounting(c(Fp, Tn, Dneg), digits = 0L),
+          TestTotals = accounting(c(TestPos, TestNeg, n), digits = 0L))
       )),
       
       barplot = list(NULL)

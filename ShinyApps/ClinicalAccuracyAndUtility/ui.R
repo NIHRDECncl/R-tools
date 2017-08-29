@@ -68,7 +68,7 @@ ui <- function(request) {
                    wellPanel(
                      span(style="color: rgb(0, 0, 153)",
                           h4(tags$b("2x2 Table"),
-                          tableOutput("df2x2Table")
+                          dataTableOutput("df2x2Table")
                    )
                )
         ),
