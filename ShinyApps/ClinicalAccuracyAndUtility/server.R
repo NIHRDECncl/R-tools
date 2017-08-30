@@ -68,7 +68,7 @@ shinyServer (
        datatable(
          DxStats(iN, iPrev, iSens, iSpec, plot2x2 = TRUE)$df2x2[[1]]), 
           options = list(
-            dom = "t") # this option should show the table without length or filter controls --- but it doesn't work :-(
+            dom = 't') # this option should show the table without length or filter controls --- but it doesn't work :-(
                        # see 4.2 DOM elements https://rstudio.github.io/DT/options.html 
        )
      
