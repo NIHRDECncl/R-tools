@@ -59,7 +59,7 @@ shinyServer (
     
    observeEvent(input$GoButton, {
   
-     iCMheading <- isolate(paste0("accuracy of ", input$DxTestName, " when testing for ", input$DxCondition))
+     iCMheading <- isolate(paste0("Table 1. Accuracy of ", input$DxTestName, " when testing for ", input$DxCondition))
      
      output$cmHeading <- renderText(iCMheading)
      

@@ -5,8 +5,9 @@ ui <- function(request) {
   navbarPage(title = NULL,
     navbarMenu("Information",
     tabPanel("Introduction", br(), br(), includeHTML("www/tab1.html")), 
-    tabPanel("How to read graph 1", includeHTML("www/tab2.html")),
-    tabPanel("How to read graph 2", includeHTML("www/tab3.html"))#,
+    tabPanel("How to read the table and graph", includeHTML("www/tab2.html")),
+    tabPanel("How to read graph 1", includeHTML("www/tab3.html")),
+    tabPanel("How to read graph 2", includeHTML("www/tab4.html"))#,
     ),
     
      tabPanel("Explore clinical accuracy and utility of diagnostic tests",
@@ -42,32 +43,26 @@ ui <- function(request) {
                  mainPanel(
                    wellPanel(
                      span(style="color: rgb(0, 0, 153)",
-                          h4(tags$b("Graph 0. "), "How sensitivity and specificity reflect diagnostic accuracy"),
-                          h5("(True and false positives (Tp, Fp), False and true negatives (Fn, Tn))")),
-                     withSpinner(plotOutput("RuleInOutPlot0")),
-                     br(),
-                       span(style="color: rgb(0, 0, 153)",
                                h4(textOutput("cmHeading")),
-                               tableOutput("df2x2Table")
-                            )
-                       )
+                               tableOutput("df2x2Table"),
+                          h6("(The numbers may not be integers because they are calculated from the study size, prevalence, sensitivity, and specificity.)"),
+                          br(),
+                          h4(tags$b("Graph 0. "), "How prevalence, sensitivity, and specificity reflect diagnostic accuracy"),
+                          h5("(True and false positives (Tp, Fp), False and true negatives (Fn, Tn))")),
+                     withSpinner(plotOutput("RuleInOutPlot0")), br(), br()
                    ),
                    
-                     wellPanel(
-                       span(style="color: rgb(0, 0, 153)",
+                     span(style="color: rgb(0, 0, 153)",
                        h4(tags$b("Graph 1. "), "How post-test probabilities depend on prevalence"),
                        h5("(And sensitivity, and specificity)")),
                        withSpinner(plotOutput("PrePostProb2")),
-                       br()
-                     ),
-                     br(), 
-                   
-                     wellPanel(
-                       span(style="color: rgb(0, 0, 153)",
+                       br(), br(),
+                                          
+                    span(style="color: rgb(0, 0, 153)",
                        h4(tags$b("Graph 2. "), "How diagnostic decisions depend on both the test result (positive or negative) and thresholds for decisions"),
                        h5("(And prevalence, sensitivity, and specificity)")),
-                       withSpinner(plotOutput("RuleInOutPlot2"))
-                       ),
+                       withSpinner(plotOutput("RuleInOutPlot2")), br(), br()
+                   ),
     
     tabPanel("Download report for printing and sharing",
              p("This document contains all the tables and figures generated from your input data."),
