@@ -45,7 +45,12 @@ ui <- function(request) {
                           h4(tags$b("Graph 0. "), "How sensitivity and specificity reflect diagnostic accuracy"),
                           h5("(True and false positives (Tp, Fp), False and true negatives (Fn, Tn))")),
                      withSpinner(plotOutput("RuleInOutPlot0")),
-                     br()
+                     br(),
+                       span(style="color: rgb(0, 0, 153)",
+                               h4(textOutput("cmHeading")),
+                               tableOutput("df2x2Table")
+                            )
+                       )
                    ),
                    
                      wellPanel(
@@ -63,15 +68,6 @@ ui <- function(request) {
                        h5("(And prevalence, sensitivity, and specificity)")),
                        withSpinner(plotOutput("RuleInOutPlot2"))
                        ),
-                   
-                   br(), 
-                   wellPanel(
-                     span(style="color: rgb(0, 0, 153)",
-                          h4(tags$b("2x2 Table"),
-                          dataTableOutput("df2x2Table")
-                   )
-               )
-        ),
     
     tabPanel("Download report for printing and sharing",
              p("This document contains all the tables and figures generated from your input data."),
@@ -96,4 +92,5 @@ ui <- function(request) {
         tags$p("NIHR Diagnostic Evidence Co-operative Newcastle. July 2017"),
         tags$br(),
         tags$img(src = "nihr-logo.jpg", width = "80px", height = "28px", align = "right") # add the NIHR logo)
-      )))}
+      )
+)}

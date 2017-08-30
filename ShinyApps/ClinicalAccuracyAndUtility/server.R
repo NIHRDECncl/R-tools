@@ -58,20 +58,23 @@ shinyServer (
    
     
    observeEvent(input$GoButton, {
-     iN <- isolate(input$n)
-     iPrev <- isolate(input$prevalence)
-     iSens <- isolate(input$sensitivity)
-     iSpec <- isolate(input$specificity)
+  
+     iCMheading <- isolate(paste0("accuracy of ", input$DxTestName, " when testing for ", input$DxCondition))
      
+     output$cmHeading <- renderText(iCMheading)
      
-     output$df2x2Table <- renderDataTable(
-       datatable(
-         DxStats(iN, iPrev, iSens, iSpec, plot2x2 = TRUE)$df2x2[[1]]), 
-          options = list(
-            dom = 't') # this option should show the table without length or filter controls --- but it doesn't work :-(
-                       # see 4.2 DOM elements https://rstudio.github.io/DT/options.html 
-       )
+   },   ignoreNULL = FALSE)
+
+   observeEvent(input$GoButton, {
      
+     jN <- isolate(input$n)
+     jPrev <- isolate(input$prevalence)
+     jSens <- isolate(input$sensitivity)
+     jSpec <- isolate(input$specificity)
+
+     output$df2x2Table <- renderTable(
+
+        DxStats(jN, jPrev, jSens, jSpec, plot2x2 = TRUE)$df2x2[[1]])
    },   ignoreNULL = FALSE)
 
 
