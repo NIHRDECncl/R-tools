@@ -3,7 +3,7 @@
   <head>
     <meta content="text/html; charset=windows-1252"
       http-equiv="content-type">
-    <title>Graph 2: clinical utility of a diagnostic test</title>
+    <title>How to read graph 2: clinical utility of a diagnostic test</title>
   </head>
   <body>
     <h2 style="color: rgb(0, 0, 153);">How to read graph 2: clinical
@@ -39,7 +39,12 @@
     </p>
     <hr>
     <p>The figure below is a screen snip showing how graph 2 looks when
-      the app is started. </p>
+      the app is started.<br>
+      When you customise the labels and data, it will (obviously) look
+      somewhat different.<br>
+      In particular, if you do not see the pink and green ribbons, reset
+      the population size (n) to 300.<br>
+    </p>
     <table style="text-align: left; width: 743px; height: 351px;"
       cellspacing="2" cellpadding="2" border="1">
       <tbody>
@@ -52,13 +57,16 @@
             <span style="font-weight: bold; color: rgb(51, 102, 255);">Figure.
 Screensnip
 
+
+
               of Graph 2</span></td>
           <td><br>
           </td>
         </tr>
       </tbody>
     </table>
-    <h2 style="color: rgb(0, 0, 153);">Look at the graph</h2>
+    <h2 style="color: rgb(0, 0, 153);">Look at graph 2<br>
+    </h2>
     <h3 style="color: rgb(0, 0, 153);"> </h3>
     <p>You may have noticied that there are not one, but two Y-axes!</p>
     <ul>
@@ -89,146 +97,132 @@ Screensnip
     The&nbsp; = (1 - PPV), or 25% as initially set up in the app.<br>
     <br>
     Similarly, the sea green&nbsp; line starting at the prevalence rate
-    and ending at the
-    negative predictive value (NPV) of 8% shows how a negative result
-    decreases the probability of the condition.<br>
+    and ending at the negative predictive value (NPV) of 8% shows how a
+    negative result decreases the probability of the condition.<br>
     <br>
     <br>
     <hr>
-    <h2 style="color: rgb(0, 0, 153);">Explore the effects of
-      prevalence, sensitivity, specificity<br>
-    </h2>
-    <p><br>
-    </p>
     <h2 style="color: rgb(0, 0, 153);"> </h2>
+    <p><span style="font-weight: bold;"></span></p>
     <hr>
-    <h2 style="color: rgb(0, 0, 153);">Examples and exercises<br>
+    <h2 style="color: rgb(0, 0, 153);">Exercise for graph <br>
     </h2>
+    <p>Click on the tab to "<i>Explore clinical accuracy and utility of
+        diagnostic tests</i>".<br>
+    </p>
+    <img
+src="file:///Users/michaelpower/Google%20Drive/GIT-project/GitHub/R-tools/ShinyApps/ClinicalAccuracyAndUtility/www/Snip%20Explore%20clinical%20accuracy%20and%20utility%20of%20diagnostic%20tests.png"
+      alt="Screen snip of tab &quot;Explore clinical accuracy and
+      utility&quot;" width="494" height="197">
+    <p>Use the form on the left to explore the clinical accuracy and
+      clinical utility of d-dimer as a test for excluding VTE (venous
+      thromboembolism).<br>
+    </p>
+    <p>The data are from a systematic review and meta-analysis by GJ
+      Geering et al (<a
+        href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2727580/">see
+        abstract and link to full paper</a>).<br>
+    </p>
     <ul>
       <li>
-        <p><span style="font-weight: bold;">Change the labels</span>
-          (and click on the update button) <br>
-          Does the graph show the names of the test and condition you
-          are interested in?<br>
+        <p><span style="font-weight: bold;">Change the labels:</span><br>
+          <i>Population</i> to pregnant women<br>
+          <i>Condition</i> to VTE<br>
+          <i>Test</i> to d-dimer<br>
+          <i>Rule-in decision</i> to do ultrasound scan<br>
+          <i>Indterminate decision</i> to "" (i.e. blank)<br>
+          <i>Rule-out decision</i> to exclude VTE<br>
         </p>
       </li>
+      <li>
+        <p><span style="font-weight: bold;">Explore the range of
+            prevalences and decision thresholds</span><br>
+          <i>Prevalence</i> from 4% to 51% (for the moment ignore the
+          fact that the range of prevalences is for a range of
+          populations, not just pregnant women)<br>
+          When you change the prevalence:</p>
+      </li>
+      <ul>
+        <li>How do the post postive test and post negative test
+          probabilities (PPV and NPV) change <u>in relation to the
+            decision thresholds</u>?<br>
+          What probablities would you use as thresholds for rule-in and
+          rule-out decisisions?<br>
+          In other words, how low would a NPV have to be before you
+          would exclude VTE?<br>
+          And, how high would a PPV have to be for you to arrange an
+          ultrasound scan?<br>
+        </li>
+      </ul>
     </ul>
-    <hr>
-    <h2 style="font-weight: bold; color: rgb(0, 0, 153);">Further
-      reading</h2>
-    <p><br>
-      <br>
-    </p>
-    <h3 style="color: rgb(0, 0, 153);"><br>
-      Line 7: the post-test probability for a positive test - equals PPV</h3>
-    <ol>
-      <li>
-        <p>Change the <span style="font-weight: bold; font-style:
-            italic;">specificity</span> and <span style="font-weight:
-            bold; font-style: italic;">prevalence</span> settings on the
-          left.<br>
-          How does the post-positive test probability (i.e. positive
-          predictive value, PPV) change?<br>
-          Is it above or below the decision threshhold?<br>
-          At what specificity and prevalence would there be no point in
-          doing the test to rule in a condition? </p>
-      </li>
-      <li>
-        <p>Change the population size.<br>
-          How does the precision (95% confidence interval) change?<br>
-          (The 95% confidence interval is the salmon pink ribbon around
-          the post-positive test line, and the sea green ribbon around
-          the post-negative test line.)<br>
-          <br>
-          What is the implication for decision making when the
-          confidence interval includes the decision threshold? </p>
-      </li>
-    </ol>
-    <h3 style="color: rgb(0, 0, 153);">Line 4: the decision threshold
-      for a negative test <br>
-      Line 6: the post-test probability for a negative test - equals (1
-      - NPV)</h3>
-    <ol>
-      <li>
-        <p>Change the <span style="font-weight: bold; font-style:
-            italic;">sensitivity</span> and <span style="font-weight:
-            bold; font-style: italic;">prevalence</span> settings on the
-          left.<br>
-          How does the post-negative test probability (i.e. negative
-          predictive value, (1 - NPV)) change?<br>
-          Is it above or below the decision threshhold?<br>
-          At what sensitivity and prevalence would there be no point in
-          doing the test to rule out a condition? </p>
-      </li>
-      <li>
-        <p>Change the population size.<br>
-          How does the precision (95% confidence interval) change?<br>
-          (The 95% CI is the salmon pink ribbon around the post-positive
-          test line, and the sea green ribbon around the post-negative
-          test line.<br>
-          <br>
-          What is the implication for decision making when the
-          confidence interval includes the decision threshold? </p>
-      </li>
-    </ol>
-    <hr>
-    <h2 style="color: rgb(153, 0, 0);">Where do I find the data?</h2>
-    <p>Data for your condition's prevalence and the test's accuracy
-      (sensitivity and specificity) will be in the scientific
-      literature, unless the test is under development, in which case
-      unpublished data from the developer may be available.Use data from
-      a (well conducted and well reported) systematic review and
-      meta-analysis, if this is available. Otherwise, use data from a
-      (well conducted and well reported) study. Data for the population
-      size should be available from the the source of your accuracy
-      data. </p>
-    <p>Obtaining reliable data for the decision thresholds can be a
-      challenge. But it is a challenge worth rising to, as the decision
-      thresholds determine the clinical utility of the test.</p>
-    <p>Health economists do the kind of studies that determine the
-      decision threshold that provide the optimum cost for net benefit
-      --- net benefit takes account of benefits and the harms. Costs,
-      benefits, and harms are those that follow from doing the test and
-      acting on its result.</p>
-    <p>In technical terms, the recipe that the health economists folllow
-      is:</p>
-    <div class="" style="margin-left: 40px;">Decision threshold = (net
-      harm)/(net harm + net benefit)<span style="color: rgb(51, 51, 51);
-        font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
-        font-size: 13.6364px; font-style: normal; font-variant: normal;
-        font-weight: normal; letter-spacing: normal; line-height:
-        18.1818px; text-align: start; text-indent: 0px; text-transform:
-        none; white-space: normal; word-spacing: 0px; background-color:
-        rgb(255, 255, 255); display: inline ! important; float: none;"><span
-          class="Apple-converted-space"> </span></span><br>
-      Net harm = utility(no Rx | no disease) - utility(treatment | no
-      disease)<big><span style="color: rgb(51, 51, 51); font-family:
-          'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:
-          13.6364px; font-style: normal; font-variant: normal;
-          font-weight: normal; letter-spacing: normal; line-height:
-          18.1818px; text-align: start; text-indent: 0px;
-          text-transform: none; white-space: normal; word-spacing: 0px;
-          background-color: rgb(255, 255, 255); display: inline !
-          important; float: none;"><span class="Apple-converted-space"></span></span></big><br>
-      <big><span style="color: rgb(51, 51, 51); font-family: 'Helvetica
-          Neue',Helvetica,Arial,sans-serif; font-size: 13.6364px;
-          font-style: normal; font-variant: normal; font-weight: normal;
-          letter-spacing: normal; line-height: 18.1818px; text-align:
-          start; text-indent: 0px; text-transform: none; white-space:
-          normal; word-spacing: 0px; background-color: rgb(255, 255,
-          255); display: inline ! important; float: none;"><span
-            class="Apple-converted-space"></span></span></big>Net
-      benefit = utility(Rx | disease) - utility(no treatment |
-      disease)ease)</div>
+    <ul>
+      <li><span style="font-weight: bold;">Explore the range of
+          sensitivities and specificities</span><br>
+        <i>Sensitivity</i> from 85% to 96% (95% confidence intervals
+        from 78% to 98%<br>
+        <i>Specificity</i> from 48% to 74% (95% confiden ce intervals
+        from 33% to 78%</li>
+    </ul>
+    <ul>
+      <ul>
+        <li>When you change sensitivity, what happens to the post test
+          probabilities (PPV, NPV)?<br>
+          A high sensitivity is important for which type of decision
+          i.e. rule-in or rule-out?<br>
+        </li>
+      </ul>
+    </ul>
+    <ul>
+      <ul>
+        <li>When you change specificity, what happens to the post test
+          probabilities (PPV, NPV)?<br>
+          A high specificity is important for which type of decision
+          i.e. rule-in or rule-out? </li>
+      </ul>
+    </ul>
+    <ul>
+      <li> <span style="font-weight: bold;">How do you work out what
+          the PPV and NPV thresholds for rule-in and rule-out decisions
+          should be?<br>
+        </span> We don't have an app to explain that yet, but it is on
+        our "to do" list.&nbsp;</li>
+    </ul>
+    The principle is simple: identify and quantify each of the pros and
+    each of the cons for true and false postives and for false and true
+    negatives, and weight them by their individual probabilities. This
+    gives the net benefit (which will be negative if the expected harms
+    and costs outweight the expected benefits. This is difficult to do,
+    but health economists rise to the challenge. In technical terms, the
+    recipe that the health economists folllow is:
+    <div class="" style="margin-left: 40px;">
+      <ul>
+        <li>Decision threshold = (net harm)/(net harm + net benefit)</li>
+        <li> Net harm = utility(no Rx | no disease) - utility(treatment
+          | no disease)</li>
+        <li> Net benefit = utility(Rx | disease) - utility(no treatment
+          | disease)ease)</li>
+      </ul>
+    </div>
     <p>Because this type of health economic study is difficult and
-      expensive, clinicians often have to use intuition and gut feeling
-      to decide on decision thresholds. </p>
+      expensive, clinicians, patients, and the general public often have
+      to use intuition and gut feeling to decide on decision thresholds.
+    </p>
     <p>Informal setting of decision thresholds can be biased, either by
       over-emphasising the benefits in comparison with the harms, or
-      vice versa. </p>
-    <br>
-    <p><br>
+      vice versa.<br>
     </p>
+    Because this type of health economic study is difficult and
+    expensive, clinicians often have to use intuition and gut feeling to
+    decide on decision thresholds.
+    <p>Informal setting of decision thresholds can be biased, either by
+      over-emphasising the benefits in comparison with the harms, or
+      vice versa. <br>
+    </p>
+    <p>A good starting point for uderstanding clinical decision-making
+      is the book by Hunink M, Glasziou P, Siegel J, et al, which is
+      referenced below.<br>
+    </p>
+    <br>
     <hr>
     <h2 style="font-weight: bold; color: rgb(0, 0, 153);">Further
       reading</h2>
@@ -243,25 +237,11 @@ Screensnip
 href="https://www.nice.org.uk/Media/Default/About/what-we-do/NICE-guidance/NICE-diagnostics-guidance/Diagnostics-assessment-programme-manual.pdf">NICE
 Diagnostic
 
+
+
           Assessment Programme Manual (2011),</a> <br>
         (especially section 14.</li>
     </ul>
-    <p><br>
-    </p>
-    <p>For more information on thresholds for decision making with
-      diagnostic tests and the health economic evaluation of diagnostic
-      tests, see: </p>
-    <ul>
-      <li>Hunink M, Glasziou P, Siegel J, et al. <span
-          style="font-weight: bold;">Decision making in health and
-          medicine. Integrating evidence and values.</span> Cambridge:
-        Cambridge University. Press, 2001.</li>
-      <li><a
-href="https://www.nice.org.uk/Media/Default/About/what-we-do/NICE-guidance/NICE-diagnostics-guidance/Diagnostics-assessment-programme-manual.pdf">NICE
-Diagnostic
-
-          Assessment Programme Manual (2011),</a> especially section 14
-        (PDF).</li>
-    </ul>
+    <br>
   </body>
 </html>

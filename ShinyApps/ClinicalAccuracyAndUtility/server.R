@@ -59,7 +59,7 @@ shinyServer (
     
    observeEvent(input$GoButton, {
   
-     iCMheading <- isolate(paste0("Table 1. Accuracy of ", input$DxTestName, " when testing for ", input$DxCondition))
+     iCMheading <- isolate(paste0("Table 1. Accuracy of ", input$DxTestName, " when testing for ", input$DxCondition, " in ", input$DxPopulation))
      
      output$cmHeading <- renderText(iCMheading)
      
@@ -105,8 +105,9 @@ shinyServer (
          iCond <- isolate(input$DxCondition)
          iTest <- isolate(input$DxTestName)
          iDisp <- isolate(input$disper)
+         iPop <- isolate(input$DxPopulation)
        
-          prepostprobplot(iN, iPrev, iSens, iSpec, iCond, iTest, iDisp)
+          prepostprobplot(iN, iPrev, iSens, iSpec, iCond, iTest, iDisp, iPop)
          })
    },   ignoreNULL = FALSE)
 
@@ -127,9 +128,10 @@ shinyServer (
         iRuleInDecision <- isolate(input$DxRuleInDecision)
         iRuleOutDecision <- isolate(input$DxRuleOutDecision)
         iIndeterminateDecision <- isolate(input$IndeterminateDecision)
+        iPop <- isolate(input$DxPopulation)
            
         ruleinoutplot(iN, iPrev, iSens, iSpec, iRuleInThreshold, iRuleOutThreshold,
-                      iCond, iTest, iRuleInDecision, iRuleOutDecision, iIndeterminateDecision, iDisp)
+                      iCond, iTest, iRuleInDecision, iRuleOutDecision, iIndeterminateDecision, iDisp, iPop)
        })
     },   ignoreNULL = FALSE)
 
