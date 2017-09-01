@@ -9,7 +9,6 @@ ui <- function(request) {
     tabPanel("How to read graph 2", includeHTML("www/tab3.html"))#,
     ),
     
-
      tabPanel("Explore clinical accuracy and utility of diagnostic tests",
                  sidebarPanel(
                    fluidRow(
@@ -57,12 +56,20 @@ ui <- function(request) {
                        br()
                      ),
                      br(), 
+                   
                      wellPanel(
                        span(style="color: rgb(0, 0, 153)",
                        h4(tags$b("Graph 2. "), "How diagnostic decisions depend on both the test result (positive or negative) and thresholds for decisions"),
                        h5("(And prevalence, sensitivity, and specificity)")),
                        withSpinner(plotOutput("RuleInOutPlot2"))
-                       )
+                       ),
+                   
+                   br(), 
+                   wellPanel(
+                     span(style="color: rgb(0, 0, 153)",
+                          h4(tags$b("2x2 Table"),
+                          dataTableOutput("df2x2Table")
+                   )
                )
         ),
     
@@ -74,7 +81,7 @@ ui <- function(request) {
              downloadButton('downloadReport', 'Download summary report'),
              br(), br(), 
              p("NB generating the document can take some time.")
-    ),
+    )),
     
 
 ###################################
@@ -83,14 +90,10 @@ ui <- function(request) {
 #
       tags$hr(),
       wellPanel(
-      tags$p(style="text-align: left", "Cite as:"),
-      tags$p("Michael Power, Sara Graziadio and Joy Allen."),
-      tags$em("A ShinyApp tool to explore dependence of rule-in and rule-out decisions on prevalence, sensitivity, specificity, and confidence intervals"),
-      tags$p("NIHR Diagnostic Evidence Co-operative Newcastle. July 2017"),
-      tags$br(),
-      tags$img(src = "nihr-logo.jpg", width = "80px", height = "28px", align = "right") # add the NIHR logo)
-      ),
-      tags$hr()
-    
-  )
-  }
+        tags$p(style="text-align: left", "Cite as:"),
+        tags$p("Michael Power, Sara Graziadio and Joy Allen."),
+        tags$em("A ShinyApp tool to explore dependence of rule-in and rule-out decisions on prevalence, sensitivity, specificity, and confidence intervals"),
+        tags$p("NIHR Diagnostic Evidence Co-operative Newcastle. July 2017"),
+        tags$br(),
+        tags$img(src = "nihr-logo.jpg", width = "80px", height = "28px", align = "right") # add the NIHR logo)
+      )))}
