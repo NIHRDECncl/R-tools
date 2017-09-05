@@ -12,11 +12,11 @@ ui <- function(request) {
           # The link works in rStudio, but not in the browser :-(
           
           actionLink("goToTabI2", "What will you do with information about your prognosis?"),
-          
-         br(), br(),
-          "Our aim is expressed by: ",
-         tags$a(href="https://www.ncbi.nlm.nih.gov/pubmed/15778417", "First do no harm"),
-            "(which is often wrongly attributed to Hippocrates).",
+         #  
+         # br(), br(),
+         #  "Our aim is expressed by: ",
+         # tags$a(href="https://www.ncbi.nlm.nih.gov/pubmed/15778417", "First do no harm"),
+         #    "(which is often wrongly attributed to Hippocrates).",
           value = "i1"),
 
         tabPanel("What will you do with information about your prognosis?",

@@ -1,3 +1,12 @@
+###### to trace the execution of reactives at runtime 
+###### 
+###### 1. at the R console run: options(shiny.reactlog=TRUE) 
+###### 2. start the Shiny app
+###### 3. run the trace with command-F3
+###### 4. step through with -> arrow
+###### 
+###### https://shiny.rstudio.com/articles/debugging.html
+
 ################# server for ShinyApp to explore clinical accuracy and clinical utility    ################
 
 # inputs
@@ -13,8 +22,6 @@
 # IndeterminateDecision
 # DxRuleOutDecision
 # RuleOutDecisionThreshold
-
-source("global.R")
 
 
 shinyServer (
@@ -34,9 +41,9 @@ shinyServer (
       } else {
         return(FALSE)
       }
-     
+
    },ignoreNULL = FALSE)
- 
+
 #==========================================================
    observeEvent(input$GoButton, {
    output$validtext  <- renderText({
@@ -46,44 +53,84 @@ shinyServer (
      } else {
        return(NULL)
      }
+   })
+   },ignoreNULL = FALSE)
+   
+    
+   observeEvent(input$GoButton, {
+     iN <- isolate(input$n)
+     iPrev <- isolate(input$prevalence)
+     iSens <- isolate(input$sensitivity)
+     iSpec <- isolate(input$specificity)
      
      
-   })
-   })
-    
-  #  output$linesTable <- renderDataTable(linesDf(), 
-  #                                       options = list(scrollX = TRUE, rownames = FALSE,
-  #                                       dom = 't'))
-    
-#==========================================================
-    
-    observeEvent(input$GoButton, {
-          output$RuleInOutPlot2<-renderPlot({
-        # Sys.sleep(2)
-        if(isValid_num()){
-        isolate(ruleinoutplot(input$n, input$prevalence, input$sensitivity, input$specificity,
-                      input$RuleInDecisionThreshold, input$RuleOutDecisionThreshold, 
-                      input$DxCondition, input$DxTestName,  
-                      input$DxRuleInDecision, input$DxRuleOutDecision, input$IndeterminateDecision, input$disper))
-        }
-      })
-   }, ignoreNULL = FALSE)
-    
-#==========================================================
-  
-  observeEvent(input$GoButton, {
-    output$PrePostProb2<-renderPlot({
-      # Sys.sleep(2)
-      if(isValid_num()){
-      isolate(prepostprobplot(input$n, input$prevalence, input$sensitivity, input$specificity,
-                      input$DxCondition, input$DxTestName, input$disper))
-      }
-    })
-  }, ignoreNULL = FALSE)
-    
-  
+     output$df2x2Table <- renderDataTable(
+       datatable(
+         DxStats(iN, iPrev, iSens, iSpec, plot2x2 = TRUE)$df2x2[[1]]), 
+          options = list(
+            dom = 't') # this option should show the table without length or filter controls --- but it doesn't work :-(
+                       # see 4.2 DOM elements https://rstudio.github.io/DT/options.html 
+       )
+     
+   },   ignoreNULL = FALSE)
 
-  
+
+   #==========================================================
+     
+     # graph 0: bar charts of numbers and proportions pre- and post-test
+    observeEvent(input$GoButton, {
+     output$RuleInOutPlot0 <- renderPlot({
+
+       iN <- isolate(input$n)
+       iPrev <- isolate(input$prevalence)
+       iSens <- isolate(input$sensitivity)
+       iSpec <- isolate(input$specificity)
+       
+       DxStats(iN, iPrev, iSens, iSpec, plot2x2 = TRUE)$barplot[[1]]
+     })
+   },   ignoreNULL = FALSE)
+
+     
+ # graph 1: true and false postives; false and true negatives
+     observeEvent(input$GoButton, {
+       output$PrePostProb2<-renderPlot({
+
+         iN <- isolate(input$n)
+         iPrev <- isolate(input$prevalence)
+         iSens <- isolate(input$sensitivity)
+         iSpec <- isolate(input$specificity)
+         iCond <- isolate(input$DxCondition)
+         iTest <- isolate(input$DxTestName)
+         iDisp <- isolate(input$disper)
+       
+          prepostprobplot(iN, iPrev, iSens, iSpec, iCond, iTest, iDisp)
+         })
+   },   ignoreNULL = FALSE)
+
+
+   # graph 2: decision thresholds comopared to posterior probabailities
+     observeEvent(input$GoButton, {
+        output$RuleInOutPlot2<-renderPlot({
+         
+        iN <- isolate(input$n)
+        iPrev <- isolate(input$prevalence)
+        iSens <- isolate(input$sensitivity)
+        iSpec <- isolate(input$specificity)
+        iCond <- isolate(input$DxCondition)
+        iTest <- isolate(input$DxTestName)
+        iDisp <- isolate(input$disper)
+        iRuleInThreshold <- isolate(input$RuleInDecisionThreshold)
+        iRuleOutThreshold <- isolate(input$RuleOutDecisionThreshold)
+        iRuleInDecision <- isolate(input$DxRuleInDecision)
+        iRuleOutDecision <- isolate(input$DxRuleOutDecision)
+        iIndeterminateDecision <- isolate(input$IndeterminateDecision)
+           
+        ruleinoutplot(iN, iPrev, iSens, iSpec, iRuleInThreshold, iRuleOutThreshold,
+                      iCond, iTest, iRuleInDecision, iRuleOutDecision, iIndeterminateDecision, iDisp)
+       })
+    },   ignoreNULL = FALSE)
+
+   
   ## Thanks to Mark Strong for this code
   # https://github.com/Sheffield-Accelerated-VoI/SAVI/blob/master/server.R
   
@@ -102,7 +149,6 @@ shinyServer (
       on.exit(setwd(owd))
       file.copy(src, 'report.Rmd', overwrite=TRUE)
       
-      library(rmarkdown)
       out <- render(input = 'report.Rmd', #pdf_document()
                     output_format = switch(
                       input$format,
@@ -113,8 +159,6 @@ shinyServer (
     },
     contentType = "text/plain"
   )
+   })
 
-  
-   }
 
-)

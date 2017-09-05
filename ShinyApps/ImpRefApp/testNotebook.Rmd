@@ -1,0 +1,231 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+#===================================================================================================
+#
+# load packages used by the App 
+LoadPackages <- function() {
+  library(shiny)
+  library(tidyverse) # Imports: broom, DBI, dplyr, forcats, ggplot2, haven, httr, hms, jsonlite, lubridate, magrittr, modelr, purrr, readr, readxl, stringr, tibble, rvest, tidyr, xml2
+  library(rsconnect)   # needed to upload to Shinyio
+  library(readr)       # needed for GET()
+  library(vcd)         # mosaic() plot http://www.statmethods.net/advgraphs/mosaic.html
+  library(colourpicker) # http://deanattali.com/blog/plot-colour-helper/ 
+  library(shinythemes)
+  library(DT)
+  library(knitr)
+  library(rmarkdown)
+  library(shinycssloaders)
+  #      library(proportion)  package no longer being maintained :-(
+  library(PropCIs)
+  library(rsconnect)   # needed to upload to Shinyio
+  library(ggrepel)
+  # ...
+}
+
+
+#
+#===================================================================================================
+#
+#################### confidence interval on a proportion ###############################
+#
+### this is a wrapper to allow the choice of CI method to be easily changed
+#
+# use PropCIs::scoreci() to calculate Wilson's confidence interval for a single proportion. 
+#             Score CI based on inverting the asymptotic normal test using the null standard error
+# Arguments: 
+# x	           Number of successes
+# n            Total sample size
+# conf.level   Confidence level
+
+ciprop <- function(x, n, alpha = 0.05)
+{
+  
+  conf.level <- 1 - alpha
+  
+  return({
+    data.frame(
+      ciL = PropCIs::scoreci(x, n, conf.level)$conf.int[1],
+      ciU = PropCIs::scoreci(x, n, conf.level)$conf.int[2]
+    )
+  })
+}
+
+
+
+#
+#===================================================================================================
+#
+DxStats <- function(n, prevalence, sensitivity, specificity) {
+  prevalence <- min(prevalence,0.9999)
+  prevalence <- max(prevalence,0.0001)
+  
+  Dpos <- n * prevalence
+  Dneg <- n - Dpos
+  
+  Tp <- sensitivity * Dpos
+  Tn <- specificity * Dneg
+  
+  Fn <- (1 - sensitivity) * Dpos
+  Fp <- (1 - specificity) * Dneg
+  
+  PPV <- Tp/(Tp + Fp)
+  NPV <- Tn/(Tn + Fn) 
+  
+  LRp <- sensitivity/(1 - specificity)
+  LRn <- (1 -sensitivity)/(specificity)
+  
+  PreTestOddsP <- prevalence/(1 - prevalence)
+  PreTestOddsN <- (prevalence)/(1 -prevalence)
+  
+  PostTestOddsP <- PreTestOddsP*LRp
+  PostTestOddsN <- PreTestOddsN*LRn
+  
+  PostTestProbP <- PostTestOddsP/(PostTestOddsP + 1) # = PPV
+  PostTestProbN <- PostTestOddsN/(PostTestOddsN + 1) # = (1 - NPV)
+  
+  cidf <- ciprop(PPV * n, n) # CI for post-positive test probability
+  TPY_ciL <- cidf$ciL
+  TPY_ciU <- cidf$ciU
+  
+  cidf <- ciprop(PostTestProbN * n, n) # CI for post-negative test probability
+  TNY_ciL <- cidf$ciL
+  TNY_ciU <- cidf$ciU
+  
+  data_frame(
+    Dpos = Dpos,
+    Dneg = Dneg,
+    
+    TestPos = Tp + Fp,
+    TestNeg = Tn + Fn,
+    
+    Tp = Tp,
+    Tn = Tn,
+    
+    Fn = Fn,
+    Fp = Fp,
+    
+    PPV = PPV,
+    NPV = NPV,
+    
+    TpPct = Tp/n,
+    TnPct = Tn/n,
+    
+    FpPct = Fp/n,
+    FnPct = Fp/n,
+    
+    LRp = LRp,
+    LRn = LRn,
+    
+    PreTestOddsP = PreTestOddsP,
+    PreTestOddsN = PreTestOddsN,
+    
+    PostTestOddsP = PostTestOddsP,
+    PostTestOddsN = PostTestOddsP,
+    
+    PostTestProbP = PostTestProbP,
+    PostTestProbN = PostTestProbN,
+    
+    TPY_ciL = TPY_ciL,
+    TPY_ciU = TPY_ciU,
+    
+    TNY_ciL = TNY_ciL,
+    TNY_ciU = TNY_ciU,
+    
+    n = n
+  )
+}
+
+
+#
+#===================================================================================================
+#
+
+predictiveValues <-  function(n, prevalence, sensitivity, specificity, 
+                              RuleInDecisionThreshold, RuleOutDecisionThreshold, 
+                              DxCondition,  DxTestName, DxRuleInDecision, DxRuleOutDecision, IndeterminateDecision, disper) {
+  NULL
+}
+
+
+#
+#===================================================================================================
+#
+
+LoadPackages()
+
+
+n <- 333
+prevalence <- 0.4
+sensitivity <- 0.9
+specificity <- 0.80 
+RuleInDecisionThreshold <- 0.7
+RuleOutDecisionThreshold <- 0.2
+DxCondition <- "Disease"
+DxTestName <- "Test"
+DxRuleInDecision <- "Treat"
+DxRuleOutDecision <- "Stop treatment"
+IndeterminateDecision <- "Incestigate further"
+disper <- TRUE
+
+
+
+
+# pvPlot <- predictiveValues(n, prevalence, sensitivity, specificity, 
+#                               RuleInDecisionThreshold, RuleOutDecisionThreshold, 
+#                               DxCondition,  DxTestName, DxRuleInDecision, DxRuleOutDecision, IndeterminateDecision, disper)
+
+
+
+#
+#===================================================================================================
+#
+# prepare dataframe for plotting predictive value bar charts
+
+d <- DxStats(n, prevalence, sensitivity, specificity)
+
+c <- data_frame(
+  display = c(
+    rep("Absolute", 8), 
+    rep("Percentage", 8)),
+  population = 
+    rep(
+      c(
+        rep("Pre-testing", 4), 
+        rep("Post-positive test", 2), 
+        rep("Post-negative test", 2)),
+      2),
+  result = rep(c("TP", "FN", "FP", "TN", "TP", "FP", "TN", "FN"), 2),
+  label = rep(c("TP", "FN", "FP", "TN", "TP", "FP", "TN", "FN"), 2),
+  xmin = rep(c(0, 0, 0, 0, 4, 4, 8, 8), 2),
+  xmax = rep(c(2, 2, 2, 2, 6, 6, 10, 10), 2),
+  ymin = c(0, d$Tp, (d$Tp + d$Fn), (d$Tp + d$Fn + d$Fp), 0, d$Tp, 0, d$Tn,
+           0, d$TpPct, (d$TpPct + d$FnPct), (d$TpPct + d$FnPct + d$FpPct), 0, d$TpPct, 0, d$TnPct),
+  ymax = c(d$Tp, (d$Tp + d$Fn), (d$Tp + d$Fn + d$Fp), n, d$Tp, d$TestPos, d$Tn, d$TestNeg,
+           d$TpPct, (d$TpPct + d$FnPct), (d$TpPct + d$FnPct + d$FpPct), 1, d$TpPct, 1, d$TnPct, 1)
+              )
+
+p <- 
+  ggplot(c, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax)) +
+  geom_rect(aes(fill = result)) +
+  scale_x_continuous(breaks = NULL) +
+  facet_wrap(~ c$display, scales = "free_y", ncol = 2)
+
+p
+
+
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
