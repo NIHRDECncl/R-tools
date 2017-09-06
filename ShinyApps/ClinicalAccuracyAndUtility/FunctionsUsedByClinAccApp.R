@@ -29,6 +29,7 @@
     library(ggrepel)
     library(rmarkdown)
     library(formattable)
+
     # ...
   }
   
@@ -259,7 +260,7 @@
     }
     
    
-    Dx <- DxStats(n, prevalence, sensitivity, specificity) 
+    Dx <- DxStats(n, prevalence, sensitivity, specificity, plot2x2 = FALSE) 
     
     Nudge <- 0.02
     if (Dx$TPY_ciU - Dx$TPY_ciL < 3*Nudge) NudgeCIp = + Nudge else NudgeCIp = - Nudge/3
@@ -296,7 +297,7 @@
     if (disper) percent = 100
     if (!disper) percent = 1
     
-    Dx <- DxStats(n, prevalence, sensitivity, specificity) 
+    Dx <- DxStats(n, prevalence, sensitivity, specificity, plot2x2 = FALSE) 
    
     linesdf <- data.frame(
       PriorAxisX = c(0, 0),
@@ -375,8 +376,9 @@
     yN <- x
     yNciU <- x
     
-    for (i in seq_along(x)) {
-      Dx <- DxStats(n, x[[i]], sensitivity, specificity) 
+   for (i in seq_along(x)) {
+      Dx <- DxStats(n, x[[i]], sensitivity, specificity, plot2x2 = FALSE) 
+    #  Dx <- do.call(rbind,lapply(x, DxStats, n = n, prevalence = x, sensitivity = sensitivity, specificity = specificity))
       
       yPciL[[i]] <- Dx$TPY_ciL
       yP[[i]]    <- Dx$PostTestProbP
@@ -405,7 +407,7 @@
   
     
   linesPre2PostProb <- function(n, prevalence, sensitivity, specificity) {
-    Dx <- DxStats(n, prevalence, sensitivity, specificity)
+    Dx <- DxStats(n, prevalence, sensitivity, specificity, plot2x2 = FALSE)
     data.frame(
       prevalenceX     = c(prevalence, prevalence),
       prevalenceY     = c(0, Dx$PostTestProbP),
@@ -437,7 +439,7 @@
     }
     
     ### save stats so don't have to call many times
-    Dx <- DxStats(n, prevalence, sensitivity, specificity)
+    Dx <- DxStats(n, prevalence, sensitivity, specificity, plot2x2 = FALSE)
     data.frame(
       x = c(0.15, 0.15, prevalence),
       y = c(
