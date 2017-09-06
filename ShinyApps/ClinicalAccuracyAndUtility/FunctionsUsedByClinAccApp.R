@@ -8,7 +8,7 @@
   #install.packages("devtools")
   #devtools::install_github("daattali/colourpicker")
   #
-  ##########################################################
+  #===================================================================================================
   #
   # load packages used by the App 
   LoadPackages <- function() {
@@ -27,11 +27,15 @@
     library(PropCIs)
     library(rsconnect)   # needed to upload to Shinyio
     library(ggrepel)
+    library(rmarkdown)
+    library(formattable)
     # ...
   }
   
   
-  
+  #
+  #===================================================================================================
+  #
   #################### confidence interval on a proportion ###############################
   #
   ### this is a wrapper to allow the choice of CI method to be easily changed
@@ -55,8 +59,10 @@
       )
     })
   }
-  
-  DxStats <- function(n, prevalence, sensitivity, specificity) {
+  #
+  #===================================================================================================
+  #
+  DxStats <- function(n, prevalence, sensitivity, specificity, plot2x2 = FALSE) {
     prevalence <- min(prevalence,0.9999)
     prevalence <- max(prevalence,0.0001)
     
@@ -66,8 +72,17 @@
     Tp <- sensitivity * Dpos
     Tn <- specificity * Dneg
     
+    TpPct = Tp/n
+    TnPct = Tn/n
+    
     Fn <- (1 - sensitivity) * Dpos
     Fp <- (1 - specificity) * Dneg
+    
+    FnPct = Fp/n
+    FpPct = Fp/n
+    
+    TestPos = Tp + Fp
+    TestNeg = Tn + Fn
     
     PPV <- Tp/(Tp + Fp)
     NPV <- Tn/(Tn + Fn) 
@@ -92,9 +107,12 @@
     TNY_ciL <- cidf$ciL
     TNY_ciU <- cidf$ciU
     
-    data.frame(
+    dx2x2 <- data_frame(
       Dpos = Dpos,
       Dneg = Dneg,
+      
+      TestPos = TestPos,
+      TestNeg = TestNeg,
       
       Tp = Tp,
       Tn = Tn,
@@ -104,6 +122,12 @@
       
       PPV = PPV,
       NPV = NPV,
+      
+      TpPct = TpPct,
+      TnPct = TnPct,
+      
+      FnPct = FnPct,
+      FpPct = FpPct,
       
       LRp = LRp,
       LRn = LRn,
@@ -121,12 +145,73 @@
       TPY_ciU = TPY_ciU,
       
       TNY_ciL = TNY_ciL,
-      TNY_ciU = TNY_ciU
+      TNY_ciU = TNY_ciU,
+      
+      n = n,
+      
+      df2x2 = list(
+        formattable(data_frame(
+          IndexTest = c("tested +ve", "tested -ve", "Condition Totals"),
+          ConditionPresent = accounting(c(Tp, Fn, Dpos), digits = 0L),
+          ConditionAbsent = accounting(c(Fp, Tn, Dneg), digits = 0L),
+          TestTotals = accounting(c(TestPos, TestNeg, n), digits = 0L))
+      )),
+      
+      barplot = list(NULL)
     )
+
+    if (plot2x2) {
+      
+      nudgeX <- 1
+      nudgeY <- 1.05
+      
+      dx <- data_frame(
+        display = c(
+          rep("Tested population (numbers)", 8), 
+          rep("Tested population (proportions)", 8)),
+        population = 
+          rep(
+            c(
+              rep("Pre-testing", 4), 
+              rep("Post-positive test", 2), 
+              rep("Post-negative test", 2)),
+            2),
+        result = rep(c("TP", "FN", "FP", "TN", "TP", "FP", "TN", "FN"), 2),
+        label = rep(c("TP", "FN", "FP", "TN", "TP", "FP", "TN", "FN"), 2),
+        xmin = rep(c(0, 0, 0, 0, 4, 4, 8, 8), 2),
+        xmax = rep(c(2, 2, 2, 2, 6, 6, 10, 10), 2),
+        ymin = c(0, Tp, (Tp + Fn), (Tp + Fn + Fp), 0, Tp, 0, Tn,
+                 0, TpPct, (TpPct + FnPct), (TpPct + FnPct + FpPct), 0, TpPct, 0, TnPct),
+        ymax = c(Tp, (Tp + Fn), (Tp + Fn + Fp), n, Tp, TestPos, Tn, TestNeg,
+                 TpPct, (TpPct + FnPct), (TpPct + FnPct + FpPct), 1, TpPct, 1, TnPct, 1),
+        plotLabels = c(
+          "Pre-testing", "Prevalence", "Pre-testing", "", 
+          "Test positive", "Test positive", 
+          "Test negative", "Test negative",
+          "Pre-testing", "Pre-testing", "", "", 
+          "Test positve", "Test positve", 
+          "Test negatve", "Test negatve"),
+  labelX = rep(c(0, 0, 0, 0, 4, 4, 8, 8), 2) + nudgeX,
+        labelY = c(n, Dpos, -n/25, 0, TestPos, -n/25 , TestNeg, -n/25, 1, -1/25, -1/25, -1/25, 1, -1/25, 1, -1/25)*nudgeY
+      )
+      print(dx)
+      dx2x2$barplot[[1]] <- 
+        ggplot(dx, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax)) +
+        geom_rect(aes(fill = result, label )) +
+        scale_x_discrete(breaks = NULL) +
+        labs(x = NULL, y = NULL) +
+       facet_wrap(~ dx$display, scales = "free_y", ncol = 2) +
+        geom_text(aes(x = labelX, y = labelY, label = plotLabels))
+    }
+    
+    return(dx2x2)
   }
   
   
- 
+  #
+  #===================================================================================================
+  #
+  
   
   fixedlabels <- function(RuleInDecisionThreshold, prevalence, RuleOutDecisionThreshold, 
                           DxRuleInDecision, DxRuleOutDecision, IndeterminateDecision, disper)  {
@@ -157,9 +242,11 @@
 
   }
   
+  #
+  #===================================================================================================
+  #
   
   postTestLabels <- function(n, prevalence, sensitivity, specificity, disper){
-    
     
     if (disper) {
       percent <- 100
@@ -199,6 +286,9 @@
     )
   }
   
+  #
+  #===================================================================================================
+  #
   
   ruleinoutplot <- function(n, prevalence, sensitivity, specificity, RuleInDecisionThreshold, RuleOutDecisionThreshold, #}, 
                             DxCondition,  DxTestName, DxRuleInDecision, DxRuleOutDecision, IndeterminateDecision, disper){
@@ -268,6 +358,9 @@
 
   }
   
+  #
+  #===================================================================================================
+  #
   
   graphPre2PostProb <- function(n, prevalence, sensitivity, specificity) {
     x <- seq(from = 0, to = 1, by = 0.01) ### preTest probability along the x-axis
@@ -305,7 +398,12 @@
       yNciU = yNciU
     )
   }
+
+  #
+  #===================================================================================================
+  #
   
+    
   linesPre2PostProb <- function(n, prevalence, sensitivity, specificity) {
     Dx <- DxStats(n, prevalence, sensitivity, specificity)
     data.frame(
@@ -323,7 +421,9 @@
       PostProbNegYciU = c(Dx$TNY_ciU, Dx$TNY_ciU)
     )
   }
-  
+  #
+  #===================================================================================================
+  #
   prepostLabels <- function(n, prevalence, sensitivity, specificity, disper) {
     
     if (disper) {
@@ -353,9 +453,9 @@
     )
     
   }
-  
-  
-  
+  #
+  #===================================================================================================
+  #
   
  prepostprobplot <- function(n, prevalence, sensitivity, specificity, DxCondition, DxTestName, disper){
    
@@ -392,3 +492,15 @@
   #  geom_label()
  }
   
+ #
+ #===================================================================================================
+ #
+ 
+ predictiveValues <-  function(n, prevalence, sensitivity, specificity, 
+                               RuleInDecisionThreshold, RuleOutDecisionThreshold, 
+                               DxCondition,  DxTestName, DxRuleInDecision, DxRuleOutDecision, IndeterminateDecision, disper
+                             ) {
+                    NULL
+                  }
+  
+ 

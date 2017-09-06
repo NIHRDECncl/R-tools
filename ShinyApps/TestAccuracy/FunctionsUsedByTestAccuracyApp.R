@@ -156,14 +156,15 @@ linesDf <- function(n, prevalence, sensitivity, specificity){
 
 dx2x2Table <- function(n, prevalence, sensitivity, specificity){
   Dx <- DxStats(n, prevalence, sensitivity, specificity) 
-  
+  table <-  data.frame(
+    . = c("Test positive", "Test negative", "Totals"),
+    ConditionPresent = c(Dx$Tp, Dx$Fn, Dx$Dpos),
+    ConditionAbsent = c(Dx$Fp, Dx$Tn, Dx$Dneg),
+    Totals = c(Dx$Tp + Dx$Fp, Dx$Fn + Dx$Tn, n)
+  )
+  colnames(table) <- c("", "Condition present", "Condition absent", "Total")
   return(
-    data.frame(
-      . = c("Test positive", "Test negative", "Totals"),
-      ConditionPresent = c(Dx$Tp, Dx$Fn, Dx$Dpos),
-      ConditionAbsent = c(Dx$Fp, Dx$Tn, Dx$Dneg),
-      Totals = c(Dx$Tp + Dx$Fp, Dx$Fn + Dx$Tn, n)
-    )
+    table
   )
 }
 
@@ -209,29 +210,28 @@ pvdf <- function(n,prevalence, sensitivity, specificity){
 
   Dx <- DxStats(n, prevalence, sensitivity, specificity) 
   
-
-  
-  return(
-    data.frame(
-      PredictiveValues = c(
-        paste(format(100*Dx$Tp / (Dx$Tp + Dx$Fp), digits = 3), "%", sep = ""),
-        paste(format(100*Dx$Tn / (Dx$Tn + Dx$Fn), digits = 3), "%", sep = "")
-      ),
-      AtPrevalence = c(paste(format(100*prevalence, digits = 2), "%", sep = "")),
-      Measure = c("Sensitivity", "Specificity"),
-      LL95CI = c(
-        paste(trimws(format(100*(sensitivity - ciprop(sensitivity, n)$ciL), digits = 2)), "%", sep = ""),
-        paste(trimws(format(100*(specificity - ciprop(specificity, n)$ciL), digits = 2)), "%", sep = "")),
-      Mid = c(
-        paste(trimws(format(100*sensitivity, digits = 2)), "%", sep = ""),
-        paste(trimws(format(100*specificity, digits = 3)), "%", sep = "")
-      ),
-      UL95CI = c(
-        paste(trimws(format(100*(sensitivity + ciprop(sensitivity, n)$ciU), digits = 2)), "%", sep = ""),
-        paste(trimws(format(100*(specificity + ciprop(specificity, n)$ciU), digits = 2)), "%", sep = "")),
-      row.names = c("ppv", "npv")
-    )
+  table2 <- data.frame(
+    PredictiveValues = c(
+      paste(format(100*Dx$Tp / (Dx$Tp + Dx$Fp), digits = 3), "%", sep = ""),
+      paste(format(100*Dx$Tn / (Dx$Tn + Dx$Fn), digits = 3), "%", sep = "")
+    ),
+    AtPrevalence = c(paste(format(100*prevalence, digits = 2), "%", sep = "")),
+    Measure = c("Sensitivity", "Specificity"),
+    LL95CI = c(
+      paste(trimws(format(100*(sensitivity - ciprop(sensitivity, n)$ciL), digits = 2)), "%", sep = ""),
+      paste(trimws(format(100*(specificity - ciprop(specificity, n)$ciL), digits = 2)), "%", sep = "")),
+    Mid = c(
+      paste(trimws(format(100*sensitivity, digits = 2)), "%", sep = ""),
+      paste(trimws(format(100*specificity, digits = 3)), "%", sep = "")
+    ),
+    UL95CI = c(
+      paste(trimws(format(100*(sensitivity + ciprop(sensitivity, n)$ciU), digits = 2)), "%", sep = ""),
+      paste(trimws(format(100*(specificity + ciprop(specificity, n)$ciU), digits = 2)), "%", sep = "")),
+    row.names = c("ppv", "npv")
   )
+
+  colnames(table2) <- c("Predictive values", "Prevalence", "Accuracy measure", "Lower 95% CI", "Mid point", "Upper 95% CI")
+  return(table2)
 }
 
 populationdf <- function(n, prevalence, sensitivity, specificity, sorted){
@@ -300,7 +300,8 @@ popplot <- function(n, prevalence, sensitivity, specificity, sorted, ciFlag){
   linesDf <- linesDf(n, prevalence, sensitivity, specificity)
   
   p1 <- ggplot(populationdf, aes(x=x, y=y, color=condition, shape = condition)) + geom_point(size = 4) +
-   scale_color_manual(values=c("#999999", "#E69F00")) + coord_fixed()
+   scale_color_manual(values=c("#999999", "#E69F00")) + coord_fixed() + 
+   labs("Condition") #, colour="Result")
   if (sorted) {
   p1 <- ggplot(populationdf, aes(x=x, y=y, color=condition, shape = condition)) + 
     geom_point(size = 4) + #scale_color_manual(values=c("#999999", "#E69F00"))  +
@@ -331,8 +332,8 @@ if (!sorted) {
     ) 
 }
 p1 <- p1 +
-  labs(x = "", y = "", title="Population: people with and without the condition") + 
-  theme(plot.title = element_text(size = rel(1.5), colour = "dodgerblue3"))
+  labs(x = "", y = "") #, title="Population: people with and without the condition") + 
+#  theme(plot.title = element_text(size = rel(1.5), colour = "dodgerblue3"))
 p1
 
 }
@@ -344,7 +345,8 @@ popplot2 <- function(n, prevalence, sensitivity, specificity, sorted, ciFlag){
   linesDf <- linesDf(n, prevalence, sensitivity, specificity)
   contingencyM <- contingencyM(n, prevalence, sensitivity, specificity)
   
-  p2 <- ggplot(populationdf, aes(x=x, y=y, color=condition, shape = result)) + geom_point(size = 4) + coord_fixed()
+  p2 <- ggplot(populationdf, aes(x=x, y=y, color=condition, shape = result)) + geom_point(size = 4) +
+           coord_fixed() + labs(color="Condition", shape="Result")
   
   if (sorted) {
     p2 <- p2 + 
@@ -361,8 +363,8 @@ popplot2 <- function(n, prevalence, sensitivity, specificity, sorted, ciFlag){
                    data = linesDf) + 
       
       ### label the cells of the contingency matrix 
-      geom_text(data = contingencyM, size = 7, aes(x = cmX, y = cmY, label = labs, colour = NULL, shape = NULL), 
-                fontface = 2, colour = "gray41") + 
+      geom_label_repel(data = contingencyM, size = 5, aes(x = cmX, y = cmY, label = labs, colour = NULL, shape = NULL), 
+                fontface = 2, colour = "gray41", label.padding = unit(0.15, "lines"), label.r = unit(0.2, "lines")) + 
       
       ### add in scales for x and y axis
       scale_x_continuous(breaks = c(0.00, 0.25, 0.50, 0.75, 1.00),
@@ -382,24 +384,24 @@ popplot2 <- function(n, prevalence, sensitivity, specificity, sorted, ciFlag){
         annotate("rect", xmin = 0, xmax = linesDf$vx, ymin = linesDf$hy1lci, ymax = linesDf$hy1uci,
                  colour = "darksalmon", alpha = 0.2) +
         annotate("rect", xmin = linesDf$vx, xmax = 1, ymin = linesDf$hy2lci, ymax = linesDf$hy2uci,
-                 colour = "darksalmon", alpha = 0.2)      +
-        geom_text(data = contingencyM, size = 7, aes(x = cmX, y = cmY, label = labs, colour = NULL, shape = NULL), 
-                  fontface = 2, colour = "gray41") 
+                 colour = "darksalmon", alpha = 0.2)      #+
+      #  geom_text_repel(data = contingencyM, size = 7, aes(x = cmX, y = cmY, label = labs, colour = NULL, shape = NULL), 
+      #            fontface = 2, colour = "gray41") 
     }
     
     
   }
   if (!sorted) {
     p2 <- p2 +  theme(
-      axis.text.x = element_text(),#element_blank(),
+      axis.text.x = element_blank(),#element_blank(),
       axis.text.y = element_blank(),
       axis.ticks = element_blank()
     ) 
   }
   p2 <- p2 +
-    labs(x = "", y = "", 
-         title ="Test accuracy: true and false positives; \n false and true negatives.") +
-    theme(plot.title = element_text(size = rel(1.5), colour = "dodgerblue3"))
+   labs(x = "", y = "")#, 
+     #    title ="Test accuracy: true and false positives; false \n and true negatives.") +
+ #   theme(plot.title = element_text(size = rel(1.5), colour = "dodgerblue3"))
   #ggtitle("Test accuracy: true and false positives; \n false and true negatives, sensitivity, specificity, ...")
   p2
   
@@ -412,6 +414,11 @@ distributiondf <- function(prevalence, sensitivity, specificity){
   xdist2 <- seq(0,1,length = 1000)
   mean_neg <- 0.5 + specificity*0.25
   ydist2 <- (1-prevalence)*dnorm(xdist2,mean = mean_neg,sd = 0.1)
+  
+  ydist[1] <- 0
+  ydist2[1] <- 0
+  ydist[1000] <- 0
+  ydist2[1000] <- 0
   
   return({data.frame(
     mean_pos = mean_pos, 
@@ -433,12 +440,12 @@ distritext <- function(n, prevalence, sensitivity, specificity){
   max1 <- 0.25*max(distdf$ydist, na.rm = TRUE)
   max2 <- 0.25*max(distdf$ydist2, na.rm = TRUE)
   
-  return({data.frame(
+  data.frame(
     cmX = c(
-      distdf$mean_pos,
-      distdf$mean_neg - 0.25,
-      distdf$mean_pos + 0.25,
-      distdf$mean_neg
+      distdf$mean_pos[1],
+      distdf$mean_neg[1] - 0.25,
+      distdf$mean_pos[1] + 0.25,
+      distdf$mean_neg[1]
     ),
     cmY = c(
       max1,
@@ -446,36 +453,41 @@ distritext <- function(n, prevalence, sensitivity, specificity){
       max1*0.25,
       max2
     ), 
-    labs = c(
-      paste0("Tp = ", Dx$Tp),
-      paste0("Fp = ", Dx$Fp),
-      paste0("Fn = ", Dx$Fn),
-      paste0("Tn = ", Dx$Tn)
+    labels = c(
+      strwrap(paste0("Tp = ", Dx$Tp)),
+      strwrap(paste0("Fp = ", Dx$Fp)),
+      strwrap(paste0("Fn = ", Dx$Fn)),
+      strwrap(paste0("Tn = ", Dx$Tn))
     )
   )
-  })
 }
 
 
 distributionplots <- function(n, prevalence, sensitivity, specificity){
   distridf <- distributiondf(prevalence, sensitivity, specificity )
+
   distritext <- distritext(n, prevalence, sensitivity, specificity )
   Dx <- DxStats(n, prevalence, sensitivity, specificity) 
   
-  shade <- rbind(c(0.5,0), subset(distridf, xdist > 0.5), c(distridf[nrow(distridf), "X"], 0))
+  shade <- rbind(c(0.5,0), subset(distridf, xdist < 0.5), c(distridf[nrow(distridf), "X"], 0))
+  shade3 <- rbind(c(0.5,0), subset(distridf, xdist < 0.5), c(distridf[nrow(distridf), "X"], 0.5))
   shade2 <- rbind(c(0.5,0), subset(distridf, xdist2 > 0.5), c(distridf[nrow(distridf), "X2"], 0))
   distri <- ggplot(distridf, aes(x = xdist2, y = ydist2)) +
-    geom_polygon(data = shade2, aes(xdist2, ydist2), fill = "#E69F00")
-  distri <- distri + geom_line(colour = "#E69F00")
-  distri <- distri + geom_line(aes(x = xdist, y = ydist), colour =  "#999999") + geom_vline(xintercept = 0.5) +
-    geom_polygon(data = shade, aes(xdist, ydist), fill = "#999999") + 
-    theme(axis.title.x=element_blank(),
+    geom_polygon(data = shade2, aes(xdist2, ydist2), fill = "#999999")
+  distri <- distri + geom_line(colour = "#999999")
+  distri <- distri + geom_line(aes(x = xdist, y = ydist), colour =  "#E69F00") + geom_vline(xintercept = 0.5) +
+    geom_polygon(data = shade3, aes(xdist, ydist), fill = "#E69F00") + 
+    geom_line(data = distridf, aes(x = xdist2, y = ydist2), colour = "#999999" ) + 
+    theme(axis.title.x=element_text(size = 8),
           axis.text.x=element_blank(),
           axis.ticks.x=element_blank(),
           axis.title.y=element_blank(),
           axis.text.y=element_blank(),
           axis.ticks.y=element_blank()) + 
-    geom_text_repel(data = distritext, size = 5, aes(x = cmX, y = cmY, label = labs, colour = NULL))
+    scale_x_continuous("Index test result") +
+    annotate("text",  x = 0.05, y = 3.1, label = "With condition", size = 6, colour = "royalblue3" ) + 
+    annotate("text",  x = 0.95, y = 3.1, label = "Without condition", size = 6, colour = "royalblue3" ) + 
+    geom_text(data = distritext, size = 6, aes(x = cmX, y = cmY, label = labels))
  distri
 
 }

@@ -46,7 +46,7 @@ pplot <- function(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = TRUE, 
    if (showCI) 
     pPlot <- pPlot + geom_ribbon(
       aes(ymin = ciMin, ymax = ciMax, fill = factor(legend4Line), colour = factor(legend4Line)),
-      alpha = 1/10, linetype = 0)
+      alpha = 2/10, linetype = 0)
   
   pPlot <- pPlot + scale_fill_discrete(breaks = NULL)
   
