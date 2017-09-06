@@ -58,19 +58,15 @@ shinyServer (
    
     
    observeEvent(input$GoButton, {
-     iN <- isolate(input$n)
-     iPrev <- isolate(input$prevalence)
-     iSens <- isolate(input$sensitivity)
-     iSpec <- isolate(input$specificity)
-     
-     
+ 
      output$df2x2Table <- renderDataTable(
        datatable(
-         DxStats(iN, iPrev, iSens, iSpec, plot2x2 = TRUE)$df2x2[[1]]), 
+        isolate(DxStats(input$n, input$prevalence, input$sensitivity, input$specificity, plot2x2 = TRUE)$df2x2[[1]])), 
           options = list(
             dom = 't') # this option should show the table without length or filter controls --- but it doesn't work :-(
                        # see 4.2 DOM elements https://rstudio.github.io/DT/options.html 
        )
+
      
    },   ignoreNULL = FALSE)
 
@@ -81,12 +77,7 @@ shinyServer (
     observeEvent(input$GoButton, {
      output$RuleInOutPlot0 <- renderPlot({
 
-       iN <- isolate(input$n)
-       iPrev <- isolate(input$prevalence)
-       iSens <- isolate(input$sensitivity)
-       iSpec <- isolate(input$specificity)
-       
-       DxStats(iN, iPrev, iSens, iSpec, plot2x2 = TRUE)$barplot[[1]]
+       isolate(DxStats(input$n, input$prevalence, input$sensitivity, input$specificity, plot2x2 = TRUE)$barplot[[1]])
      })
    },   ignoreNULL = FALSE)
 
@@ -94,16 +85,10 @@ shinyServer (
  # graph 1: true and false postives; false and true negatives
      observeEvent(input$GoButton, {
        output$PrePostProb2<-renderPlot({
-
-         iN <- isolate(input$n)
-         iPrev <- isolate(input$prevalence)
-         iSens <- isolate(input$sensitivity)
-         iSpec <- isolate(input$specificity)
-         iCond <- isolate(input$DxCondition)
-         iTest <- isolate(input$DxTestName)
-         iDisp <- isolate(input$disper)
-       
-          prepostprobplot(iN, iPrev, iSens, iSpec, iCond, iTest, iDisp)
+        isolate(
+          prepostprobplot(input$n, input$prevalence, input$sensitivity,input$specificity, input$DxCondition,
+                          input$DxTestName, input$disper)
+        )
          })
    },   ignoreNULL = FALSE)
 
@@ -112,21 +97,23 @@ shinyServer (
      observeEvent(input$GoButton, {
         output$RuleInOutPlot2<-renderPlot({
          
-        iN <- isolate(input$n)
-        iPrev <- isolate(input$prevalence)
-        iSens <- isolate(input$sensitivity)
-        iSpec <- isolate(input$specificity)
-        iCond <- isolate(input$DxCondition)
-        iTest <- isolate(input$DxTestName)
-        iDisp <- isolate(input$disper)
-        iRuleInThreshold <- isolate(input$RuleInDecisionThreshold)
-        iRuleOutThreshold <- isolate(input$RuleOutDecisionThreshold)
-        iRuleInDecision <- isolate(input$DxRuleInDecision)
-        iRuleOutDecision <- isolate(input$DxRuleOutDecision)
-        iIndeterminateDecision <- isolate(input$IndeterminateDecision)
+        # iN <- isolate(input$n)
+        # iPrev <- isolate(input$prevalence)
+        # iSens <- isolate(input$sensitivity)
+        # iSpec <- isolate(input$specificity)
+        # iCond <- isolate(input$DxCondition)
+        # iTest <- isolate(input$DxTestName)
+        # iDisp <- isolate(input$disper)
+        # iRuleInThreshold <- isolate(input$RuleInDecisionThreshold)
+        # iRuleOutThreshold <- isolate(input$RuleOutDecisionThreshold)
+        # iRuleInDecision <- isolate(input$DxRuleInDecision)
+        # iRuleOutDecision <- isolate(input$DxRuleOutDecision)
+        # iIndeterminateDecision <- isolate(input$IndeterminateDecision)
            
-        ruleinoutplot(iN, iPrev, iSens, iSpec, iRuleInThreshold, iRuleOutThreshold,
-                      iCond, iTest, iRuleInDecision, iRuleOutDecision, iIndeterminateDecision, iDisp)
+       isolate(ruleinoutplot(input$n, input$prevalence, input$sensitivity, input$specificity, input$RuleInDecisionThreshold, 
+                      input$RuleOutDecisionThreshold,
+                      input$DxCondition, input$DxTestName, input$DxRuleInDecision,
+                      input$DxRuleOutDecision, input$IndeterminateDecision, input$disper))
        })
     },   ignoreNULL = FALSE)
 
