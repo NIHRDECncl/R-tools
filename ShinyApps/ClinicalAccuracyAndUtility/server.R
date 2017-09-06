@@ -1,6 +1,6 @@
 ###### to trace the execution of reactives at runtime 
 ###### 
-###### 1. at the R console run: options(shiny.reactlog=TRUE) 
+###### 1. at the R console run: 
 ###### 2. start the Shiny app
 ###### 3. run the trace with command-F3
 ###### 4. step through with -> arrow
@@ -9,7 +9,7 @@
 
 ################# server for ShinyApp to explore clinical accuracy and clinical utility    ################
 
-# inputs
+# inputs      .
 #
 # DxCondition
 # DxTestName
