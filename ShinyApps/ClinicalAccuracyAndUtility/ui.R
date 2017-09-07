@@ -44,7 +44,7 @@ ui <- function(request) {
                      span(style="color: rgb(0, 0, 153)",
                           h4(tags$b("Graph 0. "), "How sensitivity and specificity reflect diagnostic accuracy"),
                           h5("(True and false positives (Tp, Fp), False and true negatives (Fn, Tn))")),
-                     withSpinner(plotOutput("RuleInOutPlot0")),
+                     withSpinner(plotOutput("RuleInOutPlot0"), type = 6),
                      br()
                    ),
                    
@@ -52,7 +52,7 @@ ui <- function(request) {
                        span(style="color: rgb(0, 0, 153)",
                        h4(tags$b("Graph 1. "), "How post-test probabilities depend on prevalence"),
                        h5("(And sensitivity, and specificity)")),
-                       withSpinner(plotOutput("PrePostProb2")),
+                       withSpinner(plotOutput(paste0("PrePostProb2")), type = 6),
                        br()
                      ),
                      br(), 
@@ -61,7 +61,7 @@ ui <- function(request) {
                        span(style="color: rgb(0, 0, 153)",
                        h4(tags$b("Graph 2. "), "How diagnostic decisions depend on both the test result (positive or negative) and thresholds for decisions"),
                        h5("(And prevalence, sensitivity, and specificity)")),
-                       withSpinner(plotOutput("RuleInOutPlot2"))
+                       withSpinner(plotOutput("RuleInOutPlot2"), type = 6)
                        ),
                    
                    br(), 

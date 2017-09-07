@@ -20,6 +20,15 @@ if (!require(ggrepel)){
 }
 
 
+if (!require(formattable)){
+  install.packages("formattable", repos="http://cran.rstudio.com/") 
+  library("formattable")
+}
+
+if (!require(plotly)){
+  install.packages("plotly", repos="http://cran.rstudio.com/") 
+  library("plotly")
+}
 
 if (!require(shinycssloaders)){
   install.packages("shinycssloaders", repos="http://cran.rstudio.com/") 
