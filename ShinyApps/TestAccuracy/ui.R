@@ -48,11 +48,11 @@ ui <- function(request) {
              )
              ),    
    
-   tabPanel("Distributions",
-             span(textOutput("plot3title"), align = "center", style="color:#4169E1; font-weight:bold;font-size: 18px"),
-              withSpinner(plotOutput("distributionplots")),
-             textOutput("distributiontext")
-            ),
+   #tabPanel("Distributions",
+  #           span(textOutput("plot3title"), align = "center", style="color:#4169E1; font-weight:bold;font-size: 18px"),
+  #            withSpinner(plotOutput("distributionplots")),
+  #           textOutput("distributiontext")
+  #          ),
 
     tabPanel("Download summary report",
              p("This document contains all the tables and figures generated from your input data."),

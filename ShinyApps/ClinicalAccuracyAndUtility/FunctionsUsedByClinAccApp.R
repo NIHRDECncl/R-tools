@@ -210,7 +210,7 @@
   labelX = rep(c(0, 0, 0, 0, 4, 4, 8, 8), 2) + nudgeX,
         labelY = c(n, Dpos, -n/25, 0, TestPos, -n/25 , TestNeg, -n/25, 1, -1/25, -1/25, -1/25, 1, -1/25, 1, -1/25)*nudgeY
       )
-      print(dx)
+     # print(dx)
       dx2x2$barplot[[1]] <- 
         ggplot(dx, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax)) +
         geom_rect(aes(fill = result, label )) +
