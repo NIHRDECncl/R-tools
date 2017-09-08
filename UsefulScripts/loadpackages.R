@@ -376,4 +376,5 @@ if (!require("PropCIs")){
   install.packages("PropCIs", repos="http://cran.rstudio.com/")
   library("PropCIs")
 }
->>>>>>> master
+
+

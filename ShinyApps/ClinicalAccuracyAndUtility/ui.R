@@ -9,9 +9,11 @@ ui <- function(request) {
     tabPanel("How to read graph 2", includeHTML("www/tab3.html"))#,
     ),
     
+  
      tabPanel("Explore clinical accuracy and utility of diagnostic tests",
+    
                  sidebarPanel(
-                   fluidRow(
+                    fluidRow(
                     actionButton("GoButton", "Update the graphs (will take a while)", class = 'middleAlign'),
                      hr(),
                       textInput(inputId = "DxCondition", label = "Name of condition", value = "<condition>"),
@@ -40,36 +42,39 @@ ui <- function(request) {
                    )
                  ),
                  mainPanel(
-                   wellPanel(
+                  # wellPanel(
+                   br(),
+                   br(),
+                   span(textOutput("validtext"), style="color:red"),
                      span(style="color: rgb(0, 0, 153)",
                           h4(tags$b("Graph 0. "), "How sensitivity and specificity reflect diagnostic accuracy"),
                           h5("(True and false positives (Tp, Fp), False and true negatives (Fn, Tn))")),
                      withSpinner(plotOutput("RuleInOutPlot0"), type = 6),
-                     br()
-                   ),
+                     br(),
+                #   ),
                    
-                     wellPanel(
+                 #    wellPanel(
                        span(style="color: rgb(0, 0, 153)",
                        h4(tags$b("Graph 1. "), "How post-test probabilities depend on prevalence"),
                        h5("(And sensitivity, and specificity)")),
                        withSpinner(plotOutput(paste0("PrePostProb2")), type = 6),
-                       br()
-                     ),
+                       br(),
+                #     ),
                      br(), 
                    
-                     wellPanel(
+                #     wellPanel(
                        span(style="color: rgb(0, 0, 153)",
                        h4(tags$b("Graph 2. "), "How diagnostic decisions depend on both the test result (positive or negative) and thresholds for decisions"),
                        h5("(And prevalence, sensitivity, and specificity)")),
-                       withSpinner(plotOutput("RuleInOutPlot2"), type = 6)
-                       ),
+                       withSpinner(plotOutput("RuleInOutPlot2"), type = 6),
+                #       ),
                    
                    br(), 
-                   wellPanel(
+               #    wellPanel(
                      span(style="color: rgb(0, 0, 153)",
                           h4(tags$b("2x2 Table"),
-                          dataTableOutput("df2x2Table")
-                   )
+                             withSpinner(dataTableOutput("df2x2Table"),type = 6)
+                #   )
                )
         ),
     
@@ -82,6 +87,7 @@ ui <- function(request) {
              br(), br(), 
              p("NB generating the document can take some time.")
     )),
+     
     
 
 ###################################
@@ -96,4 +102,6 @@ ui <- function(request) {
         tags$p("NIHR Diagnostic Evidence Co-operative Newcastle. July 2017"),
         tags$br(),
         tags$img(src = "nihr-logo.jpg", width = "80px", height = "28px", align = "right") # add the NIHR logo)
-      )))}
+      )))
+
+}
