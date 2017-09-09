@@ -29,10 +29,25 @@
     library(ggrepel)
     library(rmarkdown)
     library(formattable)
+    library(shinyjs)
 
     # ...
   }
+
   
+  appCSS <- "
+  #loading-content {
+  position: absolute;
+  background: #000000;
+  opacity: 0.9;
+  z-index: 100;
+  left: 0;
+  right: 0;
+  height: 100%;
+  text-align: center;
+  color: #FFFFFF;
+  }
+  "
   
   #
   #===================================================================================================
@@ -195,7 +210,7 @@
   labelX = rep(c(0, 0, 0, 0, 4, 4, 8, 8), 2) + nudgeX,
         labelY = c(n, Dpos, -n/25, 0, TestPos, -n/25 , TestNeg, -n/25, 1, -1/25, -1/25, -1/25, 1, -1/25, 1, -1/25)*nudgeY
       )
-      print(dx)
+     # print(dx)
       dx2x2$barplot[[1]] <- 
         ggplot(dx, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax)) +
         geom_rect(aes(fill = result, label )) +
@@ -375,19 +390,16 @@
     yNciL <- x
     yN <- x
     yNciU <- x
+
+    Dx <- do.call(rbind,lapply(x,DxStats, n = n, sensitivity = sensitivity, specificity = specificity))
     
-   for (i in seq_along(x)) {
-      Dx <- DxStats(n, x[[i]], sensitivity, specificity, plot2x2 = FALSE) 
-    #  Dx <- do.call(rbind,lapply(x, DxStats, n = n, prevalence = x, sensitivity = sensitivity, specificity = specificity))
-      
-      yPciL[[i]] <- Dx$TPY_ciL
-      yP[[i]]    <- Dx$PostTestProbP
-      yPciU[[i]] <- Dx$TPY_ciU
-      
-      yNciL[[i]] <- Dx$TNY_ciL
-      yN[[i]]    <- Dx$PostTestProbN
-      yNciU[[i]] <- Dx$TNY_ciU
-    }
+    yPciL <- Dx$TPY_ciL
+    yP   <- Dx$PostTestProbP
+    yPciU <- Dx$TPY_ciU
+    
+    yNciL <- Dx$TNY_ciL
+    yN    <- Dx$PostTestProbN
+    yNciU <- Dx$TNY_ciU
     
     data.frame(
       x = x,
