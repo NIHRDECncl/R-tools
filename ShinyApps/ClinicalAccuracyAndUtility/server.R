@@ -56,19 +56,22 @@ shinyServer (
    })
    },ignoreNULL = FALSE)
    
+   observeEvent(input$GoButton, {
+     iCMheading <- isolate(paste0("Table 1. Accuracy of ", input$DxTestName, " when testing for ", input$DxCondition, " in ", input$DxPopulation))
+     output$cmHeading <- renderText(iCMheading)
+   },   ignoreNULL = FALSE)
+   
+   
     
    observeEvent(input$GoButton, {
- 
-     output$df2x2Table <- renderDataTable(
-       datatable(
+     output$df2x2Table <- renderTable(
+      # datatable(
          if(isValid_num()){
-        isolate(DxStats(input$n, input$prevalence, input$sensitivity, input$specificity, plot2x2 = TRUE)$df2x2[[1]])}), 
-          options = list(
-            dom = 't') # this option should show the table without length or filter controls --- but it doesn't work :-(
+        isolate(DxStats(input$n, input$prevalence, input$sensitivity, input$specificity, plot2x2 = TRUE)$df2x2[[1]])})
+      #    options = list(
+       #     dom = 't') # this option should show the table without length or filter controls --- but it doesn't work :-(
                        # see 4.2 DOM elements https://rstudio.github.io/DT/options.html 
-       )
-
-     
+       #)
    },   ignoreNULL = FALSE)
 
 
