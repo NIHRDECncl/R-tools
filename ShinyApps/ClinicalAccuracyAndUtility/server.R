@@ -93,7 +93,7 @@ shinyServer (
          if(isValid_num()){
         isolate(
           prepostprobplot(input$n, input$prevalence, input$sensitivity,input$specificity, input$DxCondition,
-                          input$DxTestName, input$disper)
+                          input$DxTestName, input$disper, input$DxPopulation)
         )}
          })
    },   ignoreNULL = FALSE)
@@ -106,7 +106,7 @@ shinyServer (
          isolate(ruleinoutplot(input$n, input$prevalence, input$sensitivity, input$specificity, input$RuleInDecisionThreshold, 
                       input$RuleOutDecisionThreshold,
                       input$DxCondition, input$DxTestName, input$DxRuleInDecision,
-                      input$DxRuleOutDecision, input$IndeterminateDecision, input$disper))
+                      input$DxRuleOutDecision, input$IndeterminateDecision, input$disper, input$DxPopulation))
           }
        })
     },   ignoreNULL = FALSE)
