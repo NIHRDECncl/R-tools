@@ -16,6 +16,7 @@ ui <- function(request) {
                     fluidRow(
                     actionButton("GoButton", "Update the graphs (will take a while)", class = 'middleAlign'),
                      hr(),
+                      textInput(inputId = "DxPopulation", label = "Population", value = "<population>"),
                       textInput(inputId = "DxCondition", label = "Name of condition", value = "<condition>"),
                       textInput(inputId = "DxTestName", label = "Name of test", value = "<test>"),
                      hr(),
@@ -42,39 +43,33 @@ ui <- function(request) {
                    )
                  ),
                  mainPanel(
-                  # wellPanel(
                    br(),
                    br(),
                    span(textOutput("validtext"), style="color:red"),
                      span(style="color: rgb(0, 0, 153)",
+                          h4(textOutput("cmHeading"))),
+                          h4(tags$b("2x2 Table"), withSpinner(tableOutput("df2x2Table"),type = 6)),
+                     span(style="color: rgb(0, 0, 153)",
+                          h6("(The numbers may not be integers because they are calculated from the study size, 
+                             prevalence, sensitivity, and specificity.)"),
+                          br(),
                           h4(tags$b("Graph 0. "), "How sensitivity and specificity reflect diagnostic accuracy"),
                           h5("(True and false positives (Tp, Fp), False and true negatives (Fn, Tn))")),
                      withSpinner(plotOutput("RuleInOutPlot0"), type = 6),
                      br(),
-                #   ),
-                   
-                 #    wellPanel(
+              
                        span(style="color: rgb(0, 0, 153)",
                        h4(tags$b("Graph 1. "), "How post-test probabilities depend on prevalence"),
                        h5("(And sensitivity, and specificity)")),
                        withSpinner(plotOutput(paste0("PrePostProb2")), type = 6),
                        br(),
-                #     ),
+              
                      br(), 
-                   
-                #     wellPanel(
                        span(style="color: rgb(0, 0, 153)",
                        h4(tags$b("Graph 2. "), "How diagnostic decisions depend on both the test result (positive or negative) and thresholds for decisions"),
                        h5("(And prevalence, sensitivity, and specificity)")),
                        withSpinner(plotOutput("RuleInOutPlot2"), type = 6),
-                #       ),
-                   
-                   br(), 
-               #    wellPanel(
-                     span(style="color: rgb(0, 0, 153)",
-                          h4(tags$b("2x2 Table"),
-                             withSpinner(dataTableOutput("df2x2Table"),type = 6)
-                #   )
+                    br()
                )
         ),
     
@@ -86,7 +81,7 @@ ui <- function(request) {
              downloadButton('downloadReport', 'Download summary report'),
              br(), br(), 
              p("NB generating the document can take some time.")
-    )),
+    ),
      
     
 
@@ -102,6 +97,6 @@ ui <- function(request) {
         tags$p("NIHR Diagnostic Evidence Co-operative Newcastle. July 2017"),
         tags$br(),
         tags$img(src = "nihr-logo.jpg", width = "80px", height = "28px", align = "right") # add the NIHR logo)
-      )))
+      ))
 
 }
