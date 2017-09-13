@@ -307,7 +307,7 @@
   #
   
   ruleinoutplot <- function(n, prevalence, sensitivity, specificity, RuleInDecisionThreshold, RuleOutDecisionThreshold, #}, 
-                            DxCondition,  DxTestName, DxRuleInDecision, DxRuleOutDecision, IndeterminateDecision, disper){
+                            DxCondition,  DxTestName, DxRuleInDecision, DxRuleOutDecision, IndeterminateDecision, disper, population){
     
     if (disper) percent = 100
     if (!disper) percent = 1
@@ -363,8 +363,8 @@
        axis.text.x = element_blank(),
         legend.position="none") +
        labs(x = "", y = paste0("Probability of ", DxCondition), size = 8) +
-       ggtitle(paste("Post-test probabilities after", DxTestName, "for", DxCondition)) +
-       theme(plot.title = element_text(size = 16, face = "bold"), axis.text = element_text(size = 12), 
+       ggtitle(paste("Post-test probabilities after \n", DxTestName, "for", DxCondition, "in", population)) +
+       theme(plot.title = element_text(size = 16, face = "bold", hjust = 0.5), axis.text = element_text(size = 12), 
              axis.title = element_text(size = 14)) +
      geom_label_repel(size = 4, data = fixedlabels, aes(x,y*percent,label = labels), 
                 label.padding = unit(0.15, "lines"), label.r = unit(0.2, "lines")) + 
@@ -471,7 +471,7 @@
   #===================================================================================================
   #
   
- prepostprobplot <- function(n, prevalence, sensitivity, specificity, DxCondition, DxTestName, disper){
+ prepostprobplot <- function(n, prevalence, sensitivity, specificity, DxCondition, DxTestName, disper, population){
    
    if (disper) percent = 100
    if (!disper) percent = 1
@@ -487,8 +487,8 @@
     geom_ribbon(data = graphPre2PostProb,  aes(x = x*percent, ymin = yNciL*percent, ymax = yNciU*percent, alpha = 0.03), fill  = "darkseagreen3") +
     theme(legend.position="none") +
     labs(x = "Pre-test probability (prevalence)", y = paste0("Post test probability after ", DxTestName)) +
-    ggtitle(paste("Pre- and post-test probabilities after", DxTestName, "for", DxCondition)) +
-    theme(plot.title = element_text(size = 16, face = "bold"), axis.text = element_text(size = 12), 
+    ggtitle(paste("Pre- and post-test probabilities after \n", DxTestName, "for", DxCondition, "in", population)) +
+    theme(plot.title = element_text(size = 16, face = "bold", hjust = 0.5), axis.text = element_text(size = 12), 
           axis.title = element_text(size = 14)) +
     
     geom_line(data = linesPre2PostProb, aes(x = prevalenceX*percent,
