@@ -49,7 +49,7 @@ ui <- function(request) {
                    span(textOutput("validtext"), style="color:red"),
                      span(style="color: rgb(0, 0, 153)",
                           h4(textOutput("cmHeading"))),
-                          h4(tags$b("2x2 Table"), withSpinner(tableOutput("df2x2Table"),type = 6)),
+                     span(h4( withSpinner(tableOutput("df2x2Table"),type = 6), align = "center", style="color:#4169E1; font-weight:bold;font-size: 15px")),
                      span(style="color: rgb(0, 0, 153)",
                           h6("(The numbers may not be integers because they are calculated from the study size, 
                              prevalence, sensitivity, and specificity.)"),

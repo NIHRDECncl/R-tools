@@ -30,7 +30,7 @@ The vertical line indicated the pre-test probability or prevalenceof `r input$Dx
 
 ```{r, echo = FALSE, fig.cap= "Post test probabilities", fig.width=8.2,fig.height=6}
 prepostprobplot(input$n, input$prevalence, input$sensitivity, input$specificity,
-                input$DxCondition, input$DxTestName, input$disper)
+                input$DxCondition, input$DxTestName, input$disper, input$DxPopulation)
 ```
 
 Figure 2. shows how decisions are made with information from a diagnostic test. The clinical utility of the test is the net benefit to patients, and is determined by the outcomes which follow from the management decisions made on the basis of the test's results. Thus, the first step to assessing clinical utility is to understand the factors that determine decision-making. 
@@ -41,7 +41,7 @@ The threshold for decision making to `r input$DxRuleInDecision` is `r input$Rule
  ruleinoutplot(input$n, input$prevalence, input$sensitivity, input$specificity,
                       input$RuleInDecisionThreshold, input$RuleOutDecisionThreshold, 
                       input$DxCondition, input$DxTestName,  
-                      input$DxRuleInDecision, input$DxRuleOutDecision, input$IndeterminateDecision, input$disper)
+                      input$DxRuleInDecision, input$DxRuleOutDecision, input$IndeterminateDecision, input$disper, input$DxPopulation)
         
 
 ```
