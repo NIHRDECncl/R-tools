@@ -4,9 +4,10 @@ ui <- function(request) {
 
   navbarPage(title = NULL,
     navbarMenu("Information",
-    tabPanel("Introduction", br(), br(), includeHTML("www/tab1.html")), 
-    tabPanel("How to read graph 1", includeHTML("www/tab2.html")),
-    tabPanel("How to read graph 2", includeHTML("www/tab3.html"))#,
+    tabPanel("Introduction", br(), br(), includeHTML("www/tab1 2.html")), 
+    tabPanel("How to read graph 0", includeHTML("www/tab2 2.html")),
+    tabPanel("How to read graph 1", includeHTML("www/tab3 2.html")),
+    tabPanel("How to read graph 2", includeHTML("www/tab4.html"))#,
     ),
     
   
