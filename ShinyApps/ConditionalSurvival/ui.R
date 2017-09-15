@@ -62,13 +62,13 @@ ui <- function(request) {
           hr(),
           column(2, br(), br(), br(), br(), br(), br(), 
                  textOutput("pText4Figure")),
-          column(10, plotOutput("pPlot")),
+          column(10, plotlyOutput("pPlot")),
           
           ##### conditional survival plots
           hr(),
           column(2, br(), br(), br(), br(), br(), br(), 
                  textOutput("csText4Figure")),
-          column(10, plotOutput("csPlot")),
+          column(10, plotlyOutput("csPlot")),
           hr()
           )
         ))),

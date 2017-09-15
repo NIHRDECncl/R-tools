@@ -7,7 +7,6 @@
 #
 # load packages used by the App
 LoadPackages <- function() {
-  library(DT)
   library(shiny)
   library(tidyverse) # Imports: broom, DBI, dplyr, forcats, ggplot2, haven, httr, hms, jsonlite, lubridate, magrittr, modelr, purrr, readr, readxl, stringr, tibble, rvest, tidyr, xml2
   library(rsconnect)   # needed to upload to Shinyio
@@ -20,6 +19,8 @@ LoadPackages <- function() {
   library(PropCIs)
   library(rsconnect)   # needed to upload to Shinyio
   library(readxl)
+  library(plotly)
+  library(DT)
   # ...
 }
 

@@ -1,0 +1,42 @@
+---
+title: "Exercise 1"
+author: "Michael Power"
+date: "15/09/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Features used in Word
+
+* macros
+* running headers and footers with page numbers
+* styles
+* tables and figures with captions and cross-referencing
+* cite as you write
+* last saved by and date/time stamp
+* sections for portrait and landscape
+* spell (and grammar) checking
+* tables of contents
+* tracked changes
+* 
+
+# notes
+bibtek for references
+
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

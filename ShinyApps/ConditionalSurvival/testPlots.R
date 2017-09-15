@@ -13,6 +13,7 @@ library(shinycssloaders)
 library(PropCIs)
 library(rsconnect)   # needed to upload to Shinyio
 library(readxl)
+library(plotly)
 
 
 
@@ -118,10 +119,12 @@ library(readxl)
   csGroup2Name <- csMetadata$group2Name[1]
   
   
-  pplot(csData, csPlotTitle, csXlab, csYlab, csLegendTitle, showCI = FALSE, showBW = FALSE, facetWrap = TRUE, ncol = 2L, group1Name = csGroup1Name, group2Name = csGroup2Name)  
-  pplot(csData, csPlotTitle, csXlab, csYlab, csLegendTitle, showCI = TRUE, showBW = FALSE, facetWrap = TRUE, ncol = 2L, group1Name = csGroup1Name, group2Name = csGroup2Name)  
-  pplot(csData, csPlotTitle, csXlab, csYlab, csLegendTitle, showCI = FALSE, showBW = TRUE, facetWrap = TRUE, ncol = 2L, group1Name = csGroup1Name, group2Name = csGroup2Name)  
-  pplot(csData, csPlotTitle, csXlab, csYlab, csLegendTitle, showCI = TRUE, showBW = TRUE, facetWrap = TRUE, ncol = 2L, group1Name = csGroup1Name, group2Name = csGroup2Name)  
-  
+  ggplotly( 
+   pplot(csData, csPlotTitle, csXlab, csYlab, csLegendTitle, showCI = FALSE, showBW = FALSE, facetWrap = TRUE, ncol = 2L, group1Name = csGroup1Name, group2Name = csGroup2Name) 
+         )
+ # pplot(csData, csPlotTitle, csXlab, csYlab, csLegendTitle, showCI = TRUE, showBW = FALSE, facetWrap = TRUE, ncol = 2L, group1Name = csGroup1Name, group2Name = csGroup2Name)  
+  # pplot(csData, csPlotTitle, csXlab, csYlab, csLegendTitle, showCI = FALSE, showBW = TRUE, facetWrap = TRUE, ncol = 2L, group1Name = csGroup1Name, group2Name = csGroup2Name)  
+  # pplot(csData, csPlotTitle, csXlab, csYlab, csLegendTitle, showCI = TRUE, showBW = TRUE, facetWrap = TRUE, ncol = 2L, group1Name = csGroup1Name, group2Name = csGroup2Name)  
+  # 
 
 

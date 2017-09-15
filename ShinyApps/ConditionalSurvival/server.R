@@ -2,6 +2,7 @@
 
 # load data as unreactive objects available to all sessions
 # browser()
+
 path <- "data/ConditionalSurvival.xlsx"
 sheets <- data.frame(excel_sheets(path), stringsAsFactors = FALSE)
 names(sheets) <- "sheets"
@@ -156,9 +157,11 @@ server <-
   # plot prognosis
   
 
-  output$pPlot <- renderPlot({
+  output$pPlot <- renderPlotly({
+    ggplotly(
     pplot(pData(), pPlotTitle(), pXlab(), pYlab(), pLegendTitle(), showCI(), showBW(), input$facetWrap, ncol = 2)  
-  })
+    , tooltip = c("x", "y")  )
+    })
 
   # labels for conditional survival plots
   csXlab <- reactive({csMetadata()$xLabel[1]})
@@ -186,7 +189,9 @@ server <-
   # )
   
   # plot conditional survival
-  output$csPlot <- renderPlot({
+  output$csPlot <- renderPlotly({
+    ggplotly(
     pplot(csData(), csPlotTitle(), csXlab(), csYlab(), csLegendTitle(), showCI(), showBW(), input$facetWrap, ncol = 2L)  
-      })
+    , tooltip = c("x", "y")  )
+    })
 }
