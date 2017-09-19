@@ -106,7 +106,8 @@ shinyServer (
          isolate(ruleinoutplot(input$n, input$prevalence, input$sensitivity, input$specificity, input$RuleInDecisionThreshold, 
                       input$RuleOutDecisionThreshold,
                       input$DxCondition, input$DxTestName, input$DxRuleInDecision,
-                      input$DxRuleOutDecision, input$IndeterminateDecision, input$disper, input$DxPopulation))
+                      input$DxRuleOutDecision, input$IndeterminateDecision, input$disper, input$DxPopulation, 
+                      input$disthres))
           }
        })
     },   ignoreNULL = FALSE)
