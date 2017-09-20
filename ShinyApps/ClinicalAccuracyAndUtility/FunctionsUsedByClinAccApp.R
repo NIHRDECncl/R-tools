@@ -307,7 +307,8 @@
   #
   
   ruleinoutplot <- function(n, prevalence, sensitivity, specificity, RuleInDecisionThreshold, RuleOutDecisionThreshold, #}, 
-                            DxCondition,  DxTestName, DxRuleInDecision, DxRuleOutDecision, IndeterminateDecision, disper, population){
+                            DxCondition,  DxTestName, DxRuleInDecision, DxRuleOutDecision, IndeterminateDecision, disper, 
+                            population, disthres){
     
     if (disper) percent = 100
     if (!disper) percent = 1
@@ -349,12 +350,10 @@
     postTestLabels <- postTestLabels(n, prevalence, sensitivity, specificity, disper)
     
     
-    ggplot(linesdf) +
+    p <- ggplot(linesdf) +
       geom_line(aes(x = PriorAxisX, y = PriorAxisY*percent), data =linesdf, stat = "identity", position = "identity") +
       geom_line(aes(x = PostAxisX, y = PostAxisY*percent), data = linesdf, stat = "identity", position = "identity") +
       geom_line(aes(x = PrevX, y = PrevY*percent, colour="coral1"), size = 1.5, data = linesdf, stat = "identity", position = "identity") +
-      geom_line(aes(x = RuleInDecisionThresholdX, y = RuleInDecisionThresholdY*percent, colour="cadetblue"), size = 1.5, data = linesdf, stat = "identity", position = "identity") +
-      geom_line(aes(x = RuleOutDecisionThresholdX, y = RuleOutDecisionThresholdY*percent, colour="springgreen4"), size = 1.5, data = linesdf, stat = "identity", position = "identity") +
       geom_line(aes(x = TestPosX, y = TestPosY*percent), size = 1.15, data = linesdf, stat = "identity", position = "identity", colour = "firebrick4") +
       geom_ribbon(data = linesdf, aes(x = TestPosX, ymin = TPY_ciL*percent, ymax = TPY_ciU*percent, alpha = 0.03), fill  = "lightsalmon") +
       geom_line(aes(x = TestNegX, y = TestNegY*percent), size = 1.15, data = linesdf, stat = "identity", position = "identity") +
@@ -366,12 +365,16 @@
        ggtitle(paste("Post-test probabilities after \n", DxTestName, "for", DxCondition, "in", population)) +
        theme(plot.title = element_text(size = 16, face = "bold", hjust = 0.5), axis.text = element_text(size = 12), 
              axis.title = element_text(size = 14)) +
-     geom_label_repel(size = 4, data = fixedlabels, aes(x,y*percent,label = labels), 
-                label.padding = unit(0.15, "lines"), label.r = unit(0.2, "lines")) + 
-      geom_text(data = postTestLabels, aes(x,y*percent,label = labels), size = 4 ) #+ geom_label()  
+        geom_text(data = postTestLabels, aes(x,y*percent,label = labels), size = 4 ) #+ geom_label()  
   #    geom_text_repel(point.padding = NA)
   
-
+    if(disthres){
+    p <- p + geom_line(aes(x = RuleInDecisionThresholdX, y = RuleInDecisionThresholdY*percent, colour="cadetblue"), size = 1.5, data = linesdf, stat = "identity", position = "identity") +
+         geom_line(aes(x = RuleOutDecisionThresholdX, y = RuleOutDecisionThresholdY*percent, colour="springgreen4"), size = 1.5, data = linesdf, stat = "identity", position = "identity") +
+      geom_label_repel(size = 4, data = fixedlabels, aes(x,y*percent,label = labels),          label.padding = unit(0.15, "lines"), label.r = unit(0.2, "lines"))
+    }
+    p
+    
   }
   
   #

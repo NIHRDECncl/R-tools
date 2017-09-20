@@ -39,6 +39,7 @@ ui <- function(request) {
                      textInput(inputId = "DxRuleOutDecision", label = "Rule-out decision", value = "<e.g. do not treat>"),
                      numericInput("RuleOutDecisionThreshold", "Rule-out NPV threshold", min=0, max=1, value= 0.1, step = 0.01),
                  checkboxInput('disper', 'Display as percentages?', value = FALSE), 
+                 checkboxInput('disthres', 'Display as decision making thresholds?', value = TRUE), 
                  hr(),
                  bookmarkButton()
                    )
