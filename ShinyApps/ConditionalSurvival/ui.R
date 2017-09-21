@@ -5,7 +5,7 @@ ui <- function(request) {
     navbarMenu("Information",
         tabPanel("Do you want to know your prognosis?", 
           tags$style(type="text/css", "body {padding-top: 90px;}"), # padding to make room for fixed navbar
-          includeHTML("www/Do you want to know your prognosis?.html"), 
+          includeHTML("www/tab1.html"), 
           
           # I ran the statement below to get the HTML for a link to the next tab, 
           # and then copied and pasted it into the HTML file for this tab
@@ -89,7 +89,7 @@ ui <- function(request) {
                       tabPanel("view2 title contributor",
                 h6("under construction: contributor list 2"))),
 
-   navbarMenu("Acknowledgments",
+   navbarMenu("Acknowledgements",
             tabPanel("Developers",
                  h6("under construction: Developers")),
 
