@@ -29,9 +29,25 @@
     library(ggrepel)
     library(rmarkdown)
     library(formattable)
+    library(shinyjs)
+
     # ...
   }
+
   
+  appCSS <- "
+  #loading-content {
+  position: absolute;
+  background: #000000;
+  opacity: 0.9;
+  z-index: 100;
+  left: 0;
+  right: 0;
+  height: 100%;
+  text-align: center;
+  color: #FFFFFF;
+  }
+  "
   
   #
   #===================================================================================================
@@ -194,7 +210,7 @@
   labelX = rep(c(0, 0, 0, 0, 4, 4, 8, 8), 2) + nudgeX,
         labelY = c(n, Dpos, -n/25, 0, TestPos, -n/25 , TestNeg, -n/25, 1, -1/25, -1/25, -1/25, 1, -1/25, 1, -1/25)*nudgeY
       )
-      print(dx)
+     # print(dx)
       dx2x2$barplot[[1]] <- 
         ggplot(dx, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax)) +
         geom_rect(aes(fill = result, label )) +
@@ -259,7 +275,7 @@
     }
     
    
-    Dx <- DxStats(n, prevalence, sensitivity, specificity) 
+    Dx <- DxStats(n, prevalence, sensitivity, specificity, plot2x2 = FALSE) 
     
     Nudge <- 0.02
     if (Dx$TPY_ciU - Dx$TPY_ciL < 3*Nudge) NudgeCIp = + Nudge else NudgeCIp = - Nudge/3
@@ -291,12 +307,13 @@
   #
   
   ruleinoutplot <- function(n, prevalence, sensitivity, specificity, RuleInDecisionThreshold, RuleOutDecisionThreshold, #}, 
-                            DxCondition,  DxTestName, DxRuleInDecision, DxRuleOutDecision, IndeterminateDecision, disper, population){
+                            DxCondition,  DxTestName, DxRuleInDecision, DxRuleOutDecision, IndeterminateDecision, disper, 
+                            population, disthres){
     
     if (disper) percent = 100
     if (!disper) percent = 1
     
-    Dx <- DxStats(n, prevalence, sensitivity, specificity) 
+    Dx <- DxStats(n, prevalence, sensitivity, specificity, plot2x2 = FALSE) 
    
     linesdf <- data.frame(
       PriorAxisX = c(0, 0),
@@ -333,12 +350,10 @@
     postTestLabels <- postTestLabels(n, prevalence, sensitivity, specificity, disper)
     
     
-    ggplot(linesdf) +
+    p <- ggplot(linesdf) +
       geom_line(aes(x = PriorAxisX, y = PriorAxisY*percent), data =linesdf, stat = "identity", position = "identity") +
       geom_line(aes(x = PostAxisX, y = PostAxisY*percent), data = linesdf, stat = "identity", position = "identity") +
       geom_line(aes(x = PrevX, y = PrevY*percent, colour="coral1"), size = 1.5, data = linesdf, stat = "identity", position = "identity") +
-      geom_line(aes(x = RuleInDecisionThresholdX, y = RuleInDecisionThresholdY*percent, colour="cadetblue"), size = 1.5, data = linesdf, stat = "identity", position = "identity") +
-      geom_line(aes(x = RuleOutDecisionThresholdX, y = RuleOutDecisionThresholdY*percent, colour="springgreen4"), size = 1.5, data = linesdf, stat = "identity", position = "identity") +
       geom_line(aes(x = TestPosX, y = TestPosY*percent), size = 1.15, data = linesdf, stat = "identity", position = "identity", colour = "firebrick4") +
       geom_ribbon(data = linesdf, aes(x = TestPosX, ymin = TPY_ciL*percent, ymax = TPY_ciU*percent, alpha = 0.03), fill  = "lightsalmon") +
       geom_line(aes(x = TestNegX, y = TestNegY*percent), size = 1.15, data = linesdf, stat = "identity", position = "identity") +
@@ -347,15 +362,19 @@
        axis.text.x = element_blank(),
         legend.position="none") +
        labs(x = "", y = paste0("Probability of ", DxCondition), size = 8) +
-       ggtitle(paste("Post-test probabilities after", DxTestName, "for", DxCondition, "in", population)) +
-       theme(plot.title = element_text(size = 16, face = "bold"), axis.text = element_text(size = 12), 
+       ggtitle(paste("Post-test probabilities after \n", DxTestName, "for", DxCondition, "in", population)) +
+       theme(plot.title = element_text(size = 16, face = "bold", hjust = 0.5), axis.text = element_text(size = 12), 
              axis.title = element_text(size = 14)) +
-     geom_label_repel(size = 4, data = fixedlabels, aes(x,y*percent,label = labels), 
-                label.padding = unit(0.15, "lines"), label.r = unit(0.2, "lines")) + 
-      geom_text(data = postTestLabels, aes(x,y*percent,label = labels), size = 4 ) #+ geom_label()  
+        geom_text(data = postTestLabels, aes(x,y*percent,label = labels), size = 4 ) #+ geom_label()  
   #    geom_text_repel(point.padding = NA)
   
-
+    if(disthres){
+    p <- p + geom_line(aes(x = RuleInDecisionThresholdX, y = RuleInDecisionThresholdY*percent, colour="cadetblue"), size = 1.5, data = linesdf, stat = "identity", position = "identity") +
+         geom_line(aes(x = RuleOutDecisionThresholdX, y = RuleOutDecisionThresholdY*percent, colour="springgreen4"), size = 1.5, data = linesdf, stat = "identity", position = "identity") +
+      geom_label_repel(size = 4, data = fixedlabels, aes(x,y*percent,label = labels),          label.padding = unit(0.15, "lines"), label.r = unit(0.2, "lines"))
+    }
+    p
+    
   }
   
   #
@@ -374,18 +393,16 @@
     yNciL <- x
     yN <- x
     yNciU <- x
+
+    Dx <- do.call(rbind,lapply(x,DxStats, n = n, sensitivity = sensitivity, specificity = specificity))
     
-    for (i in seq_along(x)) {
-      Dx <- DxStats(n, x[[i]], sensitivity, specificity) 
-      
-      yPciL[[i]] <- Dx$TPY_ciL
-      yP[[i]]    <- Dx$PostTestProbP
-      yPciU[[i]] <- Dx$TPY_ciU
-      
-      yNciL[[i]] <- Dx$TNY_ciL
-      yN[[i]]    <- Dx$PostTestProbN
-      yNciU[[i]] <- Dx$TNY_ciU
-    }
+    yPciL <- Dx$TPY_ciL
+    yP   <- Dx$PostTestProbP
+    yPciU <- Dx$TPY_ciU
+    
+    yNciL <- Dx$TNY_ciL
+    yN    <- Dx$PostTestProbN
+    yNciU <- Dx$TNY_ciU
     
     data.frame(
       x = x,
@@ -405,7 +422,7 @@
   
     
   linesPre2PostProb <- function(n, prevalence, sensitivity, specificity) {
-    Dx <- DxStats(n, prevalence, sensitivity, specificity)
+    Dx <- DxStats(n, prevalence, sensitivity, specificity, plot2x2 = FALSE)
     data.frame(
       prevalenceX     = c(prevalence, prevalence),
       prevalenceY     = c(0, Dx$PostTestProbP),
@@ -437,7 +454,7 @@
     }
     
     ### save stats so don't have to call many times
-    Dx <- DxStats(n, prevalence, sensitivity, specificity)
+    Dx <- DxStats(n, prevalence, sensitivity, specificity, plot2x2 = FALSE)
     data.frame(
       x = c(0.15, 0.15, prevalence),
       y = c(
@@ -473,8 +490,8 @@
     geom_ribbon(data = graphPre2PostProb,  aes(x = x*percent, ymin = yNciL*percent, ymax = yNciU*percent, alpha = 0.03), fill  = "darkseagreen3") +
     theme(legend.position="none") +
     labs(x = "Pre-test probability (prevalence)", y = paste0("Post test probability after ", DxTestName)) +
-    ggtitle(paste("Pre- and post-test probabilities after", DxTestName, "for", DxCondition, "in", population)) +
-    theme(plot.title = element_text(size = 16, face = "bold"), axis.text = element_text(size = 12), 
+    ggtitle(paste("Pre- and post-test probabilities after \n", DxTestName, "for", DxCondition, "in", population)) +
+    theme(plot.title = element_text(size = 16, face = "bold", hjust = 0.5), axis.text = element_text(size = 12), 
           axis.title = element_text(size = 14)) +
     
     geom_line(data = linesPre2PostProb, aes(x = prevalenceX*percent,

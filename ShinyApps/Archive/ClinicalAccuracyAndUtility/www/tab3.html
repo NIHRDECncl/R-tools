@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta content="text/html; charset=windows-1252"
+      http-equiv="content-type">
+    <title>How to read graph 1: Clinical accuracy</title>
+  </head>
+  <body>
+    <h2 style="color: rgb(0, 0, 153);">How to read graph 1: Clinical
+      accuracy</h2>
+    <p>The figure below is a screen snip showing how graph 1 looks when
+      the app is first started. <br>
+      If you have customised the labels or data, the graph will look
+      different.<br>
+    </p>
+    <table style="text-align: left; width: 870px; height: 420px;"
+      cellspacing="2" cellpadding="6" border="1">
+      <tbody>
+        <tr>
+          <td style="height: 98%; width: 98%; text-align: left;">
+            <div style="text-align: left;"><img title=""><img
+                style="width: 904px; height: 518px;" alt=""
+                title="Clinical accuracy" src="SnipClinicalAccuracy.PNG"><br>
+            </div>
+            <span style="font-weight: bold; color: rgb(51, 102, 255);">Figure.
+
+
+              Screensnip of graph 1. <br>
+            </span></td>
+        </tr>
+      </tbody>
+    </table>
+    <h2 style="color: rgb(0, 0, 153);">Look at graph 1<br>
+    </h2>
+    <p>The X-axis shows the possible range of pretest probabilities:
+      from 0 to 1. </p>
+    <p>The Y axis shows &nbsp;the&nbsp;the possible range of post-test
+      probabilities: from 0 to 1</p>
+    <p>Ribbons (the shaded area around lines) show 95% confidence
+      intervals. These represent statistical uncertainty, or lack of
+      precision, in measurment.<br>
+      If you can't see the ribbons clearly, this is probably because the
+      sample size (n) has been set to a large number, e.g. 3000. If this
+      is the case, reset n to 300.<br>
+    </p>
+    <p>The upper curved line, with the salmon pink ribbon and the lower
+      curved line, with the sea green ribbon show how test results
+      change the probability of having the condition. In the example
+      shown, the prevalence = 40%, sensitivity = 90%, and specificity =
+      80%, and:</p>
+    <ol>
+      <li>a positive test increases the probability of the condition to
+        75%.</li>
+      <li>a negative test decreases the probability of the condition to
+        8%.</li>
+    </ol>
+    <p><span style="font-weight: bold;"></span></p>
+    <hr>
+    <h2 style="color: rgb(0, 0, 153);">Exercise for graph 1</h2>
+    <p>Click on the tab to "<i>Explore clinical accuracy and utility of
+        diagnostic tests</i>".<br>
+    </p>
+    <img
+src="file:///Users/michaelpower/Google%20Drive/GIT-project/GitHub/R-tools/ShinyApps/ClinicalAccuracyAndUtility/www/Snip%20Explore%20clinical%20accuracy%20and%20utility%20of%20diagnostic%20tests.png"
+      alt="Screen snip of tab &quot;Explore clinical accuracy and
+      utility&quot;" width="494" height="197">
+    <p>Use the form on the left to explore the clinical accuracy and
+      clinical utility of d-dimer as a test for excluding VTE (venous
+      thromboembolism).<br>
+    </p>
+    <p>The data are from a systematic review and meta-analysis by GJ
+      Geering et al (<a
+        href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2727580/">see
+        abstract and link to full paper</a>).<br>
+    </p>
+    <ul>
+      <li>
+        <p><span style="font-weight: bold;">Change the labels:</span><br>
+          <i>Population</i> to "pregnant women"<br>
+          <i>Condition</i> to VTE<br>
+          <i>Test</i> to d-dimer<br>
+        </p>
+      </li>
+      <li>
+        <p><span style="font-weight: bold;">Explore the range of
+            prevalences in different populations</span><br>
+          <i>Prevalence</i> from 4% to 51% (for the moment ignore the
+          fact that the range of prevalences is for a range of
+          populations, not just pregnant women)<br>
+          When you change the prevalence:</p>
+      </li>
+      <ul>
+        <li>
+          <p>how do sensitivity and specificity change?<br>
+            Why?</p>
+        </li>
+      </ul>
+      <ul>
+        <li>How do the post postive test and post negative test
+          probabilities (PPV and NPV) change?<br>
+          Why?</li>
+      </ul>
+    </ul>
+    <ul>
+      <li><span style="font-weight: bold;">Explore the range of
+          sensitivities</span><br>
+        <i>Sensitivity</i> from 85% to 96% (95% confidence intervals
+        from 78% to 98%</li>
+    </ul>
+    <ul>
+      <ul>
+        <li>When you increase sensitivity, what happens to the post
+          postive test probability (PPV)?<br>
+          Why?</li>
+      </ul>
+    </ul>
+    <ul>
+      <ul>
+        <li>When you increase sensitivity, what happens to the post
+          negative test probability (NPV)?<br>
+          Why?<br>
+        </li>
+      </ul>
+      <li>
+        <p><span style="font-weight: bold;">Explore the range of
+            specificities</span><br>
+          <i>Specificity</i> from 48% to 74% (95% confiden ce intervals
+          from 33% to 78%</p>
+        <ul>
+          <li>When you increase specificity, what happens to the post
+            postive test probability (PPV)?<br>
+            Why?</li>
+        </ul>
+      </li>
+    </ul>
+    <ul>
+      <ul>
+        <li>When you increase specificity, what happens to the post
+          negative test probability (NPV)?<br>
+          Why?<br>
+        </li>
+      </ul>
+    </ul>
+    <ul>
+      <li> <span style="font-weight: bold;">How will a positive test
+          result change management?</span></li>
+      <li><span style="font-weight: bold;">How will a negative test
+          result change managment?</span></li>
+    </ul>
+    <blockquote> Tip: Graphs 2 (and the accompanying explanation on how
+      to read them) will help you find the answer. </blockquote>
+    <hr>
+    <h2 style="font-weight: bold; color: rgb(0, 0, 153);">Further
+      reading</h2>
+    <ul>
+      <li>Hunink M, Glasziou P, Siegel J, et al. <br>
+        <span style="font-weight: bold;">Decision making in health and
+          medicine. Integrating evidence and values.</span> <br>
+        Cambridge: Cambridge University. Press, 2001.<br>
+        <br>
+      </li>
+      <li><a
+href="https://www.nice.org.uk/Media/Default/About/what-we-do/NICE-guidance/NICE-diagnostics-guidance/Diagnostics-assessment-programme-manual.pdf">NICE
+Diagnostic
+
+
+
+
+
+
+          Assessment Programme Manual (2011),</a> <br>
+        (especially section 14.</li>
+    </ul>
+  </body>
+</html>

@@ -1,6 +1,6 @@
 ###### to trace the execution of reactives at runtime 
 ###### 
-###### 1. at the R console run: 
+###### 1. at the R console run: options(shiny.reactlog=TRUE) 
 ###### 2. start the Shiny app
 ###### 3. run the trace with command-F3
 ###### 4. step through with -> arrow
@@ -9,7 +9,7 @@
 
 ################# server for ShinyApp to explore clinical accuracy and clinical utility    ################
 
-# inputs      .
+# inputs
 #
 # DxCondition
 # DxTestName
@@ -56,25 +56,22 @@ shinyServer (
    })
    },ignoreNULL = FALSE)
    
+   observeEvent(input$GoButton, {
+     iCMheading <- isolate(paste0("Table 1. Accuracy of ", input$DxTestName, " when testing for ", input$DxCondition, " in ", input$DxPopulation))
+     output$cmHeading <- renderText(iCMheading)
+   },   ignoreNULL = FALSE)
+   
+   
     
    observeEvent(input$GoButton, {
-  
-     iCMheading <- isolate(paste0("Table 1. Accuracy of ", input$DxTestName, " when testing for ", input$DxCondition, " in ", input$DxPopulation))
-     
-     output$cmHeading <- renderText(iCMheading)
-     
-   },   ignoreNULL = FALSE)
-
-   observeEvent(input$GoButton, {
-     
-     jN <- isolate(input$n)
-     jPrev <- isolate(input$prevalence)
-     jSens <- isolate(input$sensitivity)
-     jSpec <- isolate(input$specificity)
-
      output$df2x2Table <- renderTable(
-
-        DxStats(jN, jPrev, jSens, jSpec, plot2x2 = TRUE)$df2x2[[1]])
+      # datatable(
+         if(isValid_num()){
+        isolate(DxStats(input$n, input$prevalence, input$sensitivity, input$specificity, plot2x2 = TRUE)$df2x2[[1]])})
+      #    options = list(
+       #     dom = 't') # this option should show the table without length or filter controls --- but it doesn't work :-(
+                       # see 4.2 DOM elements https://rstudio.github.io/DT/options.html 
+       #)
    },   ignoreNULL = FALSE)
 
 
@@ -83,13 +80,9 @@ shinyServer (
      # graph 0: bar charts of numbers and proportions pre- and post-test
     observeEvent(input$GoButton, {
      output$RuleInOutPlot0 <- renderPlot({
-
-       iN <- isolate(input$n)
-       iPrev <- isolate(input$prevalence)
-       iSens <- isolate(input$sensitivity)
-       iSpec <- isolate(input$specificity)
-       
-       DxStats(iN, iPrev, iSens, iSpec, plot2x2 = TRUE)$barplot[[1]]
+       if(isValid_num()){
+       isolate(DxStats(input$n, input$prevalence, input$sensitivity, input$specificity, plot2x2 = TRUE)$barplot[[1]])
+       }
      })
    },   ignoreNULL = FALSE)
 
@@ -97,17 +90,11 @@ shinyServer (
  # graph 1: true and false postives; false and true negatives
      observeEvent(input$GoButton, {
        output$PrePostProb2<-renderPlot({
-
-         iN <- isolate(input$n)
-         iPrev <- isolate(input$prevalence)
-         iSens <- isolate(input$sensitivity)
-         iSpec <- isolate(input$specificity)
-         iCond <- isolate(input$DxCondition)
-         iTest <- isolate(input$DxTestName)
-         iDisp <- isolate(input$disper)
-         iPop <- isolate(input$DxPopulation)
-       
-          prepostprobplot(iN, iPrev, iSens, iSpec, iCond, iTest, iDisp, iPop)
+         if(isValid_num()){
+        isolate(
+          prepostprobplot(input$n, input$prevalence, input$sensitivity,input$specificity, input$DxCondition,
+                          input$DxTestName, input$disper, input$DxPopulation)
+        )}
          })
    },   ignoreNULL = FALSE)
 
@@ -115,23 +102,13 @@ shinyServer (
    # graph 2: decision thresholds comopared to posterior probabailities
      observeEvent(input$GoButton, {
         output$RuleInOutPlot2<-renderPlot({
-         
-        iN <- isolate(input$n)
-        iPrev <- isolate(input$prevalence)
-        iSens <- isolate(input$sensitivity)
-        iSpec <- isolate(input$specificity)
-        iCond <- isolate(input$DxCondition)
-        iTest <- isolate(input$DxTestName)
-        iDisp <- isolate(input$disper)
-        iRuleInThreshold <- isolate(input$RuleInDecisionThreshold)
-        iRuleOutThreshold <- isolate(input$RuleOutDecisionThreshold)
-        iRuleInDecision <- isolate(input$DxRuleInDecision)
-        iRuleOutDecision <- isolate(input$DxRuleOutDecision)
-        iIndeterminateDecision <- isolate(input$IndeterminateDecision)
-        iPop <- isolate(input$DxPopulation)
-           
-        ruleinoutplot(iN, iPrev, iSens, iSpec, iRuleInThreshold, iRuleOutThreshold,
-                      iCond, iTest, iRuleInDecision, iRuleOutDecision, iIndeterminateDecision, iDisp, iPop)
+          if(isValid_num()){
+         isolate(ruleinoutplot(input$n, input$prevalence, input$sensitivity, input$specificity, input$RuleInDecisionThreshold, 
+                      input$RuleOutDecisionThreshold,
+                      input$DxCondition, input$DxTestName, input$DxRuleInDecision,
+                      input$DxRuleOutDecision, input$IndeterminateDecision, input$disper, input$DxPopulation, 
+                      input$disthres))
+          }
        })
     },   ignoreNULL = FALSE)
 

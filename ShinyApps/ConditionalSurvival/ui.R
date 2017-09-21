@@ -12,15 +12,10 @@ ui <- function(request) {
           # The link works in rStudio, but not in the browser :-(
           
           actionLink("goToTabI2", "What will you do with information about your prognosis?"),
-         #  
-         # br(), br(),
-         #  "Our aim is expressed by: ",
-         # tags$a(href="https://www.ncbi.nlm.nih.gov/pubmed/15778417", "First do no harm"),
-         #    "(which is often wrongly attributed to Hippocrates).",
           value = "i1"),
 
         tabPanel("What will you do with information about your prognosis?",
-                 h6("under construction: Interpreting prognosis statistics"), 
+                 includeHTML("www/What will you do with information about your prognosis?.html"), 
                  tags$style(type="text/css", "body {padding-top: 90px;}"), # padding to make room for fixed navbar
                  value = "i2"),
 
@@ -38,7 +33,10 @@ ui <- function(request) {
           selectInput("condition", label = "choose condition", choices = c("Ovarian cancer", "condition b"), selected = "Ovarian cancer"),
           selectInput("prognosisPlot", label = "choose prognosis graph", choices = c("Ovarian cancer 10-yr overall survival (SEER 1988-2001)")),
           selectInput("conditionalSurvivalPlot", label = "choose conditional survival graph", choices = c("Ovarian cancer 5-yr conditional survival by stage (SEER 1988-2001)", "Ovarian cancer 5-yr conditional survival by age-group and stage (SEER 1988-2001)")),
-          checkboxGroupInput("showUncertainties", label= "show uncertainties for:", choices = c("group averages" = "CI", "individual best and worst prospects" = "BW")),
+          checkboxGroupInput("showUncertainties", label= "show uncertainties for:", choices = c(
+            "group averages" = "CI", 
+            "individual best and worst prospects" = "BW"
+            )),
           
           # checkboxGroupInput("pShowGroups", label= "Prognosis grouping", 
           #                    choiceNames = c("pGroup1", "pGroup2"),

@@ -1,11 +1,13 @@
 name: ConditionalSurvival
 title: ConditionalSurvival
+username:
 account: decshinyapps
 server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
 appId: 199608
-bundleId: 916258
+bundleId: 985020
 url: https://decshinyapps.shinyapps.io/ConditionalSurvival/
-when: 1501062916.02726
+when: 1505646913.38103
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: .Rapp.history|testPlots.R|data/.DS_Store|data/~$ConditionalSurvival.xlsx|man/.DS_Store|www/.DS_Store|www/.RData|www/.Rhistory
+ignoredFiles: .Rapp.history|testPlots.R|data/~$ConditionalSurvival.xlsx|man/.DS_Store

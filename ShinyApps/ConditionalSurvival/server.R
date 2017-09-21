@@ -11,6 +11,8 @@ names(sheets) <- "sheets"
 
 metadata4Plots <- read_excel(path, sheets$sheets[1])
 data4Plots <- read_excel(path, sheets$sheets[2])
+
+
 # cat(file=stderr(), "spreadsheets", metadata4Plots)
 
 # initialise condition choices
@@ -160,8 +162,8 @@ server <-
   output$pPlot <- renderPlotly({
     ggplotly(
     pplot(pData(), pPlotTitle(), pXlab(), pYlab(), pLegendTitle(), showCI(), showBW(), input$facetWrap, ncol = 2)  
-    , tooltip = c("x", "y")  )
-    })
+    , tooltip = c("x", "y", "ymin", "ymax")  )
+  })
 
   # labels for conditional survival plots
   csXlab <- reactive({csMetadata()$xLabel[1]})
@@ -192,6 +194,6 @@ server <-
   output$csPlot <- renderPlotly({
     ggplotly(
     pplot(csData(), csPlotTitle(), csXlab(), csYlab(), csLegendTitle(), showCI(), showBW(), input$facetWrap, ncol = 2L)  
-    , tooltip = c("x", "y")  )
+    , tooltip = c("x", "y", "ymin", "ymax")  )
     })
 }
