@@ -26,8 +26,8 @@ LoadPackages <- function() {
 
 #########################################################
 
-pplot <- function(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = TRUE, showBW = TRUE, facetWrap = TRUE, ncol = 2L, group1Name = "Group1", group2Name = "Group2")  {
-  pPlot <- ggplot(pData, aes(time, proportion, group = legend4Line, colour = legend4Line, fill = legend4Line)) 
+pplot <- function(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = TRUE, showBW = TRUE, facetWrap = TRUE, ncol = 2L, group1Name = "Group1", group2Name = "Group2", showPI = NULL)  {
+  pPlot <- ggplot(pData, aes(duration, proportion, group = legend4Line, colour = legend4Line, fill = legend4Line)) 
   pPlot <- pPlot + labs(title = pPlotTitle, x = pXlab, y = pYlab, colour = pLegendTitle, fill = NULL)
   pPlot <- pPlot + theme(plot.title = element_text(size = 12, colour = "darkseagreen4", face = "bold"))
   
@@ -41,12 +41,28 @@ pplot <- function(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = TRUE, 
   
   if (showBW)
     pPlot <- pPlot + geom_ribbon(
-      aes(ymin = wbMin, ymax = wbMax, fill = factor(legend4Line), colour = factor(legend4Line)),
+      aes(ymin = wbMinProp, ymax = wbMaxProp, fill = factor(legend4Line), colour = factor(legend4Line)),
       alpha = 1/10, linetype = 0)
+  
+  if(!is.null(showPI)) {
+    row <- pData %>% 
+      filter(line == showPI$curveNumber, point == showPI$pointNumber)
+    predIint <- data.entry(
+      xmin = c(0, row$wbMinDur),
+      xmax = c(row$duration, wbMaxDur),
+      ymin = c(wbMinProp, 0),
+      ymax = c(wbMaxProp, row$proportion)
+      )
+    cat(predIint, row)
+    pPlot <- pPlot + geom_rect(data = predIint, mapping=aes(
+      xmin=xmin, xmax=xmax,
+      ymin=ymin, ymax=ymax),
+      color="red", alpha=0.25
+    ) }
 
    if (showCI) 
     pPlot <- pPlot + geom_ribbon(
-      aes(ymin = ciMin, ymax = ciMax, fill = factor(legend4Line), colour = factor(legend4Line)),
+      aes(ymin = ciMinProp, ymax = ciMaxProp, fill = factor(legend4Line), colour = factor(legend4Line)),
       alpha = 2/10, linetype = 0)
   
   pPlot <- pPlot + scale_fill_discrete(breaks = NULL)

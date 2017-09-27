@@ -5,9 +5,9 @@ account: decshinyapps
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 199608
-bundleId: 985020
+bundleId: 994238
 url: https://decshinyapps.shinyapps.io/ConditionalSurvival/
-when: 1505646913.38103
+when: 1506208827.61444
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: .Rapp.history|testPlots.R|data/~$ConditionalSurvival.xlsx|man/.DS_Store
+ignoredFiles: .Rapp.history|testPlots.R|data/~$ConditionalSurvival.xlsx|refs/A PRACTICAL GUIDE TO UNDERSTANDING KAPLAN-MEIER CURVES .pdf|refs/confidence and prediction intervals for SLR.pdf|refs/How To Survive the Medical Misinformation Mess Ioannidis.pdf

@@ -11,18 +11,26 @@ ui <- function(request) {
           # and then copied and pasted it into the HTML file for this tab
           # The link works in rStudio, but not in the browser :-(
           
-          actionLink("goToTabI2", "What will you do with information about your prognosis?"),
+          "Go to ", actionLink("goToTabI2", "What is prognosis?"),
           value = "i1"),
-
+        
+        tabPanel("What is prognosis?",
+                 includeHTML("www/What is prognosis?.html"), 
+                 tags$style(type="text/css", "body {padding-top: 90px;}"), # padding to make room for fixed navbar
+                 "Go to ", actionLink("goToTabI3", "What will you do with information about your prognosis?"),
+                 value = "i2"),
+        
         tabPanel("What will you do with information about your prognosis?",
                  includeHTML("www/What will you do with information about your prognosis?.html"), 
                  tags$style(type="text/css", "body {padding-top: 90px;}"), # padding to make room for fixed navbar
-                 value = "i2"),
+                 "Go to ", actionLink("goToTabI4", "How to use this app to understand and use information about prognosis"),
+                 value = "i3"),
 
         tabPanel("How to use this app to understand and use information about prognosis",
                  h6("under construction: How to use this app to understand and use information about prognosis"), 
                  tags$style(type="text/css", "body {padding-top: 90px;}"), # padding to make room for fixed navbar
-                 value = "i3")
+                 "Go to ", actionLink("goToTabFacts", "Get the facts and see the uncertainties in prognosis"),
+                 value = "i4")
         ),
     
       tabPanel("Facts",
@@ -62,6 +70,8 @@ ui <- function(request) {
                  textOutput("pText4Figure")),
           column(10, plotlyOutput("pPlot")),
           
+          verbatimTextOutput("click"),
+          
           ##### conditional survival plots
           hr(),
           column(2, br(), br(), br(), br(), br(), br(), 
@@ -70,14 +80,6 @@ ui <- function(request) {
           hr()
           )
         ))),
-
-    navbarMenu("Advice",
-
-               tabPanel("view1 title contributor",
-                        h6("under construction: contributor list 1")),
-
-               tabPanel("view2 title contributor",
-                        h6("under construction: contributor list 2"))),
 
   navbarMenu("Experiences",
 
@@ -98,12 +100,29 @@ ui <- function(request) {
                 h6("under construction: Reviewers")),
 
              tabPanel("Other support",
-               h6("under construction: Other support"))
+               h6("under construction: Other support")),
+            
+            tabPanel("References and Resources",
+                     tags$style(type="text/css", "body {padding-top: 90px;}"), # padding to make room for fixed navbar
+                     includeHTML("www/References and resources.html") 
+                     )
   ),
 
 
- navbarMenu("Contribute",
-            tabPanel("Contribute addotional data on survival",
+ navbarMenu("Contact/Contribute",
+            tabPanel("Contact",
+            tags$p("We are unfortunately unable to offer advice, but we are looking for personal experiences that would be useful to the app's visitors."),
+            tags$p("We would also welcome contributions of data on more conditions, and suggestions for improving the presentation of prognostic data."),
+            tags$p("So, if you would like to contribute a personal experience, data, or suggestions, please email us."),
+            tags$br(),
+            tags$p("Thank you"),
+            tags$hr(),
+            tags$blockquote("Michael.Power@ncl.ac.uk"),
+            tags$hr(),
+            tags$blockquote("Joy.Allen@ncl.ac.uk"),
+            tags$hr()),
+            
+            tabPanel("Contribute additional data on survival",
                h5("under construction: contribute data"),
                 h6("Contributors will submit data on a spreadsheet with"),
                h6("* everything in the data input section"),
@@ -179,7 +198,7 @@ ui <- function(request) {
     tags$br(),
     tags$b("Cite as:"),
     tags$p("Michael Power, Joy Allen."),
-    tags$em("A ShinyApp tool to show how survival statistics could be interpreted by patients"),
+    tags$em("A ShinyApp tool to explain prognosis: what it is, the large uncertainties in any number, and why you should hope for the best, plan for the worst, and act on the average."),
     hr(),
  id = "navbarPage", position = "fixed-top", selected = "i1"
   )}

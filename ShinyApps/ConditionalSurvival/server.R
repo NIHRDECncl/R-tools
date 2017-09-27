@@ -33,6 +33,27 @@ server <-
       )
     })
     
+    # go to 3rd tab on navbarMenu
+    observeEvent(input$goToTabI3, {
+      updateTabsetPanel(session, "navbarPage",
+                        selected = "i3"
+      )
+    })
+    
+    # go to 4th tab on navbarMenu
+    observeEvent(input$goToTabI4, {
+      updateTabsetPanel(session, "navbarPage",
+                        selected = "i4"
+      )
+    })
+    
+    # go to "Facts" tab on navbarMenu
+    observeEvent(input$goToTabFacts, {
+      updateTabsetPanel(session, "navbarPage",
+                        selected = "Facts"
+      )
+    })
+    
      observe({
       updateSelectInput(session, "condition", label = NULL, choices = conditionChoices)
     })
@@ -151,7 +172,13 @@ server <-
   output$QApGroup2Name <- renderText(pGroup2Name())
   output$QApCgroupChoicesN <- renderText(pCgroupChoicesN())
   output$QApCgroupChoicesV <- renderText(pCgroupChoicesV())
-
+  
+  output$click <- renderPrint({
+    showPI <- event_data("plotly_click", source = "prognosisPlot")
+    showPI <<- showPI # Push up into enclosing environment
+    if (is.null(showPI)) "Click events appear here (double-click to clear)" else str(showPI)
+  })
+  
   
   showCI <- reactive({ sum(input$showUncertainties == "CI") == 1})
   showBW <- reactive({sum(input$showUncertainties == "BW") == 1})
@@ -160,11 +187,13 @@ server <-
   
 
   output$pPlot <- renderPlotly({
-    ggplotly(
-    pplot(pData(), pPlotTitle(), pXlab(), pYlab(), pLegendTitle(), showCI(), showBW(), input$facetWrap, ncol = 2)  
-    , tooltip = c("x", "y", "ymin", "ymax")  )
-  })
+    # Get subset based on selection
 
+    ggplotly(
+    pplot(pData(), pPlotTitle(), pXlab(), pYlab(), pLegendTitle(), showCI(), showBW(), input$facetWrap, ncol = 2, showPI = showPI)  
+    , tooltip = c("x", "y", "ymin", "ymax"), source = "prognosisPlot" )
+  })
+  
   # labels for conditional survival plots
   csXlab <- reactive({csMetadata()$xLabel[1]})
   csYlab <- reactive({csMetadata()$yLabel[1]})
@@ -192,8 +221,9 @@ server <-
   
   # plot conditional survival
   output$csPlot <- renderPlotly({
+    
     ggplotly(
     pplot(csData(), csPlotTitle(), csXlab(), csYlab(), csLegendTitle(), showCI(), showBW(), input$facetWrap, ncol = 2L)  
-    , tooltip = c("x", "y", "ymin", "ymax")  )
+    , tooltip = c("x", "y", "ymin", "ymax"), source = "csPlot"  )
     })
 }
