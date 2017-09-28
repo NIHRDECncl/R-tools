@@ -173,9 +173,9 @@ server <-
   output$QApCgroupChoicesN <- renderText(pCgroupChoicesN())
   output$QApCgroupChoicesV <- renderText(pCgroupChoicesV())
   
+  # capture click event on Prognosis chart --- to show Predictive Intervals
   output$click <- renderPrint({
     showPI <- event_data("plotly_click", source = "prognosisPlot")
-    showPI <<- showPI # Push up into enclosing environment
     if (is.null(showPI)) "Click events appear here (double-click to clear)" else str(showPI)
   })
   
@@ -184,14 +184,15 @@ server <-
   showBW <- reactive({sum(input$showUncertainties == "BW") == 1})
 
   # plot prognosis
-  
-
   output$pPlot <- renderPlotly({
+    
+    showPI <- event_data("plotly_click", source = "prognosisPlot")
+    print(showPI)
     # Get subset based on selection
-
     ggplotly(
     pplot(pData(), pPlotTitle(), pXlab(), pYlab(), pLegendTitle(), showCI(), showBW(), input$facetWrap, ncol = 2, showPI = showPI)  
-    , tooltip = c("x", "y", "ymin", "ymax"), source = "prognosisPlot" )
+     #  pplot(pData(), pPlotTitle(), pXlab(), pYlab(), pLegendTitle(), showCI(), showBW(), input$facetWrap, ncol = 2, showPI = data.frame(curveNumber = 2L, pointNumber = 6L, x = 3, y = 0.5))  
+      , tooltip = c("x", "y", "ymin", "ymax"), source = "prognosisPlot" )
   })
   
   # labels for conditional survival plots

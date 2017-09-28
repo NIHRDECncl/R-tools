@@ -69,6 +69,10 @@ ui <- function(request) {
           column(2, br(), br(), br(), br(), br(), br(), 
                  textOutput("pText4Figure")),
           column(10, plotlyOutput("pPlot")),
+          br(),
+          h5("Click on a point in the chart above to see the uncertainties in predictions for:"),
+          tags$p("(i) an individual's chance of surviving to a given time (e.g. proportion surving),"),
+          tags$p("(ii) their duration of survival (e.g. life expectancy)."),
           
           verbatimTextOutput("click"),
           
@@ -77,6 +81,7 @@ ui <- function(request) {
           column(2, br(), br(), br(), br(), br(), br(), 
                  textOutput("csText4Figure")),
           column(10, plotlyOutput("csPlot")),
+          h5("This chart shows how predicted survival (e.g. life expectancy) usually improves over time."),
           hr()
           )
         ))),

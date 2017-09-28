@@ -21,6 +21,7 @@ LoadPackages <- function() {
   library(readxl)
   library(plotly)
   library(DT)
+  library(scales)
   # ...
 }
 
@@ -30,6 +31,7 @@ pplot <- function(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = TRUE, 
   pPlot <- ggplot(pData, aes(duration, proportion, group = legend4Line, colour = legend4Line, fill = legend4Line)) 
   pPlot <- pPlot + labs(title = pPlotTitle, x = pXlab, y = pYlab, colour = pLegendTitle, fill = NULL)
   pPlot <- pPlot + theme(plot.title = element_text(size = 12, colour = "darkseagreen4", face = "bold"))
+  pPlot <- pPlot + scale_y_continuous(labels = scales::percent)
   
   if (facetWrap) {
     ifelse (length(levels(factor(pData$group2))) == 0,
@@ -45,20 +47,22 @@ pplot <- function(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = TRUE, 
       alpha = 1/10, linetype = 0)
   
   if(!is.null(showPI)) {
-    row <- pData %>% 
-      filter(line == showPI$curveNumber, point == showPI$pointNumber)
-    predIint <- data.entry(
-      xmin = c(0, row$wbMinDur),
-      xmax = c(row$duration, wbMaxDur),
-      ymin = c(wbMinProp, 0),
-      ymax = c(wbMaxProp, row$proportion)
+    cRow <- pData %>% # row with clicked point
+      filter(curve == showPI$curveNumber, point == showPI$pointNumber)
+    print(cRow)
+    predInt <- data.frame(
+      xmin = c(0, cRow$wbMinDur),
+      xmax = c(cRow$duration, cRow$wbMaxDur),
+      ymin = c(cRow$wbMinProp, 0),
+      ymax = c(cRow$wbMaxProp, cRow$proportion)
       )
-    cat(predIint, row)
-    pPlot <- pPlot + geom_rect(data = predIint, mapping=aes(
-      xmin=xmin, xmax=xmax,
-      ymin=ymin, ymax=ymax),
-      color="red", alpha=0.25
-    ) }
+    print(predInt)
+    pPlot <- pPlot + annotate("rect",
+      xmin=predInt$xmin, xmax=predInt$xmax,
+      ymin=predInt$ymin, ymax=predInt$ymax,
+      fill=c("blue", "red"), alpha=0.1
+    )
+    }
 
    if (showCI) 
     pPlot <- pPlot + geom_ribbon(

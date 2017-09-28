@@ -199,7 +199,7 @@ contingencyM <- function(n, prevalence, sensitivity, specificity){
       paste("Fn = ", Dx$Fn),
       paste("Tn = ", Dx$Tn),
       paste("ppv = ", paste(format(100*Dx$Tp / (Dx$Tp + Dx$Fp), digits = 2),"%", sep = "")),
-      paste("npv = ", paste(format(100*Dx$Tp / (Dx$Tn + Dx$Fn), digits = 2),"%", sep = ""))
+      paste("npv = ", paste(format(100*Dx$Tn / (Dx$Tn + Dx$Fn), digits = 2),"%", sep = ""))
     )
   )
   })
@@ -314,8 +314,8 @@ popplot <- function(n, prevalence, sensitivity, specificity, sorted, ciFlag){
     ### add in scales for x and y axis 
     scale_x_continuous(breaks = c(0.00, 0.25, 0.50, 0.75, 1.00),
                        labels = c("0","25%","50%","75%","100%")) + theme(axis.text.x = element_text(size = 15,colour = "azure4")) + 
-    scale_y_continuous(breaks = c(0.00, 0.25, 0.50, 0.75, 1.00),
-                       labels = c("0","25%","50%","75%","100%")) + theme(axis.text.y = element_text(size = 15,colour = "azure4")) + 
+   # scale_y_continuous(breaks = c(0.00, 0.25, 0.50, 0.75, 1.00),
+   #                    labels = c("0","25%","50%","75%","100%")) + theme(axis.text.y = element_text(size = 15,colour = "azure4")) + 
     coord_fixed()
   
   if (ciFlag) {
