@@ -20,14 +20,16 @@ ui <- function(request) {
                  "Go to ", actionLink("goToTabI3", "What will you do with information about your prognosis?"),
                  value = "i2"),
         
-        tabPanel("What will you do with information about your prognosis?",
-                 includeHTML("www/What will you do with information about your prognosis?.html"), 
+        tabPanel("How to use this app to understand and use information about prognosis",
+                 includeHTML("www/How to use this app.html"), 
                  tags$style(type="text/css", "body {padding-top: 90px;}"), # padding to make room for fixed navbar
-                 "Go to ", actionLink("goToTabI4", "How to use this app to understand and use information about prognosis"),
+                 "Go to ", actionLink("goToTabFacts", "Get the facts and see the uncertainties in prognosis"),
+                 br(),
+                 "Go to ", actionLink("goToTabI4", "Technical notes"),
                  value = "i3"),
 
-        tabPanel("How to use this app to understand and use information about prognosis",
-                 h6("under construction: How to use this app to understand and use information about prognosis"), 
+        tabPanel("Technical notes on conditional survival and predictive intervals",
+                 includeHTML("www/Technical notes on conditional survival and prediction intervals.html"), 
                  tags$style(type="text/css", "body {padding-top: 90px;}"), # padding to make room for fixed navbar
                  "Go to ", actionLink("goToTabFacts", "Get the facts and see the uncertainties in prognosis"),
                  value = "i4")
@@ -45,41 +47,41 @@ ui <- function(request) {
             "group averages" = "CI", 
             "individual best and worst prospects" = "BW"
             )),
-          
-          # checkboxGroupInput("pShowGroups", label= "Prognosis grouping", 
-          #                    choiceNames = c("pGroup1", "pGroup2"),
-          #                    choiceValues = c("pG1", "pG2")
-          # ),
-          # 
-          # checkboxGroupInput("csShowGroups", label= "Conditional survival grouping", 
-          #                    choiceNames = c("csGroup1", "csGroup2"),
-          #                    choiceValues = c("csG1", "csG2")
-          # ),
         hr(),
         checkboxInput("facetWrap", label = "Plot groups separately", value = FALSE)
         ),
         bookmarkButton(), " ...... ",
-        actionButton("goPrint", "Download for printing")
+        actionButton("goPrint", "Download for printing"),
+        hr(),
+        h4("It may be necessary to scroll down to see the conditional survival graph")
       ),
       
       mainPanel(
+        fluidRow( 
+          
+        ##### plot the usual minimum information given on prognosis
+        hr(),
+        column(2, h5("The usual minimal information given on prognosis")),
+        column(8, plotOutput("minPlot"))),
+        
         fluidRow(
+                  
           ##### prognosis plots
           hr(),
           column(2, br(), br(), br(), br(), br(), br(), 
                  textOutput("pText4Figure")),
           column(10, plotlyOutput("pPlot")),
-          br(),
-          h5("Click on a point in the chart above to see the uncertainties in predictions for:"),
-          tags$p("(i) an individual's chance of surviving to a given time (e.g. proportion surving),"),
-          tags$p("(ii) their duration of survival (e.g. life expectancy)."),
+          p("."),
+          h5("Click on a point in the chart above to see the uncertainties in predictions for an individual's:"),
+          tags$p("(i) Prediction interval for survival rate: their chance of surviving for a given time."),
+          tags$p("(ii) Prediction interval for life expectancy: their length of survival."),
           
           verbatimTextOutput("click"),
           
           ##### conditional survival plots
           hr(),
           column(2, br(), br(), br(), br(), br(), br(), 
-                 textOutput("csText4Figure")),
+            textOutput("csText4Figure")),
           column(10, plotlyOutput("csPlot")),
           h5("This chart shows how predicted survival (e.g. life expectancy) usually improves over time."),
           hr()

@@ -142,6 +142,7 @@ server <-
   pPlotTitle <- reactive({pMetadata()$title4Plot[1]})
   pLegendTitle <-reactive({pMetadata()$title4Legend[1]}) 
   output$pText4Figure <- renderText(pMetadata()$text4Figure[1])
+  #  output$minPtext <- renderText("Plot for usual kind of prognosis information") # NOT WORKING ??? why
   
   # # update input labels for prognosis groups
   # pGroup1Name <-reactive({pMetadata()$group1Name[1]})
@@ -183,9 +184,24 @@ server <-
   showCI <- reactive({ sum(input$showUncertainties == "CI") == 1})
   showBW <- reactive({sum(input$showUncertainties == "BW") == 1})
 
+  # minimal plot of prognosis information
+  output$minPlot <- renderPlot({
+    d <- data.frame(survivalTime = 5, proportion = 0.25)
+    ggplot(d, aes(x = survivalTime, y = proportion, colour = "red", size = 4)) +
+      geom_point() +
+      # guides(colour = FALSE, size = FALSE) +
+      labs(title = "Plot when prognosis for surviving 5-years is 25%",
+           x = "\nYears survived",
+           y = "Proportion survived\n") +
+      theme(
+        plot.title = element_text(size = 12, colour = "darkseagreen4", face = "bold"),
+        legend.position = "none") +
+      scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
+      scale_x_continuous(limits = c(0, 10)) 
+  })
+  
   # plot prognosis
   output$pPlot <- renderPlotly({
-    
     showPI <- event_data("plotly_click", source = "prognosisPlot")
     print(showPI)
     # Get subset based on selection

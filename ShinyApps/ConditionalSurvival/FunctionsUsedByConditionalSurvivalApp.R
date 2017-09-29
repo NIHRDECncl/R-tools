@@ -28,10 +28,14 @@ LoadPackages <- function() {
 #########################################################
 
 pplot <- function(pData, pPlotTitle, pXlab, pYlab, pLegendTitle, showCI = TRUE, showBW = TRUE, facetWrap = TRUE, ncol = 2L, group1Name = "Group1", group2Name = "Group2", showPI = NULL)  {
-  pPlot <- ggplot(pData, aes(duration, proportion, group = legend4Line, colour = legend4Line, fill = legend4Line)) 
-  pPlot <- pPlot + labs(title = pPlotTitle, x = pXlab, y = pYlab, colour = pLegendTitle, fill = NULL)
-  pPlot <- pPlot + theme(plot.title = element_text(size = 12, colour = "darkseagreen4", face = "bold"))
-  pPlot <- pPlot + scale_y_continuous(labels = scales::percent)
+  pPlot <- ggplot(pData, aes(duration, proportion, group = legend4Line, colour = legend4Line, fill = legend4Line)) +
+             labs(title = pPlotTitle, x = pXlab, y = pYlab, colour = pLegendTitle, fill = NULL) +
+             theme(
+               plot.title = element_text(size = 12, colour = "darkseagreen4", face = "bold"),
+               axis.title.x = element_text(margin = margin(t = 200, r = 200, b = 200, l = 200)), # margins not working!!!!
+               axis.title.y = element_text(margin = margin(t = 0, r = 200, b = 0, l = 0)) # margins not working!!!!
+             ) +
+             scale_y_continuous(labels = scales::percent)
   
   if (facetWrap) {
     ifelse (length(levels(factor(pData$group2))) == 0,
