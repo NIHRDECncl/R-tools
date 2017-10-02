@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+    <meta content="text/html; charset=windows-1252" http-equiv="content-type">
+    <title>Technical notes on conditional survival and prediction
+      intervals</title>
+  </head>
+  <body>
+    <h1> <font size="+1" color="#333399"> </font><font color="#333399">Technical
+
+
+
+
+        notes on conditional survival and prediction intervals</font></h1>
+    <p>This is not a detailed explantion of the methods used for
+      estimating and displaying conditional survival and prediction
+      intervals, but a brief pointer to sources that informed the
+      development of this app.<br>
+      The sources are referenced, and linked.<br>
+    </p>
+    <h2><font color="#333399">Conditional survival</font><br>
+    </h2>
+    <p>Conditional survival is one of those ideas that seem to need to
+      be re-discovered repeatedly. A Pubmed search found only 80
+      articles with "conditional survival" in the title and "prognosis"
+      in the title or abstract. The earliest being in 1995.<br>
+    </p>
+    <p>Even the most recently published paper using the methodology
+      finds it necessary to explain that:<br>
+    </p>
+    <blockquote>
+      <meta charset="utf-8">
+      Some aspects of&nbsp;prognosis&nbsp;are not reflected by
+      cumulative survival estimates. These aspects include information
+      on the time already survived by the patient and the patient's
+      survival compared with the general population.&nbsp;Conditional
+      survival&nbsp;(ie, conditional on having survived a certain period
+      of time already) and relative&nbsp;conditional survival&nbsp;(ie,
+      compared with the general population) do incorporate these
+      aspects. (Baart et al, 2017)<span style="color: rgb(0, 0, 0);
+        font-family: arial, helvetica, clean, sans-serif; font-size:
+        13.52px; font-style: normal; font-variant-ligatures: normal;
+        font-variant-caps: normal; font-weight: normal; letter-spacing:
+        normal; orphans: 2; text-align: left; text-indent: 0px;
+        text-transform: none; white-space: normal; widows: 2;
+        word-spacing: 0px; -webkit-text-stroke-width: 0px;
+        background-color: rgb(255, 255, 255); text-decoration-style:
+        initial; text-decoration-color: initial; display: inline
+        !important; float: none;"><span><br>
+        </span></span></blockquote>
+    <p>The underlying statistics and graphical presentations of
+      conditional survival data are covered in some detail by (Hieke et
+      al, 2015) in an open access article.<br>
+    </p>
+    <h2><font color="#333399">Prediction interval</font><br>
+    </h2>
+    <p>The fact that prediction for an individual is not the same as
+      prediction for a group, and requires a different measure of
+      uncertainty is even less well known than conditional survival. It
+      is telling that one of the earliest publications on the
+      uncertainties inherent in prediction for individuals was published
+      (open access) in the Journal of Medical Ethics (Henderson and
+      Keiding, 2005). The authors explain why "models and statistical
+      indices can be useful at the group or population level, but that
+      human survival is so uncertain that even the best statistical
+      analysis cannot provide single-number predictions of real use for
+      individual patients". <br>
+    </p>
+    <p>It is also telling that the concept does not (yet) have a widely
+      used name, at least amongst clinicians. <br>
+    </p>
+    <p>We use "prediction interval" to mean an interval describing the
+      uncertainty around a prediction for an individual.<br>
+      The interval is derived from the distribution of individual
+      outcomes, and Henderson and Keiding suggest that the 10th to 90th
+      centiles might be used.<br>
+    </p>
+    <p>A prediction interval is analogous to the confidence cnterval (or
+      credible interval) for a group.<br>
+    </p>
+    <p>A way of visualizing the distributions from which prediction
+      intervals can be derived is suggested by (Royston, Parmar, and
+      Altman, 2008). <br>
+    </p>
+    <p>The challenges of visualizing time-to-event data are further
+      discussed by (Witte, 2008).<br>
+    </p>
+    <p>On the To Do list for a future version of this app is to include
+      in the margins of the prognosis plots the distributions from which
+      prediction intervals are derived. <br>
+      There will also be an option to choose the width of the prediction
+      interval. For example, from the 10th to 90th centile to the 5th to
+      95th centile.<br>
+      <br>
+    </p>
+    <h1><font color="#333399">References</font></h1>
+    <ol>
+      <li>Baart SJ, van Domburg RT, Janssen-Heijnen MLG, Deckers JW,
+        Akkerhuis KM, Daemen J, van Geuns RJ, Boersma E, Kardys I.<br>
+        Impact of Relative Conditional Survival Estimates on Patient
+        Prognosis After Percutaneous Coronary Intervention.<br>
+        Circ Cardiovasc Qual Outcomes. 2017 Jun;10(6). <br>
+        <a href="https://www.ncbi.nlm.nih.gov/pubmed/28619724">Pubmed<br>
+          <br>
+        </a></li>
+      <li>Henderson R, Keiding N.<br>
+        Individual survival time prediction using statistical models.<br>
+        J Med Ethics. 2005 Dec;31(12):703-6.<br>
+        <a href="https://www.ncbi.nlm.nih.gov/pubmed/16319233">Pubmed</a>
+        <br>
+        <br>
+        <meta charset="utf-8">
+      </li>
+      <li>Hieke S, Kleber M, König C, Engelhardt M, Schumacher M.<br>
+        Conditional Survival: A Useful Concept to Provide Information on
+        How Prognosis Evolves over Time.<br>
+        Clin Cancer Res. 2015 Apr 1;21(7):1530-6. <br>
+        <a href="https://www.ncbi.nlm.nih.gov/pubmed/?term=%22conditional+survival%22%5Bti%5D+AND+prognosis+AND+Hieke&amp;report=abstract">Pubmed<br>
+          <br>
+        </a></li>
+      <li>
+        <meta charset="utf-8">
+        Royston P, Parmar MK, Altman DG.<br>
+        Visualizing length of survival in time-to-event studies: a
+        complement to Kaplan-Meier plots.<br>
+        J Natl Cancer Inst. 2008 Jan 16;100(2):92-7. doi:
+        10.1093/jnci/djm265. Epub 2008 Jan 8.<br>
+        <a href="https://www.ncbi.nlm.nih.gov/pubmed/18182621">Pubmed<br>
+          <br>
+        </a></li>
+      <li>Wittes J.<br>
+        Times to event: why are they hard to visualize?<br>
+        J Natl Cancer Inst. 2008 Jan 16;100(2):80-1. doi:
+        10.1093/jnci/djm304. Epub 2008 Jan 8. <br>
+        <a href="https://www.ncbi.nlm.nih.gov/pubmed/18182615">Pubmed</a><br>
+        <br>
+        <br>
+      </li>
+    </ol>
+  
+
+</body></html>
