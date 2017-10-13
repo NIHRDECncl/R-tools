@@ -45,6 +45,7 @@ ui <- function(request) {
            tableOutput("dx2x2Table"),
        span(textOutput("table2title"), align = "center", style="color:#4169E1; font-weight:bold;font-size: 20px"),
            tableOutput("pvdf")
+       
              )
              ),    
    
