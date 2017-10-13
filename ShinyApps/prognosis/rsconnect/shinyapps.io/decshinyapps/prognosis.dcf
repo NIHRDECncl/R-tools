@@ -5,9 +5,9 @@ account: decshinyapps
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 220893
-bundleId: 1023145
+bundleId: 1023979
 url: https://decshinyapps.shinyapps.io/prognosis/
-when: 1507804334.74363
+when: 1507842786.12701
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: Icon|prognosis.nb.html|prognosis.Rmd|testPlots.R|data/.DS_Store|data/~$ConditionalSurvival.xlsx|data/Icon|data/prognosis.xlsx|refs
+ignoredFiles: Icon|testPlots.R|data/.DS_Store|refs/.DS_Store|refs/A PRACTICAL GUIDE TO UNDERSTANDING KAPLAN-MEIER CURVES .pdf|refs/confidence and prediction intervals for SLR.pdf|refs/How To Survive the Medical Misinformation Mess Ioannidis.pdf|refs/url.html
