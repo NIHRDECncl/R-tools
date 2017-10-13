@@ -122,9 +122,11 @@ shinyServer (
     observeEvent(input$GoButton, {
         output$pvdf <- renderTable({
           isolate(pvdf(input$n, input$prevalence, input$sensitivity, input$specificity))
-        }, digits = 0)
+        }, digits = 0, rownames = TRUE)
     
        }, ignoreNULL = FALSE)
+    
+    
     
     
     ## Thanks to Mark Strong for this code

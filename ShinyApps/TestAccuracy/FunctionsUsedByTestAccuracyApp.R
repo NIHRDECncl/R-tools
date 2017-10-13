@@ -218,21 +218,22 @@ pvdf <- function(n,prevalence, sensitivity, specificity){
     AtPrevalence = c(paste(format(100*prevalence, digits = 2), "%", sep = "")),
     Measure = c("Sensitivity", "Specificity"),
     LL95CI = c(
-      paste(trimws(format(100*(sensitivity - ciprop(sensitivity, n)$ciL), digits = 2)), "%", sep = ""),
-      paste(trimws(format(100*(specificity - ciprop(specificity, n)$ciL), digits = 2)), "%", sep = "")),
+      paste(trimws(format((sensitivity*100 - ciprop(sensitivity*100, n)$ciL), digits = 2)), "%", sep = ""),
+      paste(trimws(format((specificity*100 - ciprop(specificity*100, n)$ciL), digits = 2)), "%", sep = "")),
     Mid = c(
       paste(trimws(format(100*sensitivity, digits = 2)), "%", sep = ""),
       paste(trimws(format(100*specificity, digits = 3)), "%", sep = "")
     ),
     UL95CI = c(
-      paste(trimws(format(100*(sensitivity + ciprop(sensitivity, n)$ciU), digits = 2)), "%", sep = ""),
-      paste(trimws(format(100*(specificity + ciprop(specificity, n)$ciU), digits = 2)), "%", sep = "")),
-    row.names = c("ppv", "npv")
+      paste(trimws(format((100*sensitivity + ciprop(100*sensitivity, n)$ciU), digits = 2)), "%", sep = ""),
+      paste(trimws(format((100*specificity + ciprop(100*specificity, n)$ciU), digits = 2)), "%", sep = "")),
+    row.names = c("PPV", "NPV")
   )
 
   colnames(table2) <- c("Predictive values", "Prevalence", "Accuracy measure", "Lower 95% CI", "Mid point", "Upper 95% CI")
   return(table2)
 }
+
 
 populationdf <- function(n, prevalence, sensitivity, specificity, sorted){
   
