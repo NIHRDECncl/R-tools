@@ -4,10 +4,10 @@ username:
 account: decshinyapps
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
-appId: 220893
-bundleId: 1023979
+appId: 224813
+bundleId: 1026479
 url: https://decshinyapps.shinyapps.io/prognosis/
-when: 1507842786.12701
+when: 1507974384.13234
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: Icon|testPlots.R|data/.DS_Store|refs/.DS_Store|refs/A PRACTICAL GUIDE TO UNDERSTANDING KAPLAN-MEIER CURVES .pdf|refs/confidence and prediction intervals for SLR.pdf|refs/How To Survive the Medical Misinformation Mess Ioannidis.pdf|refs/url.html
+ignoredFiles: testPrognosisPlots.R|data/.DS_Store|refs/.DS_Store|refs/A PRACTICAL GUIDE TO UNDERSTANDING KAPLAN-MEIER CURVES .pdf|refs/confidence and prediction intervals for SLR.pdf|refs/How To Survive the Medical Misinformation Mess Ioannidis.pdf

@@ -1,1 +1,0 @@
-1.  cache parameters (akin to ) in order to reproduce plots for report  - investigate also caching the plots but it might be quicker and less memory intensive to redo the plots
