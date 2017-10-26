@@ -88,17 +88,17 @@
     Tp <- sensitivity * Dpos
     Tn <- specificity * Dneg
     
-    TpPct = Tp/n
-    TnPct = Tn/n
-    
     Fn <- (1 - sensitivity) * Dpos
     Fp <- (1 - specificity) * Dneg
     
-    FnPct = Fp/n
-    FpPct = Fp/n
-    
     TestPos = Tp + Fp
     TestNeg = Tn + Fn
+    
+    FnPct = Fn/TestNeg
+    FpPct = Fp/TestPos
+    
+    TpPct = Tp/TestPos
+    TnPct = Tn/TestNeg
     
     PPV <- Tp/(Tp + Fp)
     NPV <- Tn/(Tn + Fn) 
@@ -205,8 +205,8 @@
           "Test positive", "Test positive", 
           "Test negative", "Test negative",
           "Pre-testing", "Pre-testing", "", "", 
-          "Test positve", "Test positve", 
-          "Test negatve", "Test negatve"),
+          "Test positive", "Test positive", 
+          "Test negative", "Test negative"),
   labelX = rep(c(0, 0, 0, 0, 4, 4, 8, 8), 2) + nudgeX,
         labelY = c(n, Dpos, -n/25, 0, TestPos, -n/25 , TestNeg, -n/25, 1, -1/25, -1/25, -1/25, 1, -1/25, 1, -1/25)*nudgeY
       )
@@ -331,7 +331,6 @@
       RuleOutDecisionThresholdX = c(0, 1),
       RuleOutDecisionThresholdY = c(RuleOutDecisionThreshold, RuleOutDecisionThreshold),
       
-      TestPosX = c(0, 1),
       TestPosY = c(prevalence, Dx$PostTestProbP),
       
       TestNegX = c(0, 1),
