@@ -29,8 +29,7 @@
     library(ggrepel)
     library(rmarkdown)
     library(formattable)
-    library(shinyjs)
-
+  #  library(shinyjs)
     # ...
   }
 
@@ -197,18 +196,18 @@
         xmin = rep(c(0, 0, 0, 0, 4, 4, 8, 8), 2),
         xmax = rep(c(2, 2, 2, 2, 6, 6, 10, 10), 2),
         ymin = c(0, Tp, (Tp + Fn), (Tp + Fn + Fp), 0, Tp, 0, Tn,
-                 0, TpPct, (TpPct + FnPct), (TpPct + FnPct + FpPct), 0, TpPct, 0, TnPct),
+                 0, Tp/n, (Tp/n + Fn/n), (Tp/n + Fn/n + Fp/n), 0, TpPct, 0, TnPct),
         ymax = c(Tp, (Tp + Fn), (Tp + Fn + Fp), n, Tp, TestPos, Tn, TestNeg,
-                 TpPct, (TpPct + FnPct), (TpPct + FnPct + FpPct), 1, TpPct, 1, TnPct, 1),
+                 Tp/n, (Tp/n + Fn/n), (Tp/n + Fn/n + Fp/n), 1, TpPct, 1, TnPct, 1),
         plotLabels = c(
           "Pre-testing", "Prevalence", "Pre-testing", "", 
           "Test positive", "Test positive", 
           "Test negative", "Test negative",
-          "Pre-testing", "Pre-testing", "", "", 
+          "Pre-testing", "Prevalence", "Pre-testing", "", 
           "Test positive", "Test positive", 
           "Test negative", "Test negative"),
   labelX = rep(c(0, 0, 0, 0, 4, 4, 8, 8), 2) + nudgeX,
-        labelY = c(n, Dpos, -n/25, 0, TestPos, -n/25 , TestNeg, -n/25, 1, -1/25, -1/25, -1/25, 1, -1/25, 1, -1/25)*nudgeY
+        labelY = c(n, Dpos, -n/25, 0, TestPos, -n/25 , TestNeg, -n/25, 1, prevalence, -1/25, -1/25, 1, -1/25, 1, -1/25)*nudgeY
       )
      # print(dx)
       dx2x2$barplot[[1]] <- 
@@ -331,6 +330,7 @@
       RuleOutDecisionThresholdX = c(0, 1),
       RuleOutDecisionThresholdY = c(RuleOutDecisionThreshold, RuleOutDecisionThreshold),
       
+      TestPosX = c(0, 1),
       TestPosY = c(prevalence, Dx$PostTestProbP),
       
       TestNegX = c(0, 1),

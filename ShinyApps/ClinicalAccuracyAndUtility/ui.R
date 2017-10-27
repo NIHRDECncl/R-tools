@@ -58,7 +58,7 @@ ui <- function(request) {
                           h4(tags$b("Graph 0. "), "How sensitivity and specificity reflect diagnostic accuracy"),
                           h5("(True and false positives (Tp, Fp), False and true negatives (Fn, Tn))")),
                           h5("Absolute values (left) and proportions (right)"),
-                     withSpinner(plotOutput("RuleInOutPlot0"), type = 6),
+                          withSpinner(plotOutput("RuleInOutPlot0"), type = 6),
                      br(),
               
                        span(style="color: rgb(0, 0, 153)",

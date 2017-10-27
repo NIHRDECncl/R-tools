@@ -1,10 +1,10 @@
-name: ClinicalAccuracyAndUtility
-title:
+name: clinicalaccuracyandutility
+title: ClinicalAccuracyAndUtility
 account: micncltools
 server: shinyapps.io
 appId: 225825
-bundleId: 1031011
+bundleId: 1047996
 url: https://micncltools.shinyapps.io/ClinicalAccuracyAndUtility/
-when: 1508255799.83654
+when: 1509109312.6946
 asMultiple: FALSE
 asStatic: FALSE
