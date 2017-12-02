@@ -1,0 +1,57 @@
+<!---
+Copyright (c) 2017, the authors (see AUTHORS.txt).
+-->
+
+---
+title: "Report on Clinical Accuracy and Utility"
+output: pdf_document
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+geometry: margin=1in
+---
+
+
+# 1. Introduction
+Welcome to the NIHR Diagnostic Evidence Co-operative Newcastle's Clinical Diagnostic Accuracy and Utility application report.  The results of your analysis are reported below.
+
+
+The test `r input$DxTestName` detects the condition `r input$DxCondition` with sensitivity `r input$sensitivity*100`% and specificity `r input$specificity*100`%.  These accuracy statistics were measured in a study population size of `r input$n` where the prevalence of `r input$DxCondition` was `r input$prevalence*100`%.  
+
+Figure 0. is a bar plot helps to visualise the population of patients tested for `r input$DxCondition`.  The bar plots are colour coded to show the numbers (left) and proportions (right) of the population who test positive and who have `r input$DxCondition`, and testing negative and do not have `r input$DxCondition` (Tn).
+
+<<<<<<< HEAD
+```{r, echo = FALSE,message = FALSE, error  = FALSE, warning = FALSE, comment = FALSE, fig.cap= "Diagnostic accuracy", fig.width=8.2,fig.height=6 }
+=======
+```{r, echo = FALSE,message = FALSE, error  = FALSE, warning = FALSE, comment = FALSE, fig.cap= "Diagnostic accuracy", fig.width=11,fig.height=5 }
+>>>>>>> master
+       DxStats(input$n, input$prevalence, input$sensitivity, input$specificity, plot2x2 = TRUE)$barplot[[1]]
+```
+
+
+Figure 1. is a plot of the post-test probability of having `r input$DxCondition` againist the pre-test probability of having `r input$DxCondition`, the prevalence.  The green and orange ribbons represent the 95% confidence interval around these values.
+
+The vertical line indicated the pre-test probability or prevalenceof `r input$DxCondition` (`r input$prevalence*100`%).  Where this cuts the green and orange lines, give the probabilities that if the result of `r input$DxTestName` is negative, then  `r input$DxCondition` is absent, and if the the result is positive, then `r input$DxCondition` is present.  
+
+
+```{r, echo = FALSE, fig.cap= "Post test probabilities", fig.width=8.2,fig.height=6}
+prepostprobplot(input$n, input$prevalence, input$sensitivity, input$specificity,
+                input$DxCondition, input$DxTestName, input$disper, input$DxPopulation)
+```
+
+Figure 2. shows how decisions are made with information from a diagnostic test. The clinical utility of the test is the net benefit to patients, and is determined by the outcomes which follow from the management decisions made on the basis of the test's results. Thus, the first step to assessing clinical utility is to understand the factors that determine decision-making. 
+
+The threshold for decision making to `r input$DxRuleInDecision` is `r input$RuleInDecisionThreshold`.  This is shown by the orange line.  The threshold for `r input$DxRuleOutDecision` is `r input$RuleInDecisionThreshold`.  This is shown by the green line.  
+
+```{r, echo = FALSE, fig.cap="Clinical decision making thresholds", fig.width=8.2,fig.height=6}
+ ruleinoutplot(input$n, input$prevalence, input$sensitivity, input$specificity,
+                      input$RuleInDecisionThreshold, input$RuleOutDecisionThreshold, 
+                      input$DxCondition, input$DxTestName,  
+                      input$DxRuleInDecision, input$DxRuleOutDecision, input$IndeterminateDecision, input$disper, input$DxPopulation, input$disthres)
+        
+
+```
+
+
+
+
+
+

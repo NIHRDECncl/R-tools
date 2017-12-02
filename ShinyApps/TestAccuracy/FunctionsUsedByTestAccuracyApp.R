@@ -62,11 +62,11 @@ DxStats <- function(n, prevalence, sensitivity, specificity) {
   Dpos <- n * prevalence
   Dneg <- n - Dpos
   
-  Tp <- sensitivity * Dpos
-  Tn <- specificity * Dneg
+  Tp <- round(sensitivity * round(Dpos))
+  Tn <- round(specificity * round(Dneg))
   
-  Fn <- (1 - sensitivity) * Dpos
-  Fp <- (1 - specificity) * Dneg
+  Fn <- round(Dpos) - round(round(Dpos)*sensitivity)
+  Fp <- round(Dneg) - round(round(Dneg)*specificity)
   
   PPV <- Tp/(Tp + Fp)
   NPV <- Tn/(Tn + Fn) 
@@ -194,10 +194,10 @@ contingencyM <- function(n, prevalence, sensitivity, specificity){
       
     ), 
     labs = c(
-      paste("Tp = ", Dx$Tp),
-      paste("Fp = ", Dx$Fp),
-      paste("Fn = ", Dx$Fn),
-      paste("Tn = ", Dx$Tn),
+      paste("Tp = ", round(Dx$Tp)),
+      paste("Fp = ", round(Dx$Fp)),
+      paste("Fn = ", round(Dx$Fn)),
+      paste("Tn = ", round(Dx$Tn)),
       paste("ppv = ", paste(format(100*Dx$Tp / (Dx$Tp + Dx$Fp), digits = 2),"%", sep = "")),
       paste("npv = ", paste(format(100*Dx$Tn / (Dx$Tn + Dx$Fn), digits = 2),"%", sep = ""))
     )
@@ -218,21 +218,22 @@ pvdf <- function(n,prevalence, sensitivity, specificity){
     AtPrevalence = c(paste(format(100*prevalence, digits = 2), "%", sep = "")),
     Measure = c("Sensitivity", "Specificity"),
     LL95CI = c(
-      paste(trimws(format(100*(sensitivity - ciprop(sensitivity, n)$ciL), digits = 2)), "%", sep = ""),
-      paste(trimws(format(100*(specificity - ciprop(specificity, n)$ciL), digits = 2)), "%", sep = "")),
+      paste(trimws(format((sensitivity*100 - ciprop(sensitivity*100, n)$ciL), digits = 2)), "%", sep = ""),
+      paste(trimws(format((specificity*100 - ciprop(specificity*100, n)$ciL), digits = 2)), "%", sep = "")),
     Mid = c(
       paste(trimws(format(100*sensitivity, digits = 2)), "%", sep = ""),
       paste(trimws(format(100*specificity, digits = 3)), "%", sep = "")
     ),
     UL95CI = c(
-      paste(trimws(format(100*(sensitivity + ciprop(sensitivity, n)$ciU), digits = 2)), "%", sep = ""),
-      paste(trimws(format(100*(specificity + ciprop(specificity, n)$ciU), digits = 2)), "%", sep = "")),
-    row.names = c("ppv", "npv")
+      paste(trimws(format((100*sensitivity + ciprop(100*sensitivity, n)$ciU), digits = 2)), "%", sep = ""),
+      paste(trimws(format((100*specificity + ciprop(100*specificity, n)$ciU), digits = 2)), "%", sep = "")),
+    row.names = c("PPV", "NPV")
   )
 
   colnames(table2) <- c("Predictive values", "Prevalence", "Accuracy measure", "Lower 95% CI", "Mid point", "Upper 95% CI")
   return(table2)
 }
+
 
 populationdf <- function(n, prevalence, sensitivity, specificity, sorted){
   
@@ -240,16 +241,16 @@ populationdf <- function(n, prevalence, sensitivity, specificity, sorted){
   
   if (sorted){
     x = c(
-      runif(round(Dx$Tp,0), min = marginInsidePlot, max = Dx$Dpos/n - marginInsidePlot),
-      runif(round(Dx$Fn,0), min = marginInsidePlot, max = Dx$Dpos/n - marginInsidePlot),
-      runif(round(Dx$Fp,0), min = Dx$Dpos/n + marginInsidePlot, max = 1 - marginInsidePlot),
-      runif(round(Dx$Tn,0), min = Dx$Dpos/n + marginInsidePlot, max = 1 - marginInsidePlot)
+      runif(round(round(Dx$Dpos)*sensitivity), min = marginInsidePlot, max = round(Dx$Dpos)/n - marginInsidePlot),
+      runif(round(Dx$Dpos) - round(round(Dx$Dpos)*sensitivity), min = marginInsidePlot, max = round(Dx$Dpos)/n - marginInsidePlot),
+      runif(round(Dx$Dneg) - round(round(Dx$Dneg)*specificity), min = round(Dx$Dpos)/n + marginInsidePlot, max = 1 - marginInsidePlot),
+      runif(round(round(Dx$Dneg)*specificity), min = round(Dx$Dpos)/n + marginInsidePlot, max = 1 - marginInsidePlot)
     )
     y = c(
-      runif(round(Dx$Tp,0), min = round(Dx$Fn,0)/(round(Dx$Tp,0) + round(Dx$Fn,0)) + marginInsidePlot, max = 1 - marginInsidePlot),
-      runif(round(Dx$Fn,0), min = marginInsidePlot, max =  Dx$Fn/(Dx$Tp + Dx$Fn) - marginInsidePlot),
-      runif(round(Dx$Fp,0), min = round(Dx$Tn,0)/(round(Dx$Fp,0) + round(Dx$Tn,0)) + marginInsidePlot, max = 1 - marginInsidePlot),  # need to fix this if FPs less than 1!!
-      runif(round(Dx$Tn,0), min = marginInsidePlot, max = Dx$Tn/(Dx$Fp + Dx$Tn) - marginInsidePlot)
+      runif(round(round(Dx$Dpos)*sensitivity), min = round(Dx$Fn,0)/(round(Dx$Tp,0) + round(Dx$Fn,0)) + marginInsidePlot, max = 1 - marginInsidePlot),
+      runif(round(Dx$Dpos) - round(round(Dx$Dpos)*sensitivity), min = marginInsidePlot, max =  Dx$Fn/(Dx$Tp + Dx$Fn) - marginInsidePlot),
+      runif(round(Dx$Dneg) - round(round(Dx$Dneg)*specificity), min = round(Dx$Tn,0)/(round(Dx$Fp,0) + round(Dx$Tn,0)) + marginInsidePlot, max = 1 - marginInsidePlot),  # need to fix this if FPs less than 1!!
+      runif(round(round(Dx$Dneg)*specificity), min = marginInsidePlot, max = Dx$Tn/(Dx$Fp + Dx$Tn) - marginInsidePlot)
     )
     
   } else {
@@ -262,30 +263,32 @@ populationdf <- function(n, prevalence, sensitivity, specificity, sorted){
     data.frame(
       ID = 1:n,
       condition = c(
-        rep(paste("Present  = ", Dx$Dpos), times = round(Dx$Dpos,0)),
-        rep(paste("Absent = ",Dx$Dneg), times = round(Dx$Dneg,0))
+        rep(paste("Present  = ", Dx$Dpos), times = round(Dx$Dpos)),
+        rep(paste("Absent = ",n - Dx$Dpos), times = n - round(Dx$Dpos))
       ),
       conditionShape = c(
-        rep(21, times = round(Dx$Dpos,0)),
-        rep(22, times = round(Dx$Dneg,0))
+        rep(21, times = round(Dx$Dpos)),
+        rep(22, times = n - round(Dx$Dpos))
       ),
       
       testResult = c(
-        rep(paste("TestPos = ", Dx$Tp + Dx$Fp), times = round(Dx$Tp + Dx$Fp,0)),
-        rep(paste("TestNeg = ", Dx$Fn + Dx$Tn), times = round(Dx$Fn + Dx$Tn,0)) 
+        rep(paste("TestPos = ", Dx$Fp + Dx$Tp), 
+            times = round(round(Dx$Dpos)*sensitivity) + round(Dx$Dneg) - round(round(Dx$Dneg)*specificity)),
+        rep(paste("TestNeg = ", round(round(Dx$Dneg)*specificity) + round(Dx$Dpos) - round(round(Dx$Dpos)*sensitivity)),
+            times = (round(round(Dx$Dneg)*specificity) + round(Dx$Dpos) - round(round(Dx$Dpos)*sensitivity))) 
       ),
       
       result = c(
-        rep(paste("TruePos = ", Dx$Tp), times = round(Dx$Tp,0)),
-        rep(paste("FalseNeg = ", Dx$Fn), times = round(Dx$Fn,0)), 
-        rep(paste("FalsePos = ", Dx$Fp), times = round(Dx$Fp,0)), 
-        rep(paste("TrueNeg = ", Dx$Tn), times = round(Dx$Tn,0))
+        rep(paste("TruePos = ", round(round(Dx$Dpos)*sensitivity)), times = round(round(Dx$Dpos)*sensitivity)),
+        rep(paste("FalseNeg = ", round(Dx$Dpos) - round(round(Dx$Dpos)*sensitivity)), times = round(Dx$Dpos) - round(round(Dx$Dpos)*sensitivity)), 
+        rep(paste("FalsePos = ",  round(Dx$Dneg) - round(round(Dx$Dneg)*specificity)), times = round(Dx$Dneg) - round(round(Dx$Dneg)*specificity)), 
+        rep(paste("TrueNeg = ", round(round(Dx$Dneg)*specificity)), times = round(round(Dx$Dneg)*specificity))
       ),
       resultShape = c(
-        rep(21, times = round(Dx$Tp,0)), ## need to sort out these!
-        rep(22, times = round(Dx$Fn,0)), 
-        rep(23, times = round(Dx$Fp,0)), 
-        rep(24, times = round(Dx$Tn,0))
+        rep(21, times = round(round(Dx$Dpos)*sensitivity)), ## need to sort out these!
+        rep(22, times = round(Dx$Dpos) - round(round(Dx$Dpos)*sensitivity)), 
+        rep(23, times = round(Dx$Dneg) - round(round(Dx$Dneg)*specificity)), 
+        rep(24, times = round(round(Dx$Dneg)*specificity))
       ),
       x, 
       y
@@ -314,7 +317,12 @@ popplot <- function(n, prevalence, sensitivity, specificity, sorted, ciFlag){
     ### add in scales for x and y axis 
     scale_x_continuous(breaks = c(0.00, 0.25, 0.50, 0.75, 1.00),
                        labels = c("0","25%","50%","75%","100%")) + theme(axis.text.x = element_text(size = 15,colour = "azure4")) + 
+<<<<<<< HEAD
    # scale_y_continuous(breaks = c(0.00, 0.25, 0.50, 0.75, 1.00),
+=======
+    theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
+     # scale_y_continuous(breaks = c(0.00, 0.25, 0.50, 0.75, 1.00),
+>>>>>>> master
    #                    labels = c("0","25%","50%","75%","100%")) + theme(axis.text.y = element_text(size = 15,colour = "azure4")) + 
     coord_fixed()
   

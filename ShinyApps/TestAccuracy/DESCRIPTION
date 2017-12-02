@@ -1,4 +1,4 @@
 Title: Diagnostic test accuracy Shiny app
 Author: Michael and Joy
-DisplayMode: Showcase
+#DisplayMode: Showcase
 Type: Shiny

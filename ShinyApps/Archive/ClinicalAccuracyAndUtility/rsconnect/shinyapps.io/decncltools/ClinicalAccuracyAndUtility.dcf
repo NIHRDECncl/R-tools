@@ -3,8 +3,14 @@ title:
 account: decncltools
 server: shinyapps.io
 appId: 133761
+<<<<<<< HEAD:ShinyApps/Archive/ClinicalAccuracyAndUtility/rsconnect/shinyapps.io/decncltools/ClinicalAccuracyAndUtility.dcf
 bundleId: 969587
 url: https://decncltools.shinyapps.io/ClinicalAccuracyAndUtility/
 when: 1504697131.95697
+=======
+bundleId: 988905
+url: https://decncltools.shinyapps.io/ClinicalAccuracyAndUtility/
+when: 1505890160.29994
+>>>>>>> master:ShinyApps/ClinicalAccuracyAndUtility/rsconnect/shinyapps.io/decncltools/ClinicalAccuracyAndUtility.dcf
 asMultiple: FALSE
 asStatic: FALSE

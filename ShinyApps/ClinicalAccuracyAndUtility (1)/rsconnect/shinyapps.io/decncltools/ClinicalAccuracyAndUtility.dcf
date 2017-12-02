@@ -1,0 +1,16 @@
+name: ClinicalAccuracyAndUtility
+title:
+account: decncltools
+server: shinyapps.io
+appId: 133761
+<<<<<<< HEAD
+bundleId: 969587
+url: https://decncltools.shinyapps.io/ClinicalAccuracyAndUtility/
+when: 1504697131.95697
+=======
+bundleId: 988905
+url: https://decncltools.shinyapps.io/ClinicalAccuracyAndUtility/
+when: 1505890160.29994
+>>>>>>> master
+asMultiple: FALSE
+asStatic: FALSE
