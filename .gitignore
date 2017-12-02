@@ -9,11 +9,7 @@ ShinyApps/ImpRefApp/app dot R.txt
 
 ShinyApps/ImpRefApp/Untitled.R
 ShinyApps/ConditionalSurvival/www/therapeia.jpg
-
-
 *.R
-
 .DS_Store
-=======
 ShinyApps/ConditionalSurvival/www/Thumbs.db
-
+ShinyApps/Archive/*.*
