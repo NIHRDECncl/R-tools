@@ -18,9 +18,8 @@ The test `r input$DxTestName` detects the condition `r input$DxCondition` with s
 
 Figure 0. is a bar plot helps to visualise the population of patients tested for `r input$DxCondition`.  The bar plots are colour coded to show the numbers (left) and proportions (right) of the population who test positive and who have `r input$DxCondition`, and testing negative and do not have `r input$DxCondition` (Tn).
 
-
 ```{r, echo = FALSE,message = FALSE, error  = FALSE, warning = FALSE, comment = FALSE, fig.cap= "Diagnostic accuracy", fig.width=11,fig.height=5 }
-  DxStats(input$n, input$prevalence, input$sensitivity, input$specificity, plot2x2 = TRUE)$barplot[[1]]
+       DxStats(input$n, input$prevalence, input$sensitivity, input$specificity, plot2x2 = TRUE)$barplot[[1]]
 ```
 
 
