@@ -3,8 +3,9 @@ title:
 account: micncltools
 server: shinyapps.io
 appId: 225815
-bundleId: 1030843
+bundleId: 1076781
 url: https://micncltools.shinyapps.io/TestAccuracy/
-when: 1508251618.33117
+when: 1510756414.78497
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: Archive/App.R|Archive/DistributionandROCanalysis.R|Archive/temp copy.R|Archive/temp.R|Archive/VisualizeSensitivityAndSpecificityShinyApp.R|Archive/VisualizeSensitivityAndSpecificityShinyAppv - bak.R|Archive/VisualizeSensitivityAndSpecificityShinyAppv3.R|Archive/VisualizeSensitivityAndSpecificityShinyAppv4.R|Archive/VisualizeSensitivityAndSpecificityShinyAppv5.R|Archive/VisualizeSensitivityAndSpecificityShinyAppv6 - old.R|Archive/VisualizeSensitivityAndSpecificityShinyAppv6-2.R|Archive/VisualizeSensitivityAndSpecificityShinyAppv6.R|Archive/VisualizeSensitivityAndSpecificityShinyAppv7.1.R|Archive/VisualizeSensitivityAndSpecificityShinyAppv7.2.R|Archive/VisualizeSensitivityAndSpecificityShinyAppv7.R

@@ -1,0 +1,13 @@
+name: centiles
+title: centiles
+username:
+account: micncltools
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 250202
+bundleId: 1142493
+url: https://micncltools.shinyapps.io/centiles/
+when: 1513678471.60007
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: data/final_full_fhspreadsheet_resolved2ndOct.csv|data/final_full_fhspreadsheet_w_snps.csv|data/mypatientsdata_wsnps.csv|data/mypatientsdata.csv|data/mypatientsdatawsnps.csv|data/mypatientsdatawsnps100417.csv|data/mypatientsdatawsnpsfullset.csv

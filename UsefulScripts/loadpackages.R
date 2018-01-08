@@ -7,6 +7,12 @@ if (!require(plyr)){
     install.packages("plyr", repos="http://cran.rstudio.com/") 
     library("plyr")
 }
+
+
+if (!require(base)){
+  install.packages("base", repos="http://cran.rstudio.com/") 
+  library("base")
+}
 #install the packages you require
 
 if (!require(scales)){
